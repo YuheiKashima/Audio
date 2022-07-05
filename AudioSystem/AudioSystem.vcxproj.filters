@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\AudioDefines">
+      <UniqueIdentifier>{07027b29-7321-4a06-ac2a-a0d918876b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\AudioSystem">
+      <UniqueIdentifier>{b27ea5e0-f366-4cb8-bb44-825523382604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\EffectManager">
+      <UniqueIdentifier>{d8e30124-b345-4222-9b8d-52dbc6d7f075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Utilities">
+      <UniqueIdentifier>{0b31fd2c-41b3-4c0a-8058-e697b165d3ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs">
+      <UniqueIdentifier>{ecd24395-ce95-4d78-81d1-9216c21e23e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MStdPtrHelper">
+      <UniqueIdentifier>{a192ae82-f9bb-4643-ab89-f999094d2770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MLineBuffer">
+      <UniqueIdentifier>{10d5e99c-9858-413a-9e97-ddb17ee46c05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MException">
+      <UniqueIdentifier>{7030c78d-eb9d-4686-a234-67be93d5c51f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MCircularBuffer">
+      <UniqueIdentifier>{c9261d45-e492-4d26-9149-a8044e201005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MChrono">
+      <UniqueIdentifier>{14056c34-20fe-4e4a-80cc-8afc69c4dadd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MLog">
+      <UniqueIdentifier>{a4419db4-7849-43d2-901a-d405e5ce19f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MSingleton">
+      <UniqueIdentifier>{ab618f1b-0475-4452-a7d0-589a62825c36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MOTFFT">
+      <UniqueIdentifier>{1bfcbe3b-6d3c-46bf-978d-55c86f60c7ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\InstantInput">
+      <UniqueIdentifier>{c75d9b30-3099-4149-8b09-152f4973bc9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Tracks">
+      <UniqueIdentifier>{f5c34d1d-4cc3-4f74-b0b1-eb3cec770671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Tracks\MasterTrack">
+      <UniqueIdentifier>{13ae8d26-39de-49ac-aa96-d88ba0652481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Tracks\SourceTrack">
+      <UniqueIdentifier>{d2e58ea4-4a46-4823-9519-56dd7e2429b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects">
+      <UniqueIdentifier>{8d871883-3fbb-4551-93ba-184ce7616352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects\Equalizer">
+      <UniqueIdentifier>{a42fdfd9-0ad8-47e4-a027-1f45a4414a06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Tracks\TrackBase">
+      <UniqueIdentifier>{c517400d-b7cc-4e80-ab3c-a6e7160985b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects\EffectBase">
+      <UniqueIdentifier>{3cdd052b-e572-4413-8cf8-8bb59deffc07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects\ParallelEffector">
+      <UniqueIdentifier>{417eb504-2fd2-452f-b7db-f1ec00e60678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects\CombFilter">
+      <UniqueIdentifier>{2e344780-55ab-4fac-97da-c6a79519716e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Wave">
+      <UniqueIdentifier>{d8acdbfb-19e1-4b10-abe2-1d1fef72aad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Wave\WaveBase">
+      <UniqueIdentifier>{be089bd0-d5ef-4119-90f6-bc0d67e2dd08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Wave\WavFile">
+      <UniqueIdentifier>{a5d6c93d-ccc2-418d-8615-524ab72527c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Wave\OggFile">
+      <UniqueIdentifier>{43fab02b-ca20-4cc9-81d5-b1af58253ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Endpoints">
+      <UniqueIdentifier>{23f2be92-f616-4fe3-941d-282b8f083dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Endpoints\Wasapi">
+      <UniqueIdentifier>{2fe13a20-0fbd-4c7b-a445-f66a94ae53cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Endpoints\EndPointBase">
+      <UniqueIdentifier>{71bb0134-5ec0-4acd-8162-e44d917d5700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects\Reverb">
+      <UniqueIdentifier>{fad550cf-bfbc-45fe-b9d0-23f3b8cea557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects\BiquadFilter">
+      <UniqueIdentifier>{74668829-12a9-481e-b62d-4b000a631ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects\Compressor">
+      <UniqueIdentifier>{113c7e7b-0ed1-4dce-9276-c246b08a89d9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AudioDefines.h">
+      <Filter>ソース ファイル\AudioDefines</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioSystem.h">
+      <Filter>ソース ファイル\AudioSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectManager.h">
+      <Filter>ソース ファイル\EffectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Equalizer.h">
+      <Filter>ソース ファイル\Effects\Equalizer</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectBase.h">
+      <Filter>ソース ファイル\Effects\EffectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="InstantInput.h">
+      <Filter>ソース ファイル\MyLibs\InstantInput</Filter>
+    </ClInclude>
+    <ClInclude Include="MasterTrack.h">
+      <Filter>ソース ファイル\Tracks\MasterTrack</Filter>
+    </ClInclude>
+    <ClInclude Include="EndPointBase.h">
+      <Filter>ソース ファイル\Endpoints\EndPointBase</Filter>
+    </ClInclude>
+    <ClInclude Include="MLog.h">
+      <Filter>ソース ファイル\MyLibs\MLog</Filter>
+    </ClInclude>
+    <ClInclude Include="OggFile.h">
+      <Filter>ソース ファイル\Wave\OggFile</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceTrack.h">
+      <Filter>ソース ファイル\Tracks\SourceTrack</Filter>
+    </ClInclude>
+    <ClInclude Include="MChrono.h">
+      <Filter>ソース ファイル\MyLibs\MChrono</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackBase.h">
+      <Filter>ソース ファイル\Tracks\TrackBase</Filter>
+    </ClInclude>
+    <ClInclude Include="MCircularBuffer.h">
+      <Filter>ソース ファイル\MyLibs\MCircularBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="MException.h">
+      <Filter>ソース ファイル\MyLibs\MException</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>ソース ファイル\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Wasapi.h">
+      <Filter>ソース ファイル\Endpoints\Wasapi</Filter>
+    </ClInclude>
+    <ClInclude Include="MLineBuffer.h">
+      <Filter>ソース ファイル\MyLibs\MLineBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveBase.h">
+      <Filter>ソース ファイル\Wave\WaveBase</Filter>
+    </ClInclude>
+    <ClInclude Include="MStdPtrHelper.h">
+      <Filter>ソース ファイル\MyLibs\MStdPtrHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="WavFile.h">
+      <Filter>ソース ファイル\Wave\WavFile</Filter>
+    </ClInclude>
+    <ClInclude Include="MSingleton.h">
+      <Filter>ソース ファイル\MyLibs\MSingleton</Filter>
+    </ClInclude>
+    <ClInclude Include="MOTFFT.h">
+      <Filter>ソース ファイル\MyLibs\MOTFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="CombFilter.h">
+      <Filter>ソース ファイル\Effects\CombFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="ParallelEffector.h">
+      <Filter>ソース ファイル\Effects\ParallelEffector</Filter>
+    </ClInclude>
+    <ClInclude Include="Reverb.h">
+      <Filter>ソース ファイル\Effects\Reverb</Filter>
+    </ClInclude>
+    <ClInclude Include="BiquadFilter.h">
+      <Filter>ソース ファイル\Effects\BiquadFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="Compressor.h">
+      <Filter>ソース ファイル\Effects\Compressor</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AudioDefines.cpp">
+      <Filter>ソース ファイル\AudioDefines</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioSystem.cpp">
+      <Filter>ソース ファイル\AudioSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectManager.cpp">
+      <Filter>ソース ファイル\EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Equalizer.cpp">
+      <Filter>ソース ファイル\Effects\Equalizer</Filter>
+    </ClCompile>
+    <ClCompile Include="InstantInput.cpp">
+      <Filter>ソース ファイル\MyLibs\InstantInput</Filter>
+    </ClCompile>
+    <ClCompile Include="MLog.cpp">
+      <Filter>ソース ファイル\MyLibs\MLog</Filter>
+    </ClCompile>
+    <ClCompile Include="OggFile.cpp">
+      <Filter>ソース ファイル\Wave\OggFile</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceTrack.cpp">
+      <Filter>ソース ファイル\Tracks\SourceTrack</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackBase.cpp">
+      <Filter>ソース ファイル\Tracks\TrackBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>ソース ファイル\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Wasapi.cpp">
+      <Filter>ソース ファイル\Endpoints\Wasapi</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveBase.cpp">
+      <Filter>ソース ファイル\Wave\WaveBase</Filter>
+    </ClCompile>
+    <ClCompile Include="WavFile.cpp">
+      <Filter>ソース ファイル\Wave\WavFile</Filter>
+    </ClCompile>
+    <ClCompile Include="MOTFFT.cpp">
+      <Filter>ソース ファイル\MyLibs\MOTFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="MasterTrack.cpp">
+      <Filter>ソース ファイル\Tracks\MasterTrack</Filter>
+    </ClCompile>
+    <ClCompile Include="CombFilter.cpp">
+      <Filter>ソース ファイル\Effects\CombFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="Reverb.cpp">
+      <Filter>ソース ファイル\Effects\Reverb</Filter>
+    </ClCompile>
+    <ClCompile Include="BiquadFilter.cpp">
+      <Filter>ソース ファイル\Effects\BiquadFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="Compressor.cpp">
+      <Filter>ソース ファイル\Effects\Compressor</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
