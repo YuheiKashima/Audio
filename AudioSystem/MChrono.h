@@ -4,8 +4,9 @@
 #include "Utilities.h"
 
 using timestamp = std::chrono::system_clock::time_point;
-using millisecond = std::chrono::milliseconds;
-using nanosecond = std::chrono::nanoseconds;
+using milliseconds = std::chrono::milliseconds;
+using microseconds = std::chrono::microseconds;
+using nanoseconds = std::chrono::nanoseconds;
 namespace myLib {
 	class Chrono {
 	public:
@@ -26,9 +27,9 @@ namespace myLib {
 			return ss.str();
 		}
 
-		template<typename T>
-		static uint64_t GetDuration(timestamp _start, timestamp _end) {
-			return std::chrono::duration_cast<T>(_end - _start).count();
+		template<typename SEC>
+		static double GetDuration(timestamp _start, timestamp _end) {
+			return static_cast<double>(std::chrono::duration_cast<SEC>(_end - _start).count());
 		}
 	};
 }

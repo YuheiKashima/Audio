@@ -1,7 +1,7 @@
 #include "AudioDefines.h"
 
-void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const uint32_t _destPoint, const AudioFormat _format, const uint32_t _frames) {
-	if (_destPoint > _frames || _destPoint + _frames > _dest.sizeX())return;
+void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const AudioFormat _format, const uint32_t _frames) {
+	if (_frames > _dest.sizeX())return;
 
 	std::function<void(byte*, float*)> func;
 	uint16_t bdSize = _format.bitDepth / BitsPerByte;
@@ -12,17 +12,18 @@ void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, con
 	}
 	if (!func)return;
 
-	auto pCopy = _pSrc;
-	for (uint64_t fram = _destPoint; fram < _destPoint + _frames; ++fram) {
-		for (uint16_t chan = 0; chan < _format.channnels; ++chan) {
-			func(pCopy, &_dest[chan][fram]);
-			pCopy += bdSize;
+	for (uint16_t chan = 0; chan < _format.channnels; ++chan) {
+		auto pSrc = _pSrc + (bdSize * chan);
+		auto pDest = &_dest.at(chan).front();
+		for (uint64_t fram = 0; fram < _frames; ++fram) {
+			func(pSrc, pDest++);
+			pSrc += (bdSize * _format.channnels);
 		}
 	}
 }
 
-void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const uint32_t _destPoint, const AudioFormat _format, const uint32_t _frames) {
-	if (_destPoint > _frames || _destPoint + _frames > _src.sizeX())return;
+void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const AudioFormat _format, const uint32_t _frames) {
+	if (_frames > _src.sizeX())return;
 
 	std::function<void(float*, byte*)> func;
 	uint16_t bdSize = _format.bitDepth / BitsPerByte;
@@ -33,11 +34,12 @@ void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, c
 	}
 	if (!func)return;
 
-	auto pCopy = _pDest;
-	for (uint64_t fram = _destPoint; fram < _destPoint + _frames; ++fram) {
-		for (uint16_t chan = 0; chan < _format.channnels; ++chan) {
-			func(&_src[chan][fram], pCopy);
-			pCopy += bdSize;
+	for (uint16_t chan = 0; chan < _format.channnels; ++chan) {
+		auto pSrc = &_src.at(chan).front();
+		auto pDest = _pDest + (bdSize * chan);
+		for (uint64_t fram = 0; fram < _frames; ++fram) {
+			func(pSrc++, pDest);
+			pDest += (bdSize * _format.channnels);
 		}
 	}
 }

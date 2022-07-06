@@ -8,6 +8,11 @@
 #include "MLog.h"
 #include "MOTFFT.h"
 
+#define CHRONO_CONVERSION 10000.0
+#define MEASUREMENT_AVERAGE 100
+#define MEASUREMENT_MASTER false
+#define MEASUREMENT_RENDER true
+
 namespace AS {
 	using namespace myLib;
 	using byte = uint8_t;
@@ -44,8 +49,8 @@ namespace AS {
 
 	class PCMNormalizer {
 	public:
-		static void PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const uint32_t _destPoint, const AudioFormat _format, const uint32_t _frames);
-		static void PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const uint32_t _destPoint, const AudioFormat _format, const uint32_t _frames);
+		static void PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const AudioFormat _format, const uint32_t _frames);
+		static void PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const AudioFormat _format, const uint32_t _frames);
 
 	private:
 		static void PCM_Normalize_16bit(byte* _pSrc, float* _pDest);

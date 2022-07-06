@@ -61,7 +61,6 @@ void AS::WavFile::Write(LineBuffer<float>& _writeBuf, const size_t _frames) {
 	PCMNormalizer::PCM_Denormalize(
 		_writeBuf,
 		buf.get(),
-		0,
 		AudioFormat(m_FMT.samplingRate, m_FMT.bitDepth, m_FMT.channels),
 		_frames);
 
@@ -130,7 +129,7 @@ bool AS::WavFile::Open(std::string _directory, EBufferMode _mode) {
 
 		m_RealWave.resize(m_Format.channnels, m_AllFrames);
 
-		PCMNormalizer::PCM_Normalize(pcmData.get(), m_RealWave, 0, m_Format, m_AllFrames);
+		PCMNormalizer::PCM_Normalize(pcmData.get(), m_RealWave, m_Format, m_AllFrames);
 		break;
 	}
 	case EBufferMode::WAVE_BUFFERMODE_STREAM: {
@@ -185,7 +184,7 @@ size_t AS::WavFile::GetStream(LineBuffer<float>& _dest, const uint32_t _frames, 
 		m_Cursor += sendFrames;
 	}
 
-	PCMNormalizer::PCM_Normalize(pcmData.get(), _dest, 0, m_Format, sendFrames + remainFrames);
+	PCMNormalizer::PCM_Normalize(pcmData.get(), _dest, m_Format, sendFrames + remainFrames);
 	return sendFrames + remainFrames;
 }
 

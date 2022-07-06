@@ -21,8 +21,12 @@ namespace AS {
 		size_t GetBuffer(LineBuffer<float>& _dest, uint32_t _frames)override;
 		size_t ConnectTrack(const std::weak_ptr<TrackBase> _child)override;
 
-		LineBuffer<float> m_MixBuffer;
 		std::vector<std::weak_ptr<TrackBase>> m_Children;
+
+#if MEASUREMENT_MASTER
+		std::array<double, MEASUREMENT_AVERAGE> m_DevMeasurement;
+		uint32_t m_DevMeasurementCount = 0;
+#endif
 	};
 }
 #endif

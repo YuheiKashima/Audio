@@ -1,8 +1,6 @@
 #include "MasterTrack.h"
 
 AS::MasterTrack::MasterTrack(AudioFormat _format, uint32_t _createFrames) :TrackBase(_format, "MasterTrack") {
-	m_MixBuffer.resize(m_Format.channnels, _createFrames);
-
 	std::stringstream strstr;
 	strstr << "Track\t\t:" << m_InstanceID << std::endl;
 	strstr << "Type\t\t:" << m_TrackType << std::endl;
@@ -22,17 +20,30 @@ size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	std::erase_if(m_Children, [](auto child) {return child.expired(); });
 
 	const uint32_t avxAdd = sizeof(__m256) / sizeof(float);
+	LineBuffer<float> mixBuffer(m_Format.channnels, _frames);
+
+#if MEASUREMENT_MASTER
+	timestamp start = Chrono::GetTime();
+#endif
 
 	for (auto& wpchild : m_Children) {
 		if (auto child = wpchild.lock()) {
 			AudioFormat childFormat = child->GetFormat();
 			if (m_Format != childFormat)continue;
 
-			m_MixBuffer.zeroclear();
-			child->GetBuffer(m_MixBuffer, _frames);
-			_dest.avx_add(m_MixBuffer);
+			child->GetBuffer(mixBuffer, _frames);
+			_dest.avx_add(mixBuffer);
 		}
 	}
+#if MEASUREMENT_MASTER
+	m_DevMeasurement[m_DevMeasurementCount++] = Chrono::GetDuration<nanoseconds>(start, Chrono::GetTime()) / 1000000.0;
+	if (m_DevMeasurementCount >= MEASUREMENT_AVERAGE) {
+		std::stringstream strstr;
+		strstr << "Master : " << std::reduce(m_DevMeasurement.begin(), m_DevMeasurement.end(), 0.0) / MEASUREMENT_AVERAGE << "ms" << std::endl;
+		m_DevMeasurementCount = 0;
+		Log::Logging(strstr.str(), false);
+	}
+#endif
 
 	return _frames;
 }

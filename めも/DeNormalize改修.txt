@@ -1,0 +1,96 @@
+TimeStamp	:20220707_025419
+Level		:Info
+FileName	:D:\Users\third\Desktop\Development\AudioSystem\AudioSystem\Wasapi.cpp
+FunctionName	:EnumrareDevices
+Line		:319
+Comment		:Wasapi->EnumrareDevices
+	Count		:0
+	DeviceName	:スピーカー
+	Count		:1
+	DeviceName	:ヘッドセット
+	Count		:2
+	DeviceName	:ヘッドホン
+	Count		:3
+	DeviceName	:ヘッドホン(Default)
+TimeStamp	:20220707_025421
+Level		:Info
+FileName	:D:\Users\third\Desktop\Development\AudioSystem\AudioSystem\Wasapi.cpp
+FunctionName	:LunchDevice
+Line		:344
+Comment		:Wasapi->LunchDevice
+	LunchedDevice	:ヘッドホン(Default)
+	LunchOrderFormat
+		Channel		:2
+		SamplingRate	:44100
+		BitDepth	:16
+	FormatCheck		:Available
+		Channel		:2
+		SamplingRate	:44100
+		BitDepth	:16
+TimeStamp	:20220707_025421
+Level		:Info
+Track		:0
+Type		:MasterTrack
+TrackFormat<
+	Channel		:2
+	SamplingRate	:44100
+	BitDepth	:16
+>
+CreateFrameSize	:970
+TimeStamp	:20220707_025421
+Level		:Info
+FileName	:D:\Users\third\Desktop\Development\AudioSystem\AudioSystem\WaveBase.h
+FunctionName	:OutputLoadLog
+Line		:58
+Comment		:FileType	:wav
+Directory	:../Media/Somehow_441.wav
+BufferMode	:Stream
+TrackFormat<
+	Channel		:2
+	SamplingRate	:44100
+	BitDepth	:16
+>
+AllFrameSize	:9215724
+TimeStamp	:20220707_025421
+Level		:Info
+Track		:1
+Type		:SourceTrack
+TrackFormat<
+	Channel		:2
+	SamplingRate	:44100
+	BitDepth	:16
+>
+CreateFrameSize	:970
+Connect EffectManager
+TimeStamp	:20220707_025421
+Level		:Info
+Connect
+	MasterTrack(Track:0)<===>SourceTrack(Track:1)
+Render : 1.02904ms
+Render : 1.97717ms
+Render : 1.98336ms
+Render : 1.96721ms
+Render : 1.99374ms
+Render : 1.98399ms
+Render : 1.95768ms
+Render : 2.04482ms
+Render : 1.92499ms
+Render : 2.02541ms
+Render : 2.07036ms
+Render : 2.05373ms
+Render : 2.11127ms
+Render : 1.9481ms
+Render : 2.03096ms
+Render : 2.06847ms
+Render : 2.03998ms
+Render : 1.94493ms
+Render : 2.06259ms
+Render : 2.00905ms
+Render : 1.94758ms
+Render : 2.02457ms
+Render : 2.04569ms
+Render : 2.02949ms
+Render : 2.0626ms
+Render : 2.05586ms
+Render : 2.01247ms
+Render : 2.00163ms
