@@ -1,0 +1,84 @@
+TimeStamp	:20220707_023647
+Level		:Info
+FileName	:D:\Users\third\Desktop\Development\AudioSystem\AudioSystem\Wasapi.cpp
+FunctionName	:EnumrareDevices
+Line		:319
+Comment		:Wasapi->EnumrareDevices
+	Count		:0
+	DeviceName	:スピーカー
+	Count		:1
+	DeviceName	:ヘッドセット
+	Count		:2
+	DeviceName	:ヘッドホン
+	Count		:3
+	DeviceName	:ヘッドホン(Default)
+TimeStamp	:20220707_023648
+Level		:Info
+FileName	:D:\Users\third\Desktop\Development\AudioSystem\AudioSystem\Wasapi.cpp
+FunctionName	:LunchDevice
+Line		:344
+Comment		:Wasapi->LunchDevice
+	LunchedDevice	:ヘッドホン(Default)
+	LunchOrderFormat
+		Channel		:2
+		SamplingRate	:44100
+		BitDepth	:16
+	FormatCheck		:Available
+		Channel		:2
+		SamplingRate	:44100
+		BitDepth	:16
+TimeStamp	:20220707_023648
+Level		:Info
+Track		:0
+Type		:MasterTrack
+TrackFormat<
+	Channel		:2
+	SamplingRate	:44100
+	BitDepth	:16
+>
+CreateFrameSize	:970
+TimeStamp	:20220707_023648
+Level		:Info
+FileName	:D:\Users\third\Desktop\Development\AudioSystem\AudioSystem\WaveBase.h
+FunctionName	:OutputLoadLog
+Line		:58
+Comment		:FileType	:wav
+Directory	:../Media/Somehow_441.wav
+BufferMode	:Stream
+TrackFormat<
+	Channel		:2
+	SamplingRate	:44100
+	BitDepth	:16
+>
+AllFrameSize	:9215724
+TimeStamp	:20220707_023649
+Level		:Info
+Track		:1
+Type		:SourceTrack
+TrackFormat<
+	Channel		:2
+	SamplingRate	:44100
+	BitDepth	:16
+>
+CreateFrameSize	:970
+Connect EffectManager
+TimeStamp	:20220707_023649
+Level		:Info
+Connect
+	MasterTrack(Track:0)<===>SourceTrack(Track:1)
+Render : 0.821128ms
+Render : 2.08185ms
+Render : 2.04366ms
+Render : 2.04997ms
+Render : 2.01009ms
+Render : 2.10449ms
+Render : 2.04184ms
+Render : 2.07011ms
+Render : 2.09565ms
+Render : 2.09313ms
+Render : 2.08098ms
+Render : 2.1837ms
+Render : 2.13961ms
+Render : 2.07725ms
+Render : 2.14394ms
+Render : 2.04123ms

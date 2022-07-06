@@ -285,7 +285,7 @@ uint32_t AS::Wasapi::RenderProcess(LineBuffer<float>& _output, uint32_t& _frames
 		memset(pBuffer, NULL, static_cast<size_t>(renderFrames * (m_Format.bitDepth / BitsPerByte) * m_Format.channnels));
 
 		//逆正規化
-		PCMNormalizer::PCM_Denormalize(_output, pBuffer, 0, m_Format, renderFrames);
+		PCMNormalizer::PCM_Denormalize(_output, pBuffer, m_Format, renderFrames);
 
 		//収集した音声データをデバイスへ送る
 		res = m_pRenderClient->ReleaseBuffer(renderFrames, 0);
@@ -368,13 +368,13 @@ void AS::Wasapi::SetupDevice(SetupInfo& _info) {
 	REFERENCE_TIME period = 0, minPeriod = 0, wait = 0, fix = 0;
 	if (wa_info.periodTime != 0) {
 		wait = (static_cast<REFERENCE_TIME>(wa_info.periodTime) / 2);
-		period = wa_info.periodTime * 10000LL;//ms->ns
+		period = wa_info.periodTime * 10000.0;//ms->ns
 	}
 	else {
 		//Get default device period
 		res = m_pClient->GetDevicePeriod(&period, &minPeriod);
 		///todo:CheckError
-		wait = (period / 10000LL) / 2;//ns->ms
+		wait = (period / 10000.0) / 2;//ns->ms
 	}
 
 	res = InitializeClient(m_pClient, m_ShareMode, wa_info.streamFlags, period, m_Format, fix);

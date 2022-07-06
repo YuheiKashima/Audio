@@ -46,6 +46,11 @@ namespace AS {
 		static uint32_t m_stestSinWave;
 		void testSin(LineBuffer<float>& _buf, const AudioFormat _format);
 #endif
+
+#if MEASUREMENT_RENDER
+		std::array<double, MEASUREMENT_AVERAGE> m_DevMeasurement;
+		uint32_t m_DevMeasurementCount = 0;
+#endif
 	};
 
 	template<class ENDPOINT>
