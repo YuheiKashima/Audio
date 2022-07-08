@@ -39,7 +39,7 @@
 #define AVX_ALIEN_RANGE 32
 
 //Boost
-//#include <boost\thread\synchronized_value.hpp>
+#include <boost\circular_buffer.hpp>
 
 size_t calcAlienRange(size_t _range);
 std::wstring Convert_Str_to_Wstr(std::string const& _src);

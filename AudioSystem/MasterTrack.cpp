@@ -30,6 +30,7 @@ size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 		if (auto child = wpchild.lock()) {
 			AudioFormat childFormat = child->GetFormat();
 			if (m_Format != childFormat)continue;
+			mixBuffer.zeroclear();
 
 			child->GetBuffer(mixBuffer, _frames);
 			_dest.avx_add(mixBuffer);

@@ -84,12 +84,14 @@ namespace myLib {
 		//x*yの1次元配列を生成してすべての配列をvalueにする
 		LineBuffer<T>(const size_t _y, const size_t _x, const T _value) {
 			create(_y, _x);
+			zeroclear();
 			std::memset(m_arr_real.get(), _value, sizeof(T) * capasity());
 		}
 
 		//x*yの1次元配列を生成するだけ
 		constexpr LineBuffer<T>(const size_t _y, const size_t _x) {
 			create(_y, _x);
+			zeroclear();
 		}
 
 		//2次元配列に見立てた1次元配列のx軸の先頭のLineBuffer_Xを入手(1つ目の[])
@@ -101,6 +103,7 @@ namespace myLib {
 			if (capasity() != _src.capasity()) {
 				m_arr_real.reset();
 				create(_src.m_Size_y, _src.m_Size_x);
+				zeroclear();
 			}
 			memcpy_s(m_arr_real.get(), sizeof(T) * capasity(), _src.m_arr_real.get(), sizeof(T) * capasity());
 			return *this;

@@ -9,6 +9,8 @@
 #include "Compressor.h"
 #include <random>
 
+#define ENABLEEFFECT false
+
 using namespace AS;
 namespace Render {
 	class Test {
@@ -88,11 +90,13 @@ namespace Render {
 	Test::player Test::makePlayer(std::string directory) {
 		player play;
 		play.wav = std::make_shared<WavFile>(directory, EBufferMode::WAVE_BUFFERMODE_STREAM);
+
+#if ENABLEEFFECT
 		//std::pairで受け取る
 		auto [sou, eff] = system.CreateSourceTrackWithEffect(spMaster, 0, EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
 		play.source = sou; play.effect = eff;
 		play.source->Bind(play.wav);
-		play.source->Volume(0.5f);
+		play.source->Volume(1.0f);
 		play.reverb = play.effect->AddEffect<Reverb>();
 		play.compressor = play.effect->AddEffect<Compressor>();
 
@@ -121,6 +125,11 @@ namespace Render {
 		compParam.gain = 1.0f;
 		auto comp = play.compressor.lock();
 		comp->SetEffectParam(compParam);
+#else
+		play.source = system.CreateSourceTrack(spMaster, 0);
+		play.source->Bind(play.wav);
+		play.source->Volume(1.0f);
+#endif
 
 		return play;
 	}
@@ -202,6 +211,8 @@ namespace Render {
 						archive[sel].source->Pause();
 					}
 				}
+
+#if ENABLEEFFECT
 				//Q~T 1~5で設定されている楽曲のエフェクトOn or Off
 				else if (sel >= 5 && sel <= 9) {
 					sel -= 5;
@@ -234,6 +245,7 @@ namespace Render {
 							}
 					}
 				}
+#endif
 			}
 			input.Ready();
 		}
