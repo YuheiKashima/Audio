@@ -1,6 +1,6 @@
 #include "AudioDefines.h"
 
-#define SWITCH_RECENT1 false
+#define SWITCH_RECENT1 true
 #define SWITCH_RECENT2 true
 
 void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const AudioFormat _format, const uint32_t _frames) {

@@ -258,4 +258,12 @@
       <Filter>ソース ファイル\Effects\Compressor</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\Media\Somehow_441.wav">
+      <Filter>リソース ファイル</Filter>
+    </Media>
+    <Media Include="..\Media\Somehow_480.wav">
+      <Filter>リソース ファイル</Filter>
+    </Media>
+  </ItemGroup>
 </Project>

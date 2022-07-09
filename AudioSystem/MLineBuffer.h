@@ -85,7 +85,7 @@ namespace myLib {
 		LineBuffer<T>(const size_t _y, const size_t _x, const T _value) {
 			create(_y, _x);
 			zeroclear();
-			std::memset(m_arr_real.get(), _value, sizeof(T) * capasity());
+			std::memset(m_arr_real.get(), _value, sizeof(T) * capacity());
 		}
 
 		//x*yの1次元配列を生成するだけ
@@ -96,16 +96,16 @@ namespace myLib {
 
 		//2次元配列に見立てた1次元配列のx軸の先頭のLineBuffer_Xを入手(1つ目の[])
 		constexpr const LineBuffer_X<T> operator[](const size_t _y) const {
-			LineBuffer_X<T> arr_x(_y * capasityX(), m_arr_real);
+			LineBuffer_X<T> arr_x(_y * capacityX(), m_arr_real);
 			return arr_x;
 		}
 		constexpr const LineBuffer<T>& operator =(const LineBuffer<T>& _src) {
-			if (capasity() != _src.capasity()) {
+			if (capacity() != _src.capacity()) {
 				m_arr_real.reset();
 				create(_src.m_Size_y, _src.m_Size_x);
 				zeroclear();
 			}
-			memcpy_s(m_arr_real.get(), sizeof(T) * capasity(), _src.m_arr_real.get(), sizeof(T) * capasity());
+			memcpy_s(m_arr_real.get(), sizeof(T) * capacity(), _src.m_arr_real.get(), sizeof(T) * capacity());
 			return *this;
 		}
 		constexpr T* operator&() const {
@@ -113,7 +113,7 @@ namespace myLib {
 		}
 
 		constexpr const LineBuffer_X<T> at(const size_t _y) const {
-			return LineBuffer_X(_y * capasityX(), m_arr_real);
+			return LineBuffer_X(_y * capacityX(), m_arr_real);
 		}
 		constexpr const LineBuffer_X<T> front() const {
 			return LineBuffer_X(0, m_arr_real);
@@ -121,14 +121,14 @@ namespace myLib {
 		constexpr size_t size() const {
 			return m_Size_x * m_Size_y;
 		}
-		constexpr size_t capasity() const {
-			return m_Capasity_x * m_Size_y;
+		constexpr size_t capacity() const {
+			return m_Capacity_x * m_Size_y;
 		}
 		constexpr size_t sizeX() const {
 			return m_Size_x;
 		}
-		constexpr size_t capasityX() const {
-			return m_Capasity_x;
+		constexpr size_t capacityX() const {
+			return m_Capacity_x;
 		}
 		constexpr size_t sizeY() const {
 			return m_Size_y;
@@ -143,33 +143,33 @@ namespace myLib {
 			zeroclear();
 		}
 		void zeroclear() {
-			std::memset(m_arr_real.get(), NULL, sizeof(T) * capasity());
+			std::memset(m_arr_real.get(), NULL, sizeof(T) * capacity());
 		}
 		std::unique_ptr<T[]> data() const;
 		bool empty() {
 			return m_arr_real ? false : true;
 		}
 		void swap(LineBuffer<T>& _swap) {
-			size_t tempx = m_Size_x, tempy = m_Size_y, tempRx = m_Capasity_x;
+			size_t tempx = m_Size_x, tempy = m_Size_y, tempRx = m_Capacity_x;
 			m_Size_x = _swap.m_Size_x;
 			m_Size_y = _swap.m_Size_y;
-			m_Capasity_x = _swap.m_Capasity_x;
+			m_Capacity_x = _swap.m_Capacity_x;
 
 			_swap.m_Size_x = tempx;
 			_swap.m_Size_y = tempy;
-			_swap.m_Capasity_x = tempRx;
+			_swap.m_Capacity_x = tempRx;
 
 			std::swap(m_arr_real, _swap.m_arr_real);
 		}
 
 		void avx_add(LineBuffer<float>& _add) {
-			const auto processFrames = std::min(this->capasityX(), _add.capasityX());
+			const auto processFrames = std::min(this->capacityX(), _add.capacityX());
 			const auto avxForAdd = sizeof(__m256) / sizeof(float);
 
-			for (uint32_t i = 0; i < sizeY(); ++i) {
-				float* ptrThis = &at(i).front();
-				float* ptrAdd = &_add.at(i).front();
-				for (uint32_t j = 0; j < processFrames; j += avxForAdd) {
+			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
+				float* ptrThis = &at(chan).front();
+				float* ptrAdd = &_add.at(chan).front();
+				for (uint32_t fram = 0; fram < processFrames; fram += avxForAdd) {
 					__m256 avxThis = _mm256_load_ps(ptrThis);
 					__m256 avxAdd = _mm256_load_ps(ptrAdd);
 					_mm256_store_ps(ptrThis, _mm256_add_ps(avxThis, avxAdd));
@@ -182,24 +182,34 @@ namespace myLib {
 			const uint32_t avxForAdd = sizeof(__m256) / sizeof(float);
 			const __m256 mul = _mm256_set_ps(_mul, _mul, _mul, _mul, _mul, _mul, _mul, _mul);
 
-			auto ptrThis = this->get();
-			for (uint32_t i = 0; i < this->size(); i += avxForAdd) {
-				__m256 avxThis = _mm256_load_ps(ptrThis);
-				_mm256_store_ps(ptrThis, _mm256_mul_ps(avxThis, mul));
+			//啓蒙:AVX演算はCapacityを使う！Sizeでやるな！
+			//何の為のアライメント領域やねん
+			//auto ptrThis = this->get();
+			//for (uint32_t i = 0; i < this->size(); i += avxForAdd) {
+			//	__m256 avxThis = _mm256_load_ps(ptrThis);
+			//	_mm256_store_ps(ptrThis, _mm256_mul_ps(avxThis, mul));
+			//	ptrThis += avxForAdd;
+			//}
 
-				ptrThis += avxForAdd;
+			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
+				float* ptrThis = &at(chan).front();
+				for (uint32_t fram = 0; fram < capacityX(); fram += avxForAdd) {
+					__m256 avxThis = _mm256_load_ps(ptrThis);
+					_mm256_store_ps(ptrThis, _mm256_mul_ps(avxThis, mul));
+					ptrThis += avxForAdd;
+				}
 			}
 		}
 
 	private:
 		std::unique_ptr<T[]> m_arr_real;
-		size_t m_Size_x = 0, m_Size_y = 0, m_Capasity_x = 0;
+		size_t m_Size_x = 0, m_Size_y = 0, m_Capacity_x = 0;
 
 		void create(const size_t _y, const size_t _x) {
 			m_Size_x = _x == 0 ? 1 : _x;
 			m_Size_y = _y == 0 ? 1 : _y;
-			m_Capasity_x = calcAlienRange(m_Size_x);
-			m_arr_real = std::make_unique<T[]>(m_Capasity_x * m_Size_y);
+			m_Capacity_x = calcAlienRange(m_Size_x);
+			m_arr_real = std::make_unique<T[]>(m_Capacity_x * m_Size_y);
 		}
 	};
 };

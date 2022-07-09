@@ -110,10 +110,11 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	}
 
 	//音量調整
-	//_dest.avx_mul(m_Volume);
+	_dest.avx_mul(m_Volume);
 	//音量が1.0から乖離していくと右耳にノイズが発生する？
 	//ウェーブバンドを観測するとそんな感じだった。
 	//音量演算の変更を要検討
+	//->そんなことなかった、エフェクト入れたら超ノイズ
 
 	return sendFrames + remainFrames;
 }
