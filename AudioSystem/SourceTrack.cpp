@@ -21,7 +21,6 @@ AS::SourceTrack::~SourceTrack() {
 }
 
 void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
-	std::lock_guard lock(_request.taskTrack.mutex);
 	size_t filling = 0;
 	LineBuffer<float> loadBuffer(m_Format.channnels, _request.orderFrames);
 
@@ -36,6 +35,7 @@ void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
 		m_wpEffectManager.reset();
 	}
 
+	std::lock_guard lock(_request.taskTrack.mutex);
 #if USE_CIRCULAR
 	for (uint16_t chan = 0; auto & circular : _request.taskTrack.circular) {
 		auto src = &loadBuffer.at(chan).front();
@@ -47,6 +47,7 @@ void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
 	}
 #else
 	_request.taskTrack.buffer = loadBuffer;
+	_request.taskTrack.fillingBuffer = filling;
 #endif
 }
 
@@ -179,6 +180,13 @@ void AS::SourceTrack::PreLoad() {
 #if USE_CIRCULAR
 	m_Track.is_End = false;
 
+	{
+		std::lock_guard lock(m_Track.mutex);
+		for (auto& cir : m_Track.circular) {
+			cir.clear();
+		}
+	}
+
 	TrackRequest request(*this, m_Track, m_Track.circular.front().capacity());
 	RegisterTask(request);
 #else
@@ -186,6 +194,7 @@ void AS::SourceTrack::PreLoad() {
 	m_UseTrack = static_cast<uint32_t>(ETrackNum::PRIMARY);
 
 	for (auto& track : m_Tracks) {
+		std::lock_guard lock(track.mutex);
 		track.buffer.zeroclear();
 		track.fillingBuffer = 0;
 		track.is_End = false;
@@ -201,7 +210,7 @@ void AS::SourceTrack::PreLoad() {
 	{
 		TrackRequest request(*this, sec, sec.buffer.sizeX());
 		RegisterTask(request);
-}
+	}
 #endif
 }
 
