@@ -21,22 +21,46 @@ AS::SourceTrack::~SourceTrack() {
 }
 
 void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
-	Load(_request.taskTrack, _request.orderFrames);
+	std::lock_guard lock(_request.taskTrack.mutex);
+	size_t filling = 0;
+	LineBuffer<float> loadBuffer(m_Format.channnels, _request.orderFrames);
+
+	filling = Load(loadBuffer, _request.orderFrames, _request.taskTrack.is_End);
 
 	//エフェクト処理(IO時処理に設定しているとき)
 	if (m_EffectTiming == EEffectTiming::AS_EFFECTTIMING_IO && !m_wpEffectManager.expired()) {
 		if (auto effect = m_wpEffectManager.lock())
-			effect->Execute(_request.taskTrack.buffer, _request.taskTrack.fillingBuffer);
+			effect->Execute(loadBuffer, filling);
 	}
 	else if (m_wpEffectManager.expired()) {
 		m_wpEffectManager.reset();
 	}
+
+#if USE_CIRCULAR
+	for (uint16_t chan = 0; auto & circular : _request.taskTrack.circular) {
+		auto src = &loadBuffer.at(chan).front();
+		for (uint32_t i = 0; i < _request.orderFrames; ++i) {
+			circular.push_back(*src);
+			src++;
+		}
+		chan++;
+	}
+#else
+	_request.taskTrack.buffer = loadBuffer;
+#endif
 }
 
 void AS::SourceTrack::CreateBuffer(AudioFormat _format, uint32_t _createFrames) {
+#if USE_CIRCULAR
+	m_Track.circular = std::vector<boost::circular_buffer<float>>(_format.channnels);
+	for (auto& buf : m_Track.circular) {
+		buf = boost::circular_buffer<float>(_createFrames);
+	}
+#else
 	for (auto& track : m_Tracks) {
 		track.buffer.resize(m_Format.channnels, _createFrames);
 	}
+#endif
 
 	std::stringstream strstr;
 	strstr << "Track\t\t:" << m_InstanceID << std::endl;
@@ -55,18 +79,52 @@ void AS::SourceTrack::CreateBuffer(AudioFormat _format, uint32_t _createFrames) 
 size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	if (m_PlayState != EPlayState::AS_PLAYSTATE_PLAY)return 0;
 
+#if USE_CIRCULAR
+	//使用フレーム数算出(データ長,要求フレーム)
+	size_t sendFrames = 0, remainFrames = 0, orderFrames = std::min(m_Track.circular.front().size(), static_cast<size_t>(_frames));
+	//beginから実領域終端と要求フレーム数で小さい方を使用(要求量が終端量より小さいならそのまま送れる)
+	sendFrames = std::min(m_Track.circular.front().array_one().second, orderFrames);
+	//残フレームと実領域先頭空endまでの距離を比較し小さいほうを使用
+	int32_t remain = 0 >= (orderFrames - sendFrames) ? 0 : orderFrames - sendFrames;
+	remainFrames = std::min(static_cast<size_t>(remain), m_Track.circular.front().array_two().second);
+
+	{
+		std::lock_guard lock(m_Track.mutex);
+		for (uint32_t chan = 0; auto & buf : m_Track.circular) {
+			//リングバッファ先頭ポインタから転送
+			std::memcpy(&_dest[chan].front(), buf.array_one().first, sizeof(float) * sendFrames);
+			if (remainFrames > 0) {
+				std::memcpy(&_dest[chan][sendFrames], buf.array_two().first, sizeof(float) * remainFrames);
+			}
+			//転送した分リングバッファの先頭ポインタを移動(転送分消去)
+			buf.erase_begin(sendFrames + remainFrames);
+
+			++chan;
+		}
+	}
+
+	if (m_Track.is_End) {
+		if (m_Track.circular.front().size() <= 0) {
+			if (m_EndCallback)m_EndCallback();
+			Stop();
+		}
+	}
+	else {
+		TrackRequest request(*this, m_Track, sendFrames + remainFrames);
+		RegisterTask(request);
+	}
+
+#else
 	auto& primary = m_Tracks.at(m_UseTrack);
 
 	//使用フレーム数算出
 	size_t sendFrames = 0, remainFrames = 0, maxFrames = std::min(static_cast<size_t>(primary.fillingBuffer), primary.buffer.sizeX());
-	bool is_End = false;
 	if (m_Cuesor + _frames < maxFrames) {
 		sendFrames = _frames;
 	}
 	else {
 		sendFrames = maxFrames - m_Cuesor;
 		remainFrames = primary.is_End ? 0 : _frames - sendFrames;
-		is_End = primary.is_End && !remainFrames ? true : false;
 	}
 
 	{
@@ -79,7 +137,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 		m_Cuesor += (uint32_t)sendFrames;
 	}
 
-	if (is_End) {
+	if (primary.is_End && !remainFrames ? true : false) {
 		if (m_EndCallback)m_EndCallback();
 		Stop();
 	}
@@ -99,6 +157,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 		//使用バッファ切り替え
 		m_UseTrack = (m_UseTrack + 1) % static_cast<uint32_t>(ETrackNum::DOUBLE_MAX);
 	}
+#endif
 
 	//エフェクト処理(バッファ送出時処理に設定しているとき)
 	if (m_EffectTiming == EEffectTiming::AS_EFFECTTIMING_SENDBUFFER && !m_wpEffectManager.expired()) {
@@ -111,16 +170,18 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 
 	//音量調整
 	_dest.avx_mul(m_Volume);
-	//音量が1.0から乖離していくと右耳にノイズが発生する？
-	//ウェーブバンドを観測するとそんな感じだった。
-	//音量演算の変更を要検討
-	//->そんなことなかった、エフェクト入れたら超ノイズ
 
 	return sendFrames + remainFrames;
 }
 
 //プレロード(事前バッファ満たし)
 void AS::SourceTrack::PreLoad() {
+#if USE_CIRCULAR
+	m_Track.is_End = false;
+
+	TrackRequest request(*this, m_Track, m_Track.circular.front().capacity());
+	RegisterTask(request);
+#else
 	m_Cuesor = 0;
 	m_UseTrack = static_cast<uint32_t>(ETrackNum::PRIMARY);
 
@@ -134,37 +195,39 @@ void AS::SourceTrack::PreLoad() {
 	auto& sec = m_Tracks.at(static_cast<size_t>(ETrackNum::SECONDRY));
 
 	{
-		TrackRequest req(*this, pri, pri.buffer.sizeX());
-		RegisterTask(req);
+		TrackRequest request(*this, pri, pri.buffer.sizeX());
+		RegisterTask(request);
 	}
 	{
-		TrackRequest req(*this, sec, sec.buffer.sizeX());
-		RegisterTask(req);
-	}
+		TrackRequest request(*this, sec, sec.buffer.sizeX());
+		RegisterTask(request);
+}
+#endif
 }
 
 //Waveからロード
-void AS::SourceTrack::Load(Track& _dest, size_t _loadFrames) {
+size_t AS::SourceTrack::Load(LineBuffer<float>& _dest, size_t _loadFrames, bool& _isEnd) {
+	size_t filling = 0;
 	if (auto wav = m_Wave.lock()) {
-		std::lock_guard lock(_dest.mutex);
 		bool is_end = false, loop = m_Loop > 0 ? true : false;
 		//バッファゲッチュ！！
-		_dest.fillingBuffer = wav->GetBuffer(_dest.buffer, (uint32_t)_loadFrames, loop, is_end);
+		filling = wav->GetBuffer(_dest, (uint32_t)_loadFrames, loop, is_end);
 
 		//終了判定
 		if (is_end) {
 			if (m_Loop > 0) {
-				_dest.is_End = false;
+				_isEnd = false;
 				--m_Loop;
 			}
 			else if (m_Loop <= 0) {
-				_dest.is_End = true;
+				_isEnd = true;
 			}
 		}
 	}
 	else {
 		Stop();
 	}
+	return filling;
 }
 
 void AS::SourceTrack::Bind(std::weak_ptr<WaveBase> _wave) {
@@ -179,11 +242,14 @@ void AS::SourceTrack::Bind(std::weak_ptr<WaveBase> _wave) {
 
 	if (m_PlayState == EPlayState::AS_PLAYSTATE_STOP ||
 		m_PlayState == EPlayState::AS_PLAYSTATE_UNBIND) {
+#if USE_CIRCULAR
+#else
 		m_UseTrack = static_cast<uint32_t>(ETrackNum::PRIMARY);
-		m_Wave = _wave;
-		PreLoad();
-		m_PlayState = EPlayState::AS_PLAYSTATE_STOP;
-	}
+#endif
+			m_Wave = _wave;
+			PreLoad();
+			m_PlayState = EPlayState::AS_PLAYSTATE_STOP;
+}
 }
 
 void AS::SourceTrack::Play(PlayOption& _option) {
@@ -209,6 +275,7 @@ void AS::SourceTrack::Stop() {
 		if (auto wav = m_Wave.lock()) {
 			wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
 		}
+
 		PreLoad();
 	}
 }

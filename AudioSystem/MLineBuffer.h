@@ -145,7 +145,6 @@ namespace myLib {
 		void zeroclear() {
 			std::memset(m_arr_real.get(), NULL, sizeof(T) * capacity());
 		}
-		std::unique_ptr<T[]> data() const;
 		bool empty() {
 			return m_arr_real ? false : true;
 		}
@@ -181,15 +180,6 @@ namespace myLib {
 		void avx_mul(float _mul) {
 			const uint32_t avxForAdd = sizeof(__m256) / sizeof(float);
 			const __m256 mul = _mm256_set_ps(_mul, _mul, _mul, _mul, _mul, _mul, _mul, _mul);
-
-			//啓蒙:AVX演算はCapacityを使う！Sizeでやるな！
-			//何の為のアライメント領域やねん
-			//auto ptrThis = this->get();
-			//for (uint32_t i = 0; i < this->size(); i += avxForAdd) {
-			//	__m256 avxThis = _mm256_load_ps(ptrThis);
-			//	_mm256_store_ps(ptrThis, _mm256_mul_ps(avxThis, mul));
-			//	ptrThis += avxForAdd;
-			//}
 
 			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
 				float* ptrThis = &at(chan).front();

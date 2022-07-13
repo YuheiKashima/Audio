@@ -44,7 +44,8 @@ void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 		m_upRenderEndPoint->WaitForProcess();
 
 #if MEASUREMENT_RENDER
-		timestamp start = Chrono::GetTime();
+		boost::timer::cpu_timer timer;
+		timer.start();
 #endif
 
 		//要求フレーム数を取得
@@ -68,12 +69,12 @@ void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 		//エンドポイントへ送信
 		m_upRenderEndPoint->Process(renderBuffer, renderFrames);
 #if MEASUREMENT_RENDER
-		m_DevMeasurement[m_DevMeasurementCount++] = Chrono::GetDuration<nanoseconds>(start, Chrono::GetTime()) / 1000000.0;
-		if (m_DevMeasurementCount >= MEASUREMENT_AVERAGE) {
-			std::stringstream strstr;
-			strstr << "Render : " << std::reduce(m_DevMeasurement.begin(), m_DevMeasurement.end(), 0.0) / MEASUREMENT_AVERAGE << "ms" << std::endl;
-			m_DevMeasurementCount = 0;
-			Log::Logging(strstr.str(), false);
+		timer.stop();
+		m_DebMeasurement.Record(timer.elapsed());
+
+		if (m_DebMeasurement.Count() >= MEASUREMENT_AVERAGE) {
+			OutputAverageTime("Render", m_DebMeasurement);
+			m_DebMeasurement.Reset();
 		}
 #endif
 	}

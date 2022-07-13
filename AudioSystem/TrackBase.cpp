@@ -40,7 +40,7 @@ void AS::TrackBase::TaskThread() {
 	while (m_sTaskInstances > 0) {
 		while (!m_sTaskQueue.empty()) {
 			auto request = m_sTaskQueue.front();
-			request.track.TaskProcess(request);
+			request.requestTrack.TaskProcess(request);
 			m_sTaskQueue.pop();
 		}
 		m_sTaskVariable.wait(uniqMutex, [&] {return m_sTaskInstances <= 0 || !m_sTaskQueue.empty(); });

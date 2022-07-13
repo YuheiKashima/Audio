@@ -23,7 +23,8 @@ size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	LineBuffer<float> mixBuffer(m_Format.channnels, _frames);
 
 #if MEASUREMENT_MASTER
-	timestamp start = Chrono::GetTime();
+	boost::timer::cpu_timer timer;
+	timer.start();
 #endif
 
 	for (auto& wpchild : m_Children) {
@@ -37,12 +38,12 @@ size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 		}
 	}
 #if MEASUREMENT_MASTER
-	m_DevMeasurement[m_DevMeasurementCount++] = Chrono::GetDuration<nanoseconds>(start, Chrono::GetTime()) / 1000000.0;
-	if (m_DevMeasurementCount >= MEASUREMENT_AVERAGE) {
-		std::stringstream strstr;
-		strstr << "Master : " << std::reduce(m_DevMeasurement.begin(), m_DevMeasurement.end(), 0.0) / MEASUREMENT_AVERAGE << "ms" << std::endl;
-		m_DevMeasurementCount = 0;
-		Log::Logging(strstr.str(), false);
+	timer.stop();
+	m_DebMeasurement.Record(timer.elapsed());
+
+	if (m_DebMeasurement.Count() >= MEASUREMENT_AVERAGE) {
+		OutputAverageTime("Master", m_DebMeasurement);
+		m_DebMeasurement.Reset();
 	}
 #endif
 

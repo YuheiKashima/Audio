@@ -48,8 +48,7 @@ namespace AS {
 #endif
 
 #if MEASUREMENT_RENDER
-		std::array<double, MEASUREMENT_AVERAGE> m_DevMeasurement;
-		uint32_t m_DevMeasurementCount = 0;
+		boostMeasurement m_DebMeasurement;
 #endif
 	};
 

@@ -9,7 +9,11 @@
 #include "Compressor.h"
 #include <random>
 
-#define ENABLEEFFECT false
+#define ENABLEEFFECT true
+
+void StopCallBack() {
+	std::cout << "Called Stop Callback Function" << std::endl;
+}
 
 using namespace AS;
 namespace Render {
@@ -45,11 +49,11 @@ namespace Render {
 
 #ifdef _DEBUG
 		std::vector<std::string> album{
-			"../Media/Somehow_480.wav",
+			"../Media/Somehow_441.wav",
 		};
 #else
 		std::vector<std::string> album{
-			"Media/Somehow_480.wav",
+			"Media/Somehow_441.wav",
 		};
 #endif
 		void Init();
@@ -74,7 +78,7 @@ namespace Render {
 
 		//フォーマット設定(2ch 16bit 48000Hz)
 		AudioFormat alt;
-		WasapiLunchInfo lunchInfo(list[selectDevice], AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
+		WasapiLunchInfo lunchInfo(list[selectDevice], AudioFormat(44100, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
 		system.LunchDevice(lunchInfo);
 
 		WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
@@ -96,7 +100,7 @@ namespace Render {
 		auto [sou, eff] = system.CreateSourceTrackWithEffect(spMaster, 0, EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
 		play.source = sou; play.effect = eff;
 		play.source->Bind(play.wav);
-		play.source->Volume(1.0f);
+		play.source->Volume(0.5f);
 		play.reverb = play.effect->AddEffect<Reverb>();
 		play.compressor = play.effect->AddEffect<Compressor>();
 
@@ -125,10 +129,12 @@ namespace Render {
 		compParam.gain = 1.0f;
 		auto comp = play.compressor.lock();
 		comp->SetEffectParam(compParam);
+
+		play.source->SetEndingCallback(StopCallBack);
 #else
 		play.source = system.CreateSourceTrack(spMaster, 0);
 		play.source->Bind(play.wav);
-		play.source->Volume(1.0f);
+		play.source->Volume(0.5f);
 #endif
 
 		return play;
@@ -198,7 +204,7 @@ namespace Render {
 				else if (input.GetTrigger('G'))sel = 14;
 
 				//1~5 設定した楽曲を再生or一時停止
-				PlayOption op(LoopInfinity);
+				PlayOption op(0);
 				if (sel < archive.size() && sel >= 0 && sel <= 5) {
 					std::cout << "Track" << sel << std::flush;
 					auto state = archive[sel].source->GetState();
@@ -357,6 +363,16 @@ int main(int argc, char* argv[]) {
 	Capture::Test test;
 #endif
 	test.Main();
+
+	//boost::circular_buffer<float> cir(10);
+	//for (auto i = 0; i < 5; ++i) {
+	//	cir.push_back(i + 1);
+	//}
+	//std::cout << cir.size() << std::endl;
+	//std::cout << cir.capacity() << std::endl;
+
+	//cir.erase_begin(2);
+	//std::cout << cir.front() << std::endl;
 
 	/*AS::Wasapi render, capture;
 	AudioFormat alt{};

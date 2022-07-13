@@ -8,10 +8,12 @@
 #include "MLog.h"
 #include "MOTFFT.h"
 
-#define CHRONO_CONVERSION 10000.0
+#define NStoMS 1000000.0
 #define MEASUREMENT_AVERAGE 100
 #define MEASUREMENT_MASTER false
 #define MEASUREMENT_RENDER true
+
+#define USE_CIRCULAR true
 
 namespace AS {
 	using namespace myLib;
@@ -40,13 +42,6 @@ namespace AS {
 		uint32_t channnels;
 	};
 
-	struct Track {
-		LineBuffer<float> buffer;
-		std::shared_mutex mutex;
-		size_t fillingBuffer = 0;
-		bool is_End = false;
-	};
-
 	class PCMNormalizer {
 	public:
 		static void PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const AudioFormat _format, const uint32_t _frames);
@@ -59,5 +54,31 @@ namespace AS {
 
 	uint32_t TimeToFrames(const AudioFormat _format, const uint32_t _time);
 	uint32_t FramesToTime(const AudioFormat _format, const uint32_t _frames);
+
+	struct boostMeasurement {
+		std::array<double, MEASUREMENT_AVERAGE> wall;
+		std::array<double, MEASUREMENT_AVERAGE> user;
+		std::array<double, MEASUREMENT_AVERAGE> system;
+		uint32_t timerCount = 0;
+
+		void Record(boost::timer::cpu_times _elapse) {
+			if (timerCount < MEASUREMENT_AVERAGE) {
+				wall[timerCount] = _elapse.wall * NStoMS;
+				user[timerCount] = _elapse.user * NStoMS;
+				system[timerCount] = _elapse.system * NStoMS;
+				timerCount++;
+			}
+		}
+
+		void Reset() {
+			std::fill(wall.begin(), wall.end(), 0.0);
+			std::fill(user.begin(), user.end(), 0.0);
+			std::fill(system.begin(), system.end(), 0.0);
+			timerCount = 0;
+		}
+
+		uint32_t Count() { return timerCount; }
+	};
+	std::string OutputAverageTime(std::string _name, boostMeasurement& _measurement);
 }
 #endif

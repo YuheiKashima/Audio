@@ -6,12 +6,23 @@
 namespace AS {
 	class TrackBase :public std::enable_shared_from_this<TrackBase> {
 	public:
+		struct Track {
+#if USE_CIRCULAR
+			std::vector<boost::circular_buffer<float>> circular;
+#else
+			LineBuffer<float> buffer;
+			size_t fillingBuffer = 0;
+#endif
+			std::shared_mutex mutex;
+			bool is_End = false;
+		};
+
 		class TrackRequest {
 		public:
-			TrackRequest(TrackBase& _track, Track& _taskTrack, const size_t _order) :track(_track), taskTrack(_taskTrack), orderFrames(_order) {};
+			TrackRequest(TrackBase& _track, Track& _taskTrack, const size_t _order) :requestTrack(_track), taskTrack(_taskTrack), orderFrames(_order) {};
 			~TrackRequest() {};
 
-			TrackBase& track;
+			TrackBase& requestTrack;
 			Track& taskTrack;
 			size_t orderFrames;
 		};

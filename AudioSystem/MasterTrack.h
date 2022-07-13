@@ -24,8 +24,7 @@ namespace AS {
 		std::vector<std::weak_ptr<TrackBase>> m_Children;
 
 #if MEASUREMENT_MASTER
-		std::array<double, MEASUREMENT_AVERAGE> m_DevMeasurement;
-		uint32_t m_DevMeasurementCount = 0;
+		boostMeasurement m_DebMeasurement;
 #endif
 	};
 }

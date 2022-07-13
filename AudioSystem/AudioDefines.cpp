@@ -93,3 +93,20 @@ uint32_t AS::TimeToFrames(const AudioFormat _format, const uint32_t _time) {
 uint32_t AS::FramesToTime(const AudioFormat _format, const uint32_t _frames) {
 	return static_cast<uint32_t>(std::lroundf((_frames * 1000.0f) / _format.samplingRate));
 }
+
+std::string AS::OutputAverageTime(std::string _name, boostMeasurement& _measurement) {
+	std::stringstream strstr;
+	double wallAve = std::reduce(_measurement.wall.begin(), _measurement.wall.end(), 0.0) / MEASUREMENT_AVERAGE;
+	double userAve = std::reduce(_measurement.user.begin(), _measurement.user.end(), 0.0) / MEASUREMENT_AVERAGE;
+	double sysAve = std::reduce(_measurement.system.begin(), _measurement.system.end(), 0.0) / MEASUREMENT_AVERAGE;
+
+	strstr << "<" << _name << ">" <<
+		"\t" << wallAve << "ms wall, " <<
+		"\t" << userAve << "ms user, " <<
+		"\t" << sysAve << "ms system" << std::endl;
+	Log::Logging(strstr.str(), false);
+
+	return strstr.str();
+}
+
+//5.942355s wall, 5.569236s user + 0.000000s system = 5.569236s CPU (93.7%)

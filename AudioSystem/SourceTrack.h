@@ -60,9 +60,14 @@ namespace AS {
 
 		EEffectTiming m_EffectTiming = EEffectTiming::AS_EFFECTTIMING_SENDBUFFER;
 		EPlayState m_PlayState = EPlayState::AS_PLAYSTATE_NONE;
+#if USE_CIRCULAR
+		Track m_Track;
+		size_t m_PrelsoadFrames = 0;
+#else
 		std::array<Track, static_cast<size_t>(ETrackNum::DOUBLE_MAX)> m_Tracks;
 		uint32_t m_UseTrack = 0;
 		uint32_t m_Cuesor = 0;
+#endif
 		uint32_t m_Loop = 0;
 		std::weak_ptr<WaveBase> m_Wave;
 
@@ -75,7 +80,7 @@ namespace AS {
 		void CreateBuffer(AudioFormat _format, uint32_t _createFrames);
 		size_t GetBuffer(LineBuffer<float>& _dest, uint32_t _frames)override;
 		void PreLoad();
-		void Load(Track& _dest, size_t loadFrames);
+		size_t Load(LineBuffer<float>& _dest, size_t loadFrames, bool& _isEnd);
 		size_t ConnectTrack(const std::weak_ptr<TrackBase> _child) override { return 0; }
 	};
 }
