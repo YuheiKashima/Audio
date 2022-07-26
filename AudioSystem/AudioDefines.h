@@ -22,7 +22,7 @@ namespace AS {
 	const int32_t NoPadding = -1;
 	const float Volume_Min = 0.0f;
 	const float Volume_Max = 2.0f;
-	const uint32_t LoopInfinity = std::numeric_limits<uint32_t>::max();
+	const uint32_t LoopInfinity = std::numeric_limits<uint32_t>::max BOOST_PREVENT_MACRO_SUBSTITUTION();
 	const std::string DefaultDeviceStr = "(Default)";
 
 	struct AudioFormat {

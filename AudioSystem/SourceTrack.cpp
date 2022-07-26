@@ -82,12 +82,12 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 
 #if USE_CIRCULAR
 	//使用フレーム数算出(データ長,要求フレーム)
-	size_t sendFrames = 0, remainFrames = 0, orderFrames = std::min(m_Track.circular.front().size(), static_cast<size_t>(_frames));
+	size_t sendFrames = 0, remainFrames = 0, orderFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(m_Track.circular.front().size(), static_cast<size_t>(_frames));
 	//beginから実領域終端と要求フレーム数で小さい方を使用(要求量が終端量より小さいならそのまま送れる)
-	sendFrames = std::min(m_Track.circular.front().array_one().second, orderFrames);
+	sendFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(m_Track.circular.front().array_one().second, orderFrames);
 	//残フレームと実領域先頭空endまでの距離を比較し小さいほうを使用
 	int32_t remain = 0 >= (orderFrames - sendFrames) ? 0 : orderFrames - sendFrames;
-	remainFrames = std::min(static_cast<size_t>(remain), m_Track.circular.front().array_two().second);
+	remainFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(static_cast<size_t>(remain), m_Track.circular.front().array_two().second);
 
 	{
 		std::lock_guard lock(m_Track.mutex);
@@ -119,7 +119,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	auto& primary = m_Tracks.at(m_UseTrack);
 
 	//使用フレーム数算出
-	size_t sendFrames = 0, remainFrames = 0, maxFrames = std::min(static_cast<size_t>(primary.fillingBuffer), primary.buffer.sizeX());
+	size_t sendFrames = 0, remainFrames = 0, maxFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(static_cast<size_t>(primary.fillingBuffer), primary.buffer.sizeX());
 	if (m_Cuesor + _frames < maxFrames) {
 		sendFrames = _frames;
 	}
@@ -255,10 +255,10 @@ void AS::SourceTrack::Bind(std::weak_ptr<WaveBase> _wave) {
 #else
 		m_UseTrack = static_cast<uint32_t>(ETrackNum::PRIMARY);
 #endif
-			m_Wave = _wave;
-			PreLoad();
-			m_PlayState = EPlayState::AS_PLAYSTATE_STOP;
-}
+		m_Wave = _wave;
+		PreLoad();
+		m_PlayState = EPlayState::AS_PLAYSTATE_STOP;
+	}
 }
 
 void AS::SourceTrack::Play(PlayOption& _option) {

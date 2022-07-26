@@ -162,7 +162,7 @@ namespace myLib {
 		}
 
 		void avx_add(LineBuffer<float>& _add) {
-			const auto processFrames = std::min(this->capacityX(), _add.capacityX());
+			const auto processFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(this->capacityX(), _add.capacityX());
 			const auto avxForAdd = sizeof(__m256) / sizeof(float);
 
 			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
