@@ -170,7 +170,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	}
 
 	//Й╣Ч╩Т▓Ро
-	_dest.avx_mul(m_Volume);
+	_dest.mul(m_Volume);
 
 	return sendFrames + remainFrames;
 }

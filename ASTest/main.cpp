@@ -9,7 +9,7 @@
 #include "Compressor.h"
 #include <random>
 
-#define ENABLEEFFECT true
+#define ENABLEEFFECT false
 
 void StopCallBack() {
 	std::cout << "Called Stop Callback Function" << std::endl;
@@ -49,11 +49,11 @@ namespace Render {
 
 #ifdef _DEBUG
 		std::vector<std::string> album{
-			"../Media/Somehow_480.wav",
+			"../Media/Somehow_441.wav",
 		};
 #else
 		std::vector<std::string> album{
-			"Media/Somehow_480.wav",
+			"Media/Somehow_441.wav",
 		};
 #endif
 		void Init();
@@ -78,7 +78,7 @@ namespace Render {
 
 		//フォーマット設定(2ch 16bit 48000Hz)
 		AudioFormat alt;
-		WasapiLunchInfo lunchInfo(list[selectDevice], AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
+		WasapiLunchInfo lunchInfo(list[selectDevice], AudioFormat(44100, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
 		system.LunchDevice(lunchInfo);
 
 		WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);

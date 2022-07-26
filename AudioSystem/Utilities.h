@@ -5,6 +5,7 @@
 #include <array>
 #include <atomic>
 #include <bit>
+#include <bitset>
 #include <cassert>
 #include <chrono>
 #include <codecvt>

@@ -112,6 +112,9 @@
     <Filter Include="ソース ファイル\Effects\Compressor">
       <UniqueIdentifier>{113c7e7b-0ed1-4dce-9276-c246b08a89d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MCPUSupportChecker">
+      <UniqueIdentifier>{a62ac34b-336a-425f-ab75-8831671a075c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioDefines.h">
@@ -198,6 +201,9 @@
     <ClInclude Include="Compressor.h">
       <Filter>ソース ファイル\Effects\Compressor</Filter>
     </ClInclude>
+    <ClInclude Include="CPUSupportChecker.h">
+      <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioDefines.cpp">
@@ -256,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="Compressor.cpp">
       <Filter>ソース ファイル\Effects\Compressor</Filter>
+    </ClCompile>
+    <ClCompile Include="CPUSupportChecker.cpp">
+      <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

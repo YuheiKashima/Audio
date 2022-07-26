@@ -184,6 +184,7 @@
     <ClInclude Include="BiquadFilter.h" />
     <ClInclude Include="CombFilter.h" />
     <ClInclude Include="Compressor.h" />
+    <ClInclude Include="CPUSupportChecker.h" />
     <ClInclude Include="EffectBase.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="ParallelEffector.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="BiquadFilter.cpp" />
     <ClCompile Include="CombFilter.cpp" />
     <ClCompile Include="Compressor.cpp" />
+    <ClCompile Include="CPUSupportChecker.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="Equalizer.cpp" />
     <ClCompile Include="InstantInput.cpp" />

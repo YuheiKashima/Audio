@@ -34,7 +34,7 @@ size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 			mixBuffer.zeroclear();
 
 			child->GetBuffer(mixBuffer, _frames);
-			_dest.avx_add(mixBuffer);
+			_dest.add(mixBuffer);
 		}
 	}
 #if MEASUREMENT_MASTER

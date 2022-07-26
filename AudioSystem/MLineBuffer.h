@@ -2,6 +2,7 @@
 #define _MLINEBUFFER_
 
 #include "Utilities.h"
+#include "CPUSupportChecker.h"
 
 namespace myLib {
 	//éQçl(Ç∆Ç¢Ç§Ç©é åo)https://qiita.com/Gaccho/items/e936de237676120aa8a0
@@ -161,9 +162,38 @@ namespace myLib {
 			std::swap(m_arr_real, _swap.m_arr_real);
 		}
 
+		void add(LineBuffer<float>& _add) {
+			if (CPUSupportChecker::AVX2()) {
+				avx_add(_add);
+			}
+			else {
+				sequential_add(_add);
+			}
+		}
+
+		void mul(float _mul) {
+			if (CPUSupportChecker::AVX2()) {
+				avx_mul(_mul);
+			}
+			else {
+				sequential_mul(_mul);
+			}
+		}
+
+	private:
+		std::unique_ptr<T[]> m_arr_real;
+		size_t m_Size_x = 0, m_Size_y = 0, m_Capacity_x = 0;
+
+		void create(const size_t _y, const size_t _x) {
+			m_Size_x = _x == 0 ? 1 : _x;
+			m_Size_y = _y == 0 ? 1 : _y;
+			m_Capacity_x = calcAlienRange(m_Size_x);
+			m_arr_real = std::make_unique<T[]>(m_Capacity_x * m_Size_y);
+		}
+
 		void avx_add(LineBuffer<float>& _add) {
-			const auto processFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(this->capacityX(), _add.capacityX());
-			const auto avxForAdd = sizeof(__m256) / sizeof(float);
+			const size_t processFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(this->capacityX(), _add.capacityX());
+			const size_t avxForAdd = sizeof(__m256) / sizeof(float);
 
 			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
 				float* ptrThis = &at(chan).front();
@@ -177,6 +207,21 @@ namespace myLib {
 				}
 			}
 		}
+
+		void sequential_add(LineBuffer<float>& _add) {
+			const size_t processFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(this->sizeX(), _add.sizeX());
+
+			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
+				float* ptrThis = &at(chan).front();
+				float* ptrAdd = &_add.at(chan).front();
+				for (uint32_t fram = 0; fram < processFrames; ++fram) {
+					*ptrThis += *ptrAdd;
+					ptrThis++;
+					ptrAdd++;
+				}
+			}
+		}
+
 		void avx_mul(float _mul) {
 			const uint32_t avxForAdd = sizeof(__m256) / sizeof(float);
 			const __m256 mul = _mm256_set_ps(_mul, _mul, _mul, _mul, _mul, _mul, _mul, _mul);
@@ -191,15 +236,14 @@ namespace myLib {
 			}
 		}
 
-	private:
-		std::unique_ptr<T[]> m_arr_real;
-		size_t m_Size_x = 0, m_Size_y = 0, m_Capacity_x = 0;
-
-		void create(const size_t _y, const size_t _x) {
-			m_Size_x = _x == 0 ? 1 : _x;
-			m_Size_y = _y == 0 ? 1 : _y;
-			m_Capacity_x = calcAlienRange(m_Size_x);
-			m_arr_real = std::make_unique<T[]>(m_Capacity_x * m_Size_y);
+		void sequential_mul(float _mul) {
+			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
+				float* ptrThis = &at(chan).front();
+				for (uint32_t fram = 0; fram < sizeX(); ++fram) {
+					*ptrThis *= _mul;
+					ptrThis++;
+				}
+			}
 		}
 	};
 };
