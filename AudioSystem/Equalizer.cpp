@@ -22,7 +22,7 @@ void AS::Equalizer::SetEffectParam(EffectParamBase& _param) {
 void AS::Equalizer::Process(LineBuffer<float>& _buffer, uint32_t _renderFrames) {
 	std::lock_guard lock(m_ParamMutex);
 
-	_buffer.avx_mul(m_Param.preGain);
+	_buffer.mul(m_Param.preGain);
 	for (uint16_t chan = 0; chan < m_Format.channnels; ++chan) {
 		auto& biquad = m_BiquadFilters.at(chan);
 		float dest = 0.0f;

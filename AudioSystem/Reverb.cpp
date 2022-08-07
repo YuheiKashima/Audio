@@ -47,9 +47,9 @@ void AS::Reverb::Process(LineBuffer<float>& _buffer, uint32_t _renderFrames) {
 	}
 
 	if (GetEnable()) {
-		m_DestTempBuf.avx_mul(m_Param.wet);
-		_buffer.avx_mul(m_Param.dry);
-		_buffer.avx_add(m_DestTempBuf);
+		m_DestTempBuf.mul(m_Param.wet);
+		_buffer.mul(m_Param.dry);
+		_buffer.add(m_DestTempBuf);
 	}
 }
 

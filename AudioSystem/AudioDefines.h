@@ -13,7 +13,7 @@
 #define MEASUREMENT_MASTER false
 #define MEASUREMENT_RENDER true
 
-#define USE_CIRCULAR true
+#define USE_CIRCULAR false
 
 namespace AS {
 	using namespace myLib;

@@ -15,7 +15,7 @@ namespace AS {
 				for (auto parallel : m_ParallelEffects) {
 					m_ProcessBuffer = _buffer;
 					parallel->Process(m_ProcessBuffer, _renderFrames);
-					m_DestTempBuffer.avx_add(m_ProcessBuffer);
+					m_DestTempBuffer.add(m_ProcessBuffer);
 				}
 				_buffer = m_DestTempBuffer;
 			}
@@ -63,7 +63,7 @@ namespace AS {
 				for (std::shared_ptr<EFFECT> parallel : m_ParallelEffects) {
 					m_ProcessBuffer = _buffer;
 					parallel->Process(m_ProcessBuffer, _renderFrames);
-					m_DestTempBuffer.avx_add(m_ProcessBuffer);
+					m_DestTempBuffer.add(m_ProcessBuffer);
 				}
 				if (GetEnable())
 					_buffer = m_DestTempBuffer;
