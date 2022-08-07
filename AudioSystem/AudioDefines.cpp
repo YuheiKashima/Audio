@@ -99,14 +99,14 @@ std::string AS::OutputAverageTime(std::string _name, boostMeasurement& _measurem
 	double wallAve = std::reduce(_measurement.wall.begin(), _measurement.wall.end(), 0.0) / MEASUREMENT_AVERAGE;
 	double userAve = std::reduce(_measurement.user.begin(), _measurement.user.end(), 0.0) / MEASUREMENT_AVERAGE;
 	double sysAve = std::reduce(_measurement.system.begin(), _measurement.system.end(), 0.0) / MEASUREMENT_AVERAGE;
+	double cpuUsage = (userAve + sysAve) / wallAve;
 
 	strstr << "<" << _name << ">" <<
 		"\t" << wallAve << "ms wall, " <<
 		"\t" << userAve << "ms user, " <<
-		"\t" << sysAve << "ms system" << std::endl;
+		"\t" << sysAve << "ms system" <<
+		"\t(" << cpuUsage << "%)" << std::endl;
 	Log::Logging(strstr.str(), false);
 
 	return strstr.str();
 }
-
-//5.942355s wall, 5.569236s user + 0.000000s system = 5.569236s CPU (93.7%)
