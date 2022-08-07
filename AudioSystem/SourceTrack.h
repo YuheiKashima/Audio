@@ -41,13 +41,6 @@ namespace AS {
 		bool IsBinding() { return !m_Wave.expired(); }
 		void SetEndingCallback(std::function<void(void)> _stopCall) { m_EndCallback = _stopCall; }
 	private:
-		enum class ETrackNum {
-			NONE = -1,
-			PRIMARY,
-			SECONDRY,
-			DOUBLE_MAX
-		};
-
 		SourceTrack(AudioFormat _format, uint32_t _createFrames);
 		SourceTrack(AudioFormat _format, uint32_t _createFrames, EEffectTiming _effectTiming, std::weak_ptr<EffectManager> _effectManager);
 		~SourceTrack();
@@ -60,14 +53,10 @@ namespace AS {
 
 		EEffectTiming m_EffectTiming = EEffectTiming::AS_EFFECTTIMING_SENDBUFFER;
 		EPlayState m_PlayState = EPlayState::AS_PLAYSTATE_NONE;
-#if USE_CIRCULAR
+
 		Track m_Track;
 		size_t m_PrelsoadFrames = 0;
-#else
-		std::array<Track, static_cast<size_t>(ETrackNum::DOUBLE_MAX)> m_Tracks;
-		uint32_t m_UseTrack = 0;
-		uint32_t m_Cuesor = 0;
-#endif
+
 		uint32_t m_Loop = 0;
 		std::weak_ptr<WaveBase> m_Wave;
 

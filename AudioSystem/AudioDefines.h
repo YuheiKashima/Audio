@@ -13,8 +13,6 @@
 #define MEASUREMENT_MASTER false
 #define MEASUREMENT_RENDER true
 
-#define USE_CIRCULAR false
-
 namespace AS {
 	using namespace myLib;
 	using byte = uint8_t;

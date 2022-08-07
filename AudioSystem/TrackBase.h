@@ -7,12 +7,7 @@ namespace AS {
 	class TrackBase :public std::enable_shared_from_this<TrackBase> {
 	public:
 		struct Track {
-#if USE_CIRCULAR
 			std::vector<boost::circular_buffer<float>> circular;
-#else
-			LineBuffer<float> buffer;
-			size_t fillingBuffer = 0;
-#endif
 			std::shared_mutex mutex;
 			bool is_End = false;
 		};
