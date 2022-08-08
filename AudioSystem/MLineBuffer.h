@@ -143,12 +143,15 @@ namespace myLib {
 			create(_y, _x);
 			zeroclear();
 		}
+
 		void zeroclear() {
 			std::memset(m_arr_real.get(), NULL, sizeof(T) * capacity());
 		}
+
 		bool empty() {
 			return m_arr_real ? false : true;
 		}
+
 		void swap(LineBuffer<T>& _swap) {
 			size_t tempx = m_Size_x, tempy = m_Size_y, tempRx = m_Capacity_x;
 			m_Size_x = _swap.m_Size_x;

@@ -1,8 +1,5 @@
 #include "AudioDefines.h"
 
-#define SWITCH_RECENT1 true
-#define SWITCH_RECENT2 true
-
 void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const AudioFormat _format, const uint32_t _frames) {
 	if (_frames > _dest.sizeX())return;
 
@@ -15,7 +12,6 @@ void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, con
 	}
 	if (!func)return;
 
-#if SWITCH_RECENT1
 	for (uint16_t chan = 0; chan < _format.channnels; ++chan) {
 		auto pSrc = _pSrc + (bdSize * chan);
 		auto pDest = &_dest.at(chan).front();
@@ -24,15 +20,6 @@ void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, con
 			pSrc += (bdSize * _format.channnels);
 		}
 	}
-#else
-	byte* pSrc = _pSrc;
-	for (uint64_t fram = 0; fram < _frames; ++fram) {
-		for (uint16_t chan = 0; chan < _format.channnels; ++chan) {
-			func(pSrc, &_dest[chan][fram]);
-			pSrc += bdSize;
-		}
-	}
-#endif
 }
 
 void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const AudioFormat _format, const uint32_t _frames) {
@@ -47,7 +34,6 @@ void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, c
 	}
 	if (!func)return;
 
-#if SWITCH_RECENT2
 	for (uint16_t chan = 0; chan < _format.channnels; ++chan) {
 		auto pSrc = &_src.at(chan).front();
 		auto pDest = _pDest + (bdSize * chan);
@@ -56,15 +42,6 @@ void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, c
 			pDest += (bdSize * _format.channnels);
 		}
 	}
-#else
-	byte* pDest = _pDest;
-	for (uint64_t fram = 0; fram < _frames; ++fram) {
-		for (uint16_t chan = 0; chan < _format.channnels; ++chan) {
-			func(&_src[chan][fram], pDest);
-			pDest += bdSize;
-		}
-	}
-#endif
 }
 
 void AS::PCMNormalizer::PCM_Normalize_16bit(byte* pSrc, float* pDest) {
