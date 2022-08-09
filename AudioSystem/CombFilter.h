@@ -30,11 +30,7 @@ namespace AS {
 		CombParam m_Param;
 		uint32_t m_DelayPoint = 0;
 
-#if CIRCULAR_COMB
 		std::vector<boost::circular_buffer<float>> m_CircularBuffers;
-#else
-		std::vector<CircularBuffer<float>> m_CircularBuffers;
-#endif
 	};
 };
 
