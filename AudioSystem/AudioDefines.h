@@ -34,9 +34,11 @@ namespace AS {
 			if (channnels != _comp.channnels)return false;
 			return true;
 		}
-
+		//サンプリング周波数
 		uint32_t samplingRate;
+		//量子化ビット数
 		uint32_t bitDepth;
+		//チャンネル数
 		uint32_t channnels;
 	};
 

@@ -49,11 +49,11 @@ namespace Render {
 
 #ifdef _DEBUG
 		std::vector<std::string> album{
-			"../Media/Somehow_441.wav",
+			"../Media/Somehow_480.wav",
 		};
 #else
 		std::vector<std::string> album{
-			"Media/Somehow_441.wav",
+			"Media/Somehow_480.wav",
 		};
 #endif
 		void Init();
@@ -78,7 +78,7 @@ namespace Render {
 
 		//フォーマット設定(2ch 16bit 48000Hz)
 		AudioFormat alt;
-		WasapiLunchInfo lunchInfo(list[selectDevice], AudioFormat(44100, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
+		WasapiLunchInfo lunchInfo(list[selectDevice], AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
 		system.LunchDevice(lunchInfo);
 
 		WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
@@ -153,6 +153,7 @@ namespace Render {
 				break;
 			}
 
+			//音量
 			if (input.GetTrigger(VK_UP)) {
 				for (auto p : archive) {
 					float vol = p.source->Volume();
@@ -204,7 +205,7 @@ namespace Render {
 				else if (input.GetTrigger('G'))sel = 14;
 
 				//1~5 設定した楽曲を再生or一時停止
-				PlayOption op(0);
+				PlayOption op(188973, 0);
 				if (sel < archive.size() && sel >= 0 && sel <= 5) {
 					std::cout << "Track" << sel << std::flush;
 					auto state = archive[sel].source->GetState();
@@ -215,6 +216,12 @@ namespace Render {
 					else if (state == EPlayState::AS_PLAYSTATE_PLAY) {
 						std::cout << "Pause" << std::endl;
 						archive[sel].source->Pause();
+					}
+				}
+
+				if (input.GetTrigger('0')) {
+					for (auto i = 0; auto & arc : archive) {
+						std::cout << "Track" << i << "\tState:" << arc.source->GetStateStr() << std::endl;
 					}
 				}
 

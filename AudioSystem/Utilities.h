@@ -47,8 +47,4 @@
 size_t calcAlienRange(size_t _range);
 std::wstring Convert_Str_to_Wstr(std::string const& _src);
 std::string Convert_Wstr_to_Str(std::wstring const& _src);
-
-//NameofLib
-//#include <nameof.hpp>
-
 #endif

@@ -2,8 +2,6 @@
 #define _COMBFILTER_
 #include "EffectBase.h"
 
-#define CIRCULAR_COMB true
-
 namespace AS {
 	struct CombParam :public EffectParamBase {
 		CombParam() {}

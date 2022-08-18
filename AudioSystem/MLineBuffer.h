@@ -183,6 +183,14 @@ namespace myLib {
 			}
 		}
 
+		T max() {
+			return *std::max_element(m_arr_real.get(), m_arr_real.get() + capacity());
+		}
+
+		T min() {
+			return *std::min_element(m_arr_real.get(), m_arr_real.get() + capacity());
+		}
+
 	private:
 		std::unique_ptr<T[]> m_arr_real;
 		size_t m_Size_x = 0, m_Size_y = 0, m_Capacity_x = 0;

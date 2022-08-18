@@ -1,5 +1,15 @@
 #include "SourceTrack.h"
 
+const float AS::SourceTrack::m_sOutLimitDB = -50.0f;
+const std::array<std::string, static_cast<size_t>(AS::EPlayState::AS_PLAYSTATE_MAX)> AS::SourceTrack::m_sPlayStateStr{
+	"None",
+	"Unbind",
+	"Stop",
+	"Pause",
+	"Play",
+	"Out"
+};
+
 AS::SourceTrack::SourceTrack(AudioFormat _format, uint32_t _createFrames) :TrackBase(_format, "SourceTrack"), m_PlayState(EPlayState::AS_PLAYSTATE_UNBIND) {
 	CreateBuffer(_format, _createFrames);
 }
@@ -21,6 +31,8 @@ AS::SourceTrack::~SourceTrack() {
 }
 
 void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
+	std::lock_guard lock(_request.taskTrack.mutex);
+
 	size_t filling = 0;
 	LineBuffer<float> loadBuffer(m_Format.channnels, _request.orderFrames);
 
@@ -35,7 +47,6 @@ void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
 		m_wpEffectManager.reset();
 	}
 
-	std::lock_guard lock(_request.taskTrack.mutex);
 	for (uint16_t chan = 0; auto & circular : _request.taskTrack.circular) {
 		auto src = &loadBuffer.at(chan).front();
 		for (uint32_t i = 0; i < _request.orderFrames; ++i) {
@@ -60,47 +71,54 @@ void AS::SourceTrack::CreateBuffer(AudioFormat _format, uint32_t _createFrames) 
 	strstr << "\t" << "SamplingRate\t:" << m_Format.samplingRate << std::endl;
 	strstr << "\t" << "BitDepth\t:" << m_Format.bitDepth << std::endl;
 	strstr << ">" << std::endl;
-	strstr << "CreateFrameSize\t:" << _createFrames << std::endl;
+	strstr << "CreateFrameSize\t:" << _createFrames << "(" << FramesToTime(_format, _createFrames) << "ms)" << std::endl;
 
 	m_PlayState = EPlayState::AS_PLAYSTATE_UNBIND;
 	Log::Logging(Log::ASLOG_INFO, strstr.str());
 }
 
 size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
-	if (m_PlayState != EPlayState::AS_PLAYSTATE_PLAY)return 0;
+	if (m_PlayState < EPlayState::AS_PLAYSTATE_PLAY)return 0;
+	size_t sendFrames = 0, remainFrames = 0, orderFrames = 0;
 
-	//使用フレーム数算出(データ長,要求フレーム)
-	size_t sendFrames = 0, remainFrames = 0, orderFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(m_Track.circular.front().size(), static_cast<size_t>(_frames));
-	//beginから実領域終端と要求フレーム数で小さい方を使用(要求量が終端量より小さいならそのまま送れる)
-	sendFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(m_Track.circular.front().array_one().second, orderFrames);
-	//残フレームと実領域先頭空endまでの距離を比較し小さいほうを使用
-	int32_t remain = 0 >= (orderFrames - sendFrames) ? 0 : orderFrames - sendFrames;
-	remainFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(static_cast<size_t>(remain), m_Track.circular.front().array_two().second);
+	if (m_PlayState == EPlayState::AS_PLAYSTATE_PLAY) {
+		{
+			std::lock_guard lock(m_Track.mutex);
+			//使用フレーム数算出(データ長,要求フレーム)
+			orderFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(m_Track.circular.front().size(), static_cast<size_t>(_frames));
+			//beginから実領域終端と要求フレーム数で小さい方を使用(要求量が終端量より小さいならそのまま送れる)
+			sendFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(m_Track.circular.front().array_one().second, orderFrames);
+			//残フレームと実領域先頭空endまでの距離を比較し小さいほうを使用
+			int32_t remain = 0 >= (orderFrames - sendFrames) ? 0 : orderFrames - sendFrames;
+			remainFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(static_cast<size_t>(remain), m_Track.circular.front().array_two().second);
 
-	{
-		std::lock_guard lock(m_Track.mutex);
-		for (uint32_t chan = 0; auto & buf : m_Track.circular) {
-			//リングバッファ先頭ポインタから転送
-			std::memcpy(&_dest[chan].front(), buf.array_one().first, sizeof(float) * sendFrames);
-			if (remainFrames > 0) {
-				std::memcpy(&_dest[chan][sendFrames], buf.array_two().first, sizeof(float) * remainFrames);
+			for (uint32_t chan = 0; auto & buf : m_Track.circular) {
+				//リングバッファ先頭ポインタから転送
+				std::memcpy(&_dest[chan].front(), buf.array_one().first, sizeof(float) * sendFrames);
+				std::memset(buf.array_one().first, NULL, sizeof(float) * sendFrames);
+				if (remainFrames > 0) {
+					std::memcpy(&_dest[chan][sendFrames], buf.array_two().first, sizeof(float) * remainFrames);
+					std::memset(buf.array_two().first, NULL, sizeof(float) * remainFrames);
+				}
+				//転送した分リングバッファの先頭ポインタを移動(転送分消去)
+				buf.erase_begin(sendFrames + remainFrames);
+				++chan;
 			}
-			//転送した分リングバッファの先頭ポインタを移動(転送分消去)
-			buf.erase_begin(sendFrames + remainFrames);
+		}
 
-			++chan;
+		if (m_Track.is_End) {
+			if (m_Track.circular.front().size() <= 0) {
+				if (m_EndCallback)m_EndCallback();
+				m_PlayState = EPlayState::AS_PLAYSTATE_STOP;
+			}
+		}
+		else {
+			TrackRequest request(*this, m_Track, m_Track.circular.front().capacity() - m_Track.circular.front().size());
+			RegisterTask(request);
 		}
 	}
-
-	if (m_Track.is_End) {
-		if (m_Track.circular.front().size() <= 0) {
-			if (m_EndCallback)m_EndCallback();
-			Stop();
-		}
-	}
-	else {
-		TrackRequest request(*this, m_Track, sendFrames + remainFrames);
-		RegisterTask(request);
+	else if (m_PlayState == EPlayState::AS_PLAYSTATE_OUT) {
+		sendFrames = _frames;
 	}
 
 	//エフェクト処理(バッファ送出時処理に設定しているとき)
@@ -112,25 +130,21 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 		m_wpEffectManager.reset();
 	}
 
+	if (m_PlayState == EPlayState::AS_PLAYSTATE_OUT) {
+		auto db = 20 * std::log10f(_dest.max());
+		m_PlayState = db <= m_sOutLimitDB ? EPlayState::AS_PLAYSTATE_STOP : EPlayState::AS_PLAYSTATE_OUT;
+	}
+
+	if (m_PlayState == EPlayState::AS_PLAYSTATE_STOP) {
+		if (auto wav = m_Wave.lock()) {
+			wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
+		}
+	}
+
 	//音量調整
 	_dest.mul(m_Volume);
 
 	return sendFrames + remainFrames;
-}
-
-//プレロード(事前バッファ満たし)
-void AS::SourceTrack::PreLoad() {
-	m_Track.is_End = false;
-
-	{
-		std::lock_guard lock(m_Track.mutex);
-		for (auto& cir : m_Track.circular) {
-			cir.clear();
-		}
-	}
-
-	TrackRequest request(*this, m_Track, m_Track.circular.front().capacity());
-	RegisterTask(request);
 }
 
 //Waveからロード
@@ -151,9 +165,12 @@ size_t AS::SourceTrack::Load(LineBuffer<float>& _dest, size_t _loadFrames, bool&
 				_isEnd = true;
 			}
 		}
+		else {
+			_isEnd = false;
+		}
 	}
 	else {
-		Stop();
+		m_PlayState = EPlayState::AS_PLAYSTATE_UNBIND;
 	}
 	return filling;
 }
@@ -171,16 +188,29 @@ void AS::SourceTrack::Bind(std::weak_ptr<WaveBase> _wave) {
 	if (m_PlayState == EPlayState::AS_PLAYSTATE_STOP ||
 		m_PlayState == EPlayState::AS_PLAYSTATE_UNBIND) {
 		m_Wave = _wave;
-		PreLoad();
 		m_PlayState = EPlayState::AS_PLAYSTATE_STOP;
 	}
 }
 
 void AS::SourceTrack::Play(PlayOption& _option) {
-	m_Loop = _option.loopCount;
-
-	if (m_PlayState == EPlayState::AS_PLAYSTATE_STOP || m_PlayState == EPlayState::AS_PLAYSTATE_PAUSE)
-		m_PlayState = EPlayState::AS_PLAYSTATE_PLAY;
+	if (m_PlayState == EPlayState::AS_PLAYSTATE_STOP) {
+		m_Loop = _option.loopCount;
+		auto preload = _option.preLoadTime != 0 ? TimeToFrames(m_Format, _option.preLoadTime) : m_Track.circular.front().capacity();
+		if (0 < preload && preload <= m_Track.circular.front().capacity()) {
+			//途中再生(ms->frames)
+			if (auto wav = m_Wave.lock()) {
+				uint32_t point = _option.playPoint * m_Format.samplingRate;
+				wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, point % wav->Size());
+			}
+			TrackRequest request(*this, m_Track, preload);
+			RegisterTask(request);
+			m_PlayState = EPlayState::AS_PLAYSTATE_PLAY;
+		}
+	}
+	else if (m_PlayState == EPlayState::AS_PLAYSTATE_PAUSE && m_TempState >= EPlayState::AS_PLAYSTATE_PLAY) {
+		m_PlayState = m_TempState;
+		m_TempState = EPlayState::AS_PLAYSTATE_NONE;
+	}
 }
 
 void AS::SourceTrack::PlayShot() {
@@ -189,17 +219,24 @@ void AS::SourceTrack::PlayShot() {
 }
 
 void AS::SourceTrack::Pause() {
-	if (m_PlayState == EPlayState::AS_PLAYSTATE_PLAY)
+	if (m_PlayState >= EPlayState::AS_PLAYSTATE_PLAY) {
+		m_TempState = m_PlayState;
 		m_PlayState = EPlayState::AS_PLAYSTATE_PAUSE;
+	}
 }
 
 void AS::SourceTrack::Stop() {
-	if (m_PlayState == EPlayState::AS_PLAYSTATE_PLAY || m_PlayState == EPlayState::AS_PLAYSTATE_PAUSE) {
-		m_PlayState = EPlayState::AS_PLAYSTATE_STOP;
+	if (m_PlayState == EPlayState::AS_PLAYSTATE_PLAY) {
+		m_PlayState = EPlayState::AS_PLAYSTATE_OUT;
 		if (auto wav = m_Wave.lock()) {
 			wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
 		}
-
-		PreLoad();
+	}
+	else if (m_PlayState == EPlayState::AS_PLAYSTATE_PAUSE || m_PlayState == EPlayState::AS_PLAYSTATE_OUT) {
+		m_PlayState = EPlayState::AS_PLAYSTATE_STOP;
+		m_TempState = EPlayState::AS_PLAYSTATE_NONE;
+		if (auto wav = m_Wave.lock()) {
+			wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
+		}
 	}
 }

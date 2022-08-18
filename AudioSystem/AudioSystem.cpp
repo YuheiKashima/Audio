@@ -188,7 +188,7 @@ std::pair<std::shared_ptr<AS::SourceTrack>, std::shared_ptr<AS::EffectManager>> 
 
 		uint32_t createFrames = 0;
 		if (_bufferTime > 0)
-			createFrames = FramesToTime(format, _bufferTime);
+			createFrames = TimeToFrames(format, _bufferTime);
 		else
 			createFrames = devFrames.maxFrameSize;
 

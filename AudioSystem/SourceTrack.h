@@ -8,10 +8,11 @@ namespace AS {
 	enum class EPlayState {
 		AS_PLAYSTATE_NONE = 0,	//バッファ非生成状態
 		AS_PLAYSTATE_UNBIND,	//非バインド状態
+		AS_PLAYSTATE_STOP, 		//停止中
+		AS_PLAYSTATE_PAUSE,		//一時停止中
 		AS_PLAYSTATE_PLAY,		//再生中
 		AS_PLAYSTATE_OUT,		//停止準備
-		AS_PLAYSTATE_PAUSE,		//一時停止中
-		AS_PLAYSTATE_STOP 		//停止中
+		AS_PLAYSTATE_MAX
 	};
 
 	enum class EEffectTiming {
@@ -20,11 +21,15 @@ namespace AS {
 	};
 
 	struct PlayOption {
+		//再生開始地点(ms)
 		uint32_t playPoint = 0;
+		//ループ数設定
 		uint32_t loopCount = 0;
+		//事前バッファ要求時間(時間分のバッファが満たされた時再生を開始する)(ms)
+		uint32_t preLoadTime = 0;
 		PlayOption() {}
-		PlayOption(uint32_t _playPoint, uint32_t _loopCount) :playPoint(_playPoint), loopCount(_loopCount) {}
-		PlayOption(uint32_t _loopCount) :loopCount(_loopCount), playPoint(0) {}
+		PlayOption(uint32_t _playPoint, uint32_t _loopCount) :playPoint(_playPoint), loopCount(_loopCount), preLoadTime(0) {}
+		PlayOption(uint32_t _loopCount) :loopCount(_loopCount), playPoint(0), preLoadTime(0) {}
 	};
 
 	class SourceTrack : public TrackBase {
@@ -39,6 +44,7 @@ namespace AS {
 		void Pause();
 		void Stop();
 		EPlayState GetState() { return m_PlayState; }
+		std::string GetStateStr() { return m_sPlayStateStr[static_cast<size_t>(GetState())]; }
 		bool IsBinding() { return !m_Wave.expired(); }
 		void SetEndingCallback(std::function<void(void)> _stopCall) { m_EndCallback = _stopCall; }
 	private:
@@ -54,9 +60,9 @@ namespace AS {
 
 		EEffectTiming m_EffectTiming = EEffectTiming::AS_EFFECTTIMING_SENDBUFFER;
 		EPlayState m_PlayState = EPlayState::AS_PLAYSTATE_NONE;
+		EPlayState m_TempState = EPlayState::AS_PLAYSTATE_NONE;
 
 		Track m_Track;
-		size_t m_PrelsoadFrames = 0;
 
 		uint32_t m_Loop = 0;
 		std::weak_ptr<WaveBase> m_Wave;
@@ -65,11 +71,13 @@ namespace AS {
 
 		std::function<void(void)> m_EndCallback;
 
+		static const float m_sOutLimitDB;
+		static const std::array < std::string, static_cast<size_t>(EPlayState::AS_PLAYSTATE_MAX)> m_sPlayStateStr;
+
 		void TaskProcess(TrackRequest& _request) override;
 
 		void CreateBuffer(AudioFormat _format, uint32_t _createFrames);
 		size_t GetBuffer(LineBuffer<float>& _dest, uint32_t _frames)override;
-		void PreLoad();
 		size_t Load(LineBuffer<float>& _dest, size_t loadFrames, bool& _isEnd);
 		size_t ConnectTrack(const std::weak_ptr<TrackBase> _child) override { return 0; }
 	};
