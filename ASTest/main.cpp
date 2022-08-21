@@ -205,7 +205,7 @@ namespace Render {
 				else if (input.GetTrigger('G'))sel = 14;
 
 				//1~5 İ’è‚µ‚½Šy‹È‚ğÄ¶orˆê’â~
-				PlayOption op(188973, 0);
+				PlayOption op(LoopInfinity);
 				if (sel < archive.size() && sel >= 0 && sel <= 5) {
 					std::cout << "Track" << sel << std::flush;
 					auto state = archive[sel].source->GetState();

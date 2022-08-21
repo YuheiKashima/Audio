@@ -47,6 +47,7 @@ void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
 		m_wpEffectManager.reset();
 	}
 
+	//バッファ書き込み
 	for (uint16_t chan = 0; auto & circular : _request.taskTrack.circular) {
 		auto src = &loadBuffer.at(chan).front();
 		for (uint32_t i = 0; i < _request.orderFrames; ++i) {
@@ -108,8 +109,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 
 		if (m_Track.is_End) {
 			if (m_Track.circular.front().size() <= 0) {
-				if (m_EndCallback)m_EndCallback();
-				m_PlayState = EPlayState::AS_PLAYSTATE_STOP;
+				m_PlayState = EPlayState::AS_PLAYSTATE_OUT;
 			}
 		}
 		else {
@@ -130,6 +130,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 		m_wpEffectManager.reset();
 	}
 
+	//閾値以下の音圧になったら停止
 	if (m_PlayState == EPlayState::AS_PLAYSTATE_OUT) {
 		auto db = 20 * std::log10f(_dest.max());
 		m_PlayState = db <= m_sOutLimitDB ? EPlayState::AS_PLAYSTATE_STOP : EPlayState::AS_PLAYSTATE_OUT;
@@ -139,6 +140,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 		if (auto wav = m_Wave.lock()) {
 			wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
 		}
+		if (m_EndCallback)m_EndCallback();
 	}
 
 	//音量調整
