@@ -153,19 +153,19 @@ size_t AS::WavFile::GetStream(LineBuffer<float>& _dest, const uint32_t _frames, 
 
 	auto framesToFilePoint = m_Format.channnels * (m_Format.bitDepth / BitsPerByte);
 
-	auto sendFrames = 0, remainFrames = 0;
+	auto streamFrames = 0, remainFrames = 0;
 	auto streamSize = 0, remainSize = 0;
 	if ((m_Cursor + _frames) < m_AllFrames) {
-		sendFrames = _frames;
+		streamFrames = _frames;
 		_isEnd = false;
 	}
 	else {
-		sendFrames = m_AllFrames - m_Cursor;
-		remainFrames = _loopFlg ? _frames - sendFrames : 0;
+		streamFrames = m_AllFrames - m_Cursor;
+		remainFrames = _loopFlg ? _frames - streamFrames : 0;
 		_isEnd = true;
 	}
 
-	streamSize = sendFrames * framesToFilePoint;
+	streamSize = streamFrames * framesToFilePoint;
 	remainSize = remainFrames * framesToFilePoint;
 
 	std::unique_ptr<byte[]> pcmData(new byte[streamSize + remainSize]);
@@ -181,17 +181,20 @@ size_t AS::WavFile::GetStream(LineBuffer<float>& _dest, const uint32_t _frames, 
 		}
 	}
 	else {
-		m_Cursor += sendFrames;
+		m_Cursor += streamFrames;
 	}
 
-	PCMNormalizer::PCM_Normalize(pcmData.get(), _dest, m_Format, sendFrames + remainFrames);
-	return sendFrames + remainFrames;
+	PCMNormalizer::PCM_Normalize(pcmData.get(), _dest, m_Format, streamFrames + remainFrames);
+	return streamFrames + remainFrames;
 }
 
 void AS::WavFile::SeekStream(const uint32_t _seek) {
 	if (!m_WaveStream.is_open() || m_StreamMode != StreamMode::WAV_STREAMMODE_LOAD)return;
+	double seek = _seek * (m_Format.samplingRate / 1000.0);
 
-	uint32_t seekPoint = m_StreamBeginPoint + (_seek * m_Format.channnels * (m_Format.bitDepth / BitsPerByte));
-	if (m_WaveStream.tellg() != seekPoint)
-		m_WaveStream.seekg(seekPoint, std::ios::beg);
+	if (seek <= m_AllFrames) {
+		uint32_t seekPoint = m_StreamBeginPoint + (seek * m_Format.channnels * (m_Format.bitDepth / BitsPerByte));
+		if (m_WaveStream.tellg() != seekPoint)
+			m_WaveStream.seekg(seekPoint, std::ios::beg);
+	}
 }

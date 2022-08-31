@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "WavFile.h"
+#include "OggFile.h"
 #include "Reverb.h"
 #include "Compressor.h"
 #include <random>
@@ -29,7 +30,7 @@ namespace Render {
 			//ソーストラック
 			std::shared_ptr<SourceTrack> source;
 			//音源ファイル
-			std::shared_ptr<WavFile> wav;
+			std::shared_ptr<OggFile> wav;
 			//エフェクト管理
 			std::shared_ptr<EffectManager> effect;
 			//リバーブエフェクト
@@ -49,11 +50,11 @@ namespace Render {
 
 #ifdef _DEBUG
 		std::vector<std::string> album{
-			"../Media/Somehow_480.wav",
+			"../Media/Somehow_480.ogg",
 		};
 #else
 		std::vector<std::string> album{
-			"Media/Somehow_480.wav",
+			"Media/Somehow_480.ogg",
 		};
 #endif
 		void Init();
@@ -93,7 +94,7 @@ namespace Render {
 	//楽曲読み込み&エフェクト設定
 	Test::player Test::makePlayer(std::string directory) {
 		player play;
-		play.wav = std::make_shared<WavFile>(directory, EBufferMode::WAVE_BUFFERMODE_STREAM);
+		play.wav = std::make_shared<OggFile>(directory, EBufferMode::WAVE_BUFFERMODE_STREAM);
 
 #if ENABLEEFFECT
 		//std::pairで受け取る
@@ -372,6 +373,8 @@ int main(int argc, char* argv[]) {
 #endif
 	test.Main();
 
+	//OggFile ogg("../Media/Somehow_480.ogg", AS::EBufferMode::WAVE_BUFFERMODE_LOADALL);
+
 	//boost::circular_buffer<float> cir(10);
 	//for (auto i = 0; i < 5; ++i) {
 	//	cir.push_back(i + 1);
@@ -396,3 +399,72 @@ int main(int argc, char* argv[]) {
 
 	return 0;
 }
+
+// 指定サイズでPCM音声バッファを埋める関数
+unsigned int getPCMBuffer(OggVorbis_File* ovf, char* buffer, int bufferSize, bool isLoop, bool* isEnd = 0) {
+	if (buffer == 0) {
+		if (isEnd) *isEnd = true;
+		return 0;
+	}
+
+	if (isEnd) *isEnd = false;
+
+	memset(buffer, 0, bufferSize);
+	int requestSize = 4096;
+	int bitstream = 0;
+	int readSize = 0;
+	int comSize = 0;
+	bool isAdjust = false;
+
+	if (bufferSize < requestSize) {
+		requestSize = bufferSize;
+		isAdjust = true;    // 調整段階
+	}
+
+	while (1) {
+		readSize = ov_read(ovf, (char*)(buffer + comSize), requestSize, 0, 2, 1, &bitstream);
+		if (readSize == 0) {
+			// ファイルエンドに達した
+			if (isLoop == true) {
+				// ループする場合読み込み位置を最初に戻す
+				ov_time_seek(ovf, 0.0);
+			}
+			else {
+				// ループしない場合ファイルエンドに達したら終了
+				if (isEnd) *isEnd = true;
+				return comSize;
+			}
+		}
+
+		comSize += readSize;
+
+		if (comSize >= bufferSize) {
+			// バッファを埋め尽くしたので終了
+			return comSize;
+		}
+
+		if (bufferSize - comSize < 4096) {
+			isAdjust = true;    // 調整段階
+			requestSize = bufferSize - comSize;
+		}
+	}
+
+	return 0;    // 良くわからないエラー
+}
+long ov_read(
+	OggVorbis_File* vf,
+	char* buffer,
+	int             length,
+	int             bigendianp,
+	int             word,
+	int             sgned,
+	int* bitstream
+);
+
+//vfにはオープンしたOggファイルを指定します。
+//bufferには音データ（PCMデータ）を格納するバッファを指定します。マニュアルによると典型的には4096バイトのバッファを指定するようです。
+//lengthにはbufferのサイズを指定します。
+//bigendianpには音データの格納形式としてリトルエンディアン（0）かビッグエンディアン（1）を指定します。Ogg VorbisのライブラリはWindowsだけではなくてUnixやMacなどでも使えるようになっているのでこういうフラグがあります。Windowsはリトルエンディアンなので「o」が指定されます。
+//wordにはいわゆる「WORD」のサイズをフラグで指定します。8bitだと1、16bitだと2です。WindowsのWORDは16bitなのでここには「2」が入ります。
+//sgnedにはPCM音声の符号の有無をフラグ指定します。符号無しの場合は0、有りは1です。普通PCMは符号付きなので「1」です。
+//bitstreamにはストリーム再生中の位置が返ります。今は特に気にしないで下さい。

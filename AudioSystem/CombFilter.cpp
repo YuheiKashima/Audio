@@ -48,3 +48,16 @@ void AS::CombFilter::Flush() {
 	for (auto& cir : m_CircularBuffers)
 		cir.clear();
 }
+
+//void FirstOrderDifferentialFilter(void)
+//{
+//	int sum = 0;
+//
+//	for (int i = 1; i < channel - 1; i++) { //y_size‚Í‰æ‘œ‚Ìc•
+//		for (int j = 1; j < frames - 1; j++) { //x_size‚Í‰æ‘œ‚Ì‰¡•
+//			sum = abs(image[i][j + 1] - image[i][j]) + abs(image[i + 1][j] - image[i][j]);
+//
+//			image2[i][j] = sum;
+//		}
+//	}
+//}

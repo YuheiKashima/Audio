@@ -24,9 +24,13 @@ namespace AS {
 		const LineBuffer<float>& GetTrack() { return m_RealWave; }
 		const AudioFormat GetFormat() { return m_Format; }
 		const uint32_t Size() { return m_AllFrames; }
+		const uint32_t TotalTime() {
+			auto ms = (m_AllFrames / m_Format.samplingRate) * 1000.0;
+			return static_cast<uint32_t>(ms);
+		}
 	protected:
 		virtual size_t GetStream(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd) = 0;
-		size_t GetMemory(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd);
+		virtual size_t GetMemory(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd);
 
 		virtual void SeekStream(const uint32_t _seek) = 0;
 
@@ -59,6 +63,7 @@ namespace AS {
 		}
 
 		AudioFormat m_Format{};
+		//１チャンネルあたりの最大フレーム数
 		uint32_t m_AllFrames;
 		EBufferMode m_BufMode = EBufferMode::WAVE_BUFFERMODE_NONE;
 

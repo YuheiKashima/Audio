@@ -106,14 +106,14 @@
     <Filter Include="ソース ファイル\Effects\Reverb">
       <UniqueIdentifier>{fad550cf-bfbc-45fe-b9d0-23f3b8cea557}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Effects\BiquadFilter">
-      <UniqueIdentifier>{74668829-12a9-481e-b62d-4b000a631ab4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Effects\Compressor">
       <UniqueIdentifier>{113c7e7b-0ed1-4dce-9276-c246b08a89d9}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\MyLibs\MCPUSupportChecker">
       <UniqueIdentifier>{a62ac34b-336a-425f-ab75-8831671a075c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects\IIRFilter">
+      <UniqueIdentifier>{74668829-12a9-481e-b62d-4b000a631ab4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -196,7 +196,7 @@
       <Filter>ソース ファイル\Effects\Reverb</Filter>
     </ClInclude>
     <ClInclude Include="BiquadFilter.h">
-      <Filter>ソース ファイル\Effects\BiquadFilter</Filter>
+      <Filter>ソース ファイル\Effects\IIRFilter</Filter>
     </ClInclude>
     <ClInclude Include="Compressor.h">
       <Filter>ソース ファイル\Effects\Compressor</Filter>
@@ -258,7 +258,7 @@
       <Filter>ソース ファイル\Effects\Reverb</Filter>
     </ClCompile>
     <ClCompile Include="BiquadFilter.cpp">
-      <Filter>ソース ファイル\Effects\BiquadFilter</Filter>
+      <Filter>ソース ファイル\Effects\IIRFilter</Filter>
     </ClCompile>
     <ClCompile Include="Compressor.cpp">
       <Filter>ソース ファイル\Effects\Compressor</Filter>
