@@ -71,7 +71,7 @@ size_t AS::OggFile::GetStream(LineBuffer<float>& _dest, const uint32_t _frames, 
 	std::unique_ptr<byte[]> pcmData(new byte[orderSize]);
 	_isEnd = false;
 
-	std::memset(pcmData.get(), NULL, sizeof(byte) * OGG_REFREADSIZE);
+	std::memset(pcmData.get(), NULL, sizeof(byte) * orderSize);
 	byte* pPCM = pcmData.get();
 	while (true) {
 		requestSize = orderSize - readCompleteSize < OGG_REFREADSIZE ? orderSize - readCompleteSize : OGG_REFREADSIZE;

@@ -11,7 +11,7 @@
 #define NStoMS 1000000.0
 #define MEASUREMENT_AVERAGE 100
 #define MEASUREMENT_MASTER false
-#define MEASUREMENT_RENDER true
+#define MEASUREMENT_RENDER false
 
 namespace AS {
 	using namespace myLib;
