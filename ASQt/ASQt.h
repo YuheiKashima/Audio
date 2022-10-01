@@ -20,6 +20,7 @@ public:
 	~ASQt();
 
 	bool Lunch() {
+		LunchAS();
 		m_Ui.setupUi(this);
 		Connect();
 		show();
@@ -46,6 +47,7 @@ private:
 		std::weak_ptr<AS::Equalizer> equalizer;
 	};
 
+	void LunchAS();
 	void SetUpExplorer(std::string _rootDir);
 	void Connect();
 	Source CreateSource();
