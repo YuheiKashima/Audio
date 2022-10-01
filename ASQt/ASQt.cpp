@@ -19,29 +19,39 @@ ASQt::~ASQt() {
 }
 
 void ASQt::dragEnterEvent(QDragEnterEvent* _e) {
-	//if (_e->mimeData()->hasUrls()) {
-	//	_e->acceptProposedAction();
-	//}
+	if (_e->mimeData()->hasUrls()) {
+		_e->acceptProposedAction();
+	}
 }
 
 void ASQt::dropEvent(QDropEvent* _e) {
-	//QList<QUrl> fileUrls = _e->mimeData()->urls();
-	//for (uint32_t i = 0; i < fileUrls.size(); ++i) {
-	//	auto url = fileUrls.at(i).toLocalFile();
-	//	if (url.contains(".wav") == 0 || url.contains(".ogg") == 0) {
-	//		m_FilePaths.push_back(url.toStdString());
-	//		size_t pos = m_FilePaths.back().find_last_of("//");
-	//		m_Ui.m_AudioList->addItem(QString::fromStdString(m_FilePaths.back().substr(pos + 1)));
-	//	}
+	QList<QUrl> fileUrls = _e->mimeData()->urls();
+	for (uint32_t i = 0; i < fileUrls.size(); ++i) {
+		auto url = fileUrls.at(i).toLocalFile();
+		if (url.contains(".wav") == 0 || url.contains(".ogg") == 0) {
+			m_FilePaths.push_back(url.toStdString());
+			size_t pos = m_FilePaths.back().find_last_of("//");
+			m_Ui.m_PlayList->addItem(QString::fromStdString(m_FilePaths.back().substr(pos + 1)));
+		}
+	}
+}
+
+void ASQt::keyPressEvent(QKeyEvent* _e) {
+	//if (_e->key() == Qt::Key::Key_Delete) {
+	//	QList<QListWidgetItem*> selectItems = m_Ui.m_PlayList->selectedItems();
+	//	if (selectItems.size() > 0)
+	//		for (auto item : selectItems) {
+	//			m_Ui.m_PlayList->removeItemWidget(item);
+	//		}
 	//}
 }
 
 void ASQt::Connect() {
-	//connect(m_Ui.m_PlayButton, &QPushButton::clicked, this, &ASQt::Play);
+	connect(m_Ui.m_PlayButton, &QPushButton::clicked, this, &ASQt::Play);
+	connect(m_Ui.m_PauseButton, &QPushButton::clicked, this, &ASQt::Pause);
+	connect(m_Ui.m_StopButton, &QPushButton::clicked, this, &ASQt::Stop);
 	//connect(m_Ui.m_AudioList, &QListWidget::doubleClicked, this, &ASQt::Play);
-	//connect(m_Ui.m_PauseButton, &QPushButton::clicked, this, &ASQt::Pause);
-	//connect(m_Ui.m_StopButton, &QPushButton::clicked, this, &ASQt::Stop);
-	//connect(m_Ui.m_VolSlider, &QSlider::sliderReleased, this, &ASQt::ChangeVol);
+	connect(m_Ui.m_VolController, &QSlider::sliderReleased, this, &ASQt::ChangeVol);
 	//connect(m_Ui.m_ActionReverb, &QAction::triggered, this, &ASQt::OpenReverbWindow);
 	//connect(m_Ui.m_ActionEQ, &QAction::triggered, this, &ASQt::OpenEqualizerWindow);
 }

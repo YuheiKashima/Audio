@@ -29,6 +29,7 @@ public:
 protected:
 	void dragEnterEvent(QDragEnterEvent* _e) override;
 	void dropEvent(QDropEvent* _e) override;
+	void keyPressEvent(QKeyEvent* _e) override;
 private slots:
 	void Play();
 	void Stop();
@@ -45,14 +46,18 @@ private:
 		std::weak_ptr<AS::Equalizer> equalizer;
 	};
 
+	void SetUpExplorer(std::string _rootDir);
 	void Connect();
 	Source CreateSource();
 
+	//ASQt
+	const std::string m_DefaultRootDirectory = "%HOMEPATH%/Music";
+	Ui::ASQtClass m_Ui;
+	std::vector<std::string> m_FilePaths;
+
+	//AudioSystem
 	std::unique_ptr<AS::AudioSystem> m_AudioSystem;
 	AS::DeviceList m_DevList;
 	std::shared_ptr<AS::MasterTrack> m_spMasterTrack;
 	Source m_Source;
-
-	Ui::ASQtClass m_Ui;
-	std::vector<std::string> m_FilePaths;
 };

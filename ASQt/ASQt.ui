@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>512</height>
+    <width>1024</width>
+    <height>576</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>512</width>
-    <height>512</height>
+    <width>1024</width>
+    <height>576</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>512</width>
-    <height>512</height>
+    <width>1980</width>
+    <height>1080</height>
    </size>
   </property>
   <property name="font">
@@ -33,7 +33,93 @@
   <property name="windowTitle">
    <string>ASQt</string>
   </property>
-  <widget class="QWidget" name="m_CentralWidget"/>
+  <widget class="QWidget" name="m_CentralWidget">
+   <widget class="QTreeView" name="m_MusicExplorer">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>11</y>
+      <width>291</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="headerHidden">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="m_InfoViewer">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>40</y>
+      <width>691</width>
+      <height>201</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="m_PlayButton">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>10</y>
+      <width>61</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Play</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="m_StopButton">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>10</y>
+      <width>61</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="m_PauseButton">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>10</y>
+      <width>61</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pause</string>
+    </property>
+   </widget>
+   <widget class="QSlider" name="m_VolController">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>10</y>
+      <width>160</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="m_PlayList">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>250</y>
+      <width>691</width>
+      <height>271</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
   <widget class="QStatusBar" name="m_StatusBar"/>
   <widget class="QToolBar" name="m_MainToolBar">
    <attribute name="toolBarArea">
@@ -48,10 +134,26 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>512</width>
+     <width>1024</width>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDSP">
+    <property name="title">
+     <string>DSP</string>
+    </property>
+    <addaction name="actionreverb"/>
+    <addaction name="actionEQ"/>
+    <addaction name="actionCompressor"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionPreference"/>
+   </widget>
+   <addaction name="menuDSP"/>
+   <addaction name="menuTools"/>
   </widget>
   <action name="m_ActionPreference">
    <property name="text">
@@ -66,6 +168,26 @@
   <action name="m_ActionEQ">
    <property name="text">
     <string>EQ</string>
+   </property>
+  </action>
+  <action name="actionreverb">
+   <property name="text">
+    <string>Reverb</string>
+   </property>
+  </action>
+  <action name="actionEQ">
+   <property name="text">
+    <string>EQ</string>
+   </property>
+  </action>
+  <action name="actionCompressor">
+   <property name="text">
+    <string>Compressor</string>
+   </property>
+  </action>
+  <action name="actionPreference">
+   <property name="text">
+    <string>Preference</string>
    </property>
   </action>
  </widget>
