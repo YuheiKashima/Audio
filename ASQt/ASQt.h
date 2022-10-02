@@ -19,8 +19,8 @@ public:
 	ASQt(QWidget* parent = Q_NULLPTR);
 	~ASQt();
 
-	bool Lunch() {
-		LunchAS();
+	bool Launch() {
+		LaunchAS();
 		m_Ui.setupUi(this);
 		Connect();
 		show();
@@ -47,7 +47,7 @@ private:
 		std::weak_ptr<AS::Equalizer> equalizer;
 	};
 
-	void LunchAS();
+	void LaunchAS();
 	void SetUpExplorer(std::string _rootDir);
 	void Connect();
 	Source CreateSource();

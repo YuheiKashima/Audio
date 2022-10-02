@@ -17,10 +17,10 @@
 namespace AS {
 	using Microsoft::WRL::ComPtr;
 
-	struct WasapiLunchInfo :public LunchInfo {
-		WasapiLunchInfo() {}
-		WasapiLunchInfo(DeviceInfo _device, AudioFormat _format, AUDCLNT_SHAREMODE _mode, AudioFormat* _paltFormat)
-			:LunchInfo(_device, _format),
+	struct WasapiLaunchInfo :public LaunchInfo {
+		WasapiLaunchInfo() {}
+		WasapiLaunchInfo(DeviceInfo _device, AudioFormat _format, AUDCLNT_SHAREMODE _mode, AudioFormat* _paltFormat)
+			:LaunchInfo(_device, _format),
 			shareMode(_mode),
 			pAltFormat(_paltFormat) {}
 		//WasapiMode(共有モード:AUDCLNT_SHAREMODE_SHARED 排他モード:AUDCLNT_SHAREMODE_EXCLUSIVE)
@@ -58,7 +58,7 @@ namespace AS {
 
 		static std::string GetAPIName() { return m_APIName; }
 		uint32_t EnumrareDevices(const EEndPointMode _mode, DeviceList& _destList) override;
-		void LunchDevice(LunchInfo& _info) override;
+		void LaunchDevice(LaunchInfo& _info) override;
 		void SetupDevice(SetupInfo& _info) override;
 		void Start(StartInfo& _info) override;
 		void Stop() override;

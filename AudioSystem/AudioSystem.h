@@ -19,7 +19,7 @@ namespace AS {
 
 		template <class ENDPOINT>
 		uint32_t EnumerateDevices(const EEndPointMode _mode, DeviceList& _destList);
-		void LunchDevice(LunchInfo& _info);
+		void LaunchDevice(LaunchInfo& _info);
 		void SetupDevice(const EEndPointMode _mode, SetupInfo& _info);
 		void Start(const EEndPointMode _mode, StartInfo& _info);
 		void Stop(const EEndPointMode _mode);

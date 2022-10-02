@@ -321,30 +321,30 @@ uint32_t AS::Wasapi::EnumrareDevices(const EEndPointMode _mode, DeviceList& _des
 	return count;
 }
 
-void AS::Wasapi::LunchDevice(LunchInfo& _info) {
+void AS::Wasapi::LaunchDevice(LaunchInfo& _info) {
 	if (m_EndpointState != EEndPointState::AS_ENDPOINTSTATE_NONE)return;
 	///todo:ステート違ったらなんか例外処理
 
 	HRESULT res;
 	std::stringstream strstr;
 	strstr << m_APIName << "->" << std::source_location::current().function_name() << std::endl;
-	WasapiLunchInfo& wa_info = static_cast<WasapiLunchInfo&>(_info);
-	CreateDeviceMap(wa_info.lunchDevice.endpointMode, m_DeviceMap);
-	m_pDevice = FindDeviceFromMap(m_DeviceMap, wa_info.lunchDevice.deviceName);
+	WasapiLaunchInfo& wa_info = static_cast<WasapiLaunchInfo&>(_info);
+	CreateDeviceMap(wa_info.LaunchDevice.endpointMode, m_DeviceMap);
+	m_pDevice = FindDeviceFromMap(m_DeviceMap, wa_info.LaunchDevice.deviceName);
 	//Activate client
 	res = m_pDevice->Activate(m_sIID_IAudioClient, CLSCTX_ALL, nullptr, (void**)&m_pClient);
 	assert(res == S_OK);
 	///todo:CheckError
 	{
-		strstr << "\tLunchedDevice\t:" << wa_info.lunchDevice.deviceName << std::endl;
-		strstr << "\t" << "LunchOrderFormat" << std::endl;
-		strstr << "\t\t" << "Channel\t\t:" << wa_info.lunchFormat.channnels << std::endl;
-		strstr << "\t\t" << "SamplingRate\t:" << wa_info.lunchFormat.samplingRate << std::endl;
-		strstr << "\t\t" << "BitDepth\t:" << wa_info.lunchFormat.bitDepth << std::endl;
+		strstr << "\tLaunchedDevice\t:" << wa_info.LaunchDevice.deviceName << std::endl;
+		strstr << "\t" << "LaunchOrderFormat" << std::endl;
+		strstr << "\t\t" << "Channel\t\t:" << wa_info.LaunchFormat.channnels << std::endl;
+		strstr << "\t\t" << "SamplingRate\t:" << wa_info.LaunchFormat.samplingRate << std::endl;
+		strstr << "\t\t" << "BitDepth\t:" << wa_info.LaunchFormat.bitDepth << std::endl;
 		Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current(), true);
 	}
 
-	res = CheckFormat(m_pClient, wa_info.lunchFormat, wa_info.shareMode, m_Format);
+	res = CheckFormat(m_pClient, wa_info.LaunchFormat, wa_info.shareMode, m_Format);
 	assert(res == S_OK);
 	if (res != S_OK) {
 		m_pClient->Release();
@@ -353,12 +353,12 @@ void AS::Wasapi::LunchDevice(LunchInfo& _info) {
 	}
 
 	m_ShareMode = wa_info.shareMode;
-	m_EndPointMode = wa_info.lunchDevice.endpointMode;
-	m_EndpointState = EEndPointState::AS_ENDPOINTSTATE_LUNCHED;
+	m_EndPointMode = wa_info.LaunchDevice.endpointMode;
+	m_EndpointState = EEndPointState::AS_ENDPOINTSTATE_LAUNCHED;
 }
 
 void AS::Wasapi::SetupDevice(SetupInfo& _info) {
-	if (m_EndpointState != EEndPointState::AS_ENDPOINTSTATE_LUNCHED)return;
+	if (m_EndpointState != EEndPointState::AS_ENDPOINTSTATE_LAUNCHED)return;
 	///todo:ステート違ったらなんか例外処理
 
 	std::stringstream strstr;

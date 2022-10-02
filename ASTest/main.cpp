@@ -79,8 +79,8 @@ namespace Render {
 
 		//フォーマット設定(2ch 16bit 48000Hz)
 		AudioFormat alt;
-		WasapiLunchInfo lunchInfo(list[selectDevice], AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
-		system.LunchDevice(lunchInfo);
+		WasapiLaunchInfo LaunchInfo(list[selectDevice], AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
+		system.LaunchDevice(LaunchInfo);
 
 		WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
 		system.SetupDevice(EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
@@ -387,15 +387,15 @@ int main(int argc, char* argv[]) {
 
 	/*AS::Wasapi render, capture;
 	AudioFormat alt{};
-	WasapiLunchInfo lunch{};
-	lunch.lunchFormat = AudioFormat(48000, 16, 2);
-	lunch.shareMode = AUDCLNT_SHAREMODE_SHARED;
-	lunch.pAltFormat = &alt;
+	WasapiLaunchInfo Launch{};
+	Launch.LaunchFormat = AudioFormat(48000, 16, 2);
+	Launch.shareMode = AUDCLNT_SHAREMODE_SHARED;
+	Launch.pAltFormat = &alt;
 
-	lunch.lunchDevice = DeviceInfo("", Wasapi::GetAPIName(), EEndPointMode::AS_ENDPOINTMODE_RENDER);
-	render.LunchDevice(lunch);
-	lunch.lunchDevice.endpointMode = EEndPointMode::AS_ENDPOINTMODE_CAPTURE;
-	capture.LunchDevice(lunch);*/
+	Launch.LaunchDevice = DeviceInfo("", Wasapi::GetAPIName(), EEndPointMode::AS_ENDPOINTMODE_RENDER);
+	render.LaunchDevice(Launch);
+	Launch.LaunchDevice.endpointMode = EEndPointMode::AS_ENDPOINTMODE_CAPTURE;
+	capture.LaunchDevice(Launch);*/
 
 	return 0;
 }

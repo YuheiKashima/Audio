@@ -7,5 +7,5 @@ int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
 	ASQt w;
-	return w.Lunch() ? a.exec() : 0;
+	return w.Launch() ? a.exec() : 0;
 }

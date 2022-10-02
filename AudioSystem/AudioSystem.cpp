@@ -80,16 +80,16 @@ void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 	}
 }
 
-void AS::AudioSystem::LunchDevice(LunchInfo& _info) {
+void AS::AudioSystem::LaunchDevice(LaunchInfo& _info) {
 	std::unique_ptr<EndPointBase> instance;
 #ifdef _WIN32
-	instance = _info.lunchDevice.apiName == Wasapi::GetAPIName() ? std::make_unique<Wasapi>() : nullptr;
+	instance = _info.LaunchDevice.apiName == Wasapi::GetAPIName() ? std::make_unique<Wasapi>() : nullptr;
 #endif
 
 	if (instance) {
-		instance->LunchDevice(_info);
+		instance->LaunchDevice(_info);
 
-		switch (_info.lunchDevice.endpointMode) {
+		switch (_info.LaunchDevice.endpointMode) {
 		case EEndPointMode::AS_ENDPOINTMODE_RENDER:
 			if (m_upRenderEndPoint) {
 				m_upRenderEndPoint.reset();

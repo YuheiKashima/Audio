@@ -42,12 +42,12 @@ void ASQt::Connect() {
 	//connect(m_Ui.m_ActionEQ, &QAction::triggered, this, &ASQt::OpenEqualizerWindow);
 }
 
-void ASQt::LunchAS() {
+void ASQt::LaunchAS() {
 	m_AudioSystem = std::make_unique<AS::AudioSystem>();
 	m_AudioSystem->EnumerateDevices<AS::Wasapi>(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, m_DevList);
 	AS::AudioFormat altFormat;
-	AS::WasapiLunchInfo lunch(AS::DeviceInfo("", AS::Wasapi::GetAPIName()), AS::AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE_SHARED, &altFormat);
-	m_AudioSystem->LunchDevice(lunch);
+	AS::WasapiLaunchInfo Launch(AS::DeviceInfo("", AS::Wasapi::GetAPIName()), AS::AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE_SHARED, &altFormat);
+	m_AudioSystem->LaunchDevice(Launch);
 	AS::WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
 	m_AudioSystem->SetupDevice(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
 	m_spMasterTrack = m_AudioSystem->CreateMasterTrack();
