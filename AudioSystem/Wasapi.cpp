@@ -68,7 +68,7 @@ std::map<HRESULT, std::string>		AS::Wasapi::m_sErrorDetails{
 };
 
 AS::Wasapi::Wasapi() {
-	HRESULT res = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	HRESULT res = CoInitialize(nullptr);
 	assert(res == S_OK || res == S_FALSE);
 }
 

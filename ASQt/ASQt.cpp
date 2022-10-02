@@ -43,22 +43,21 @@ void ASQt::Connect() {
 }
 
 void ASQt::LaunchAS() {
-	m_AudioSystem = std::make_unique<AS::AudioSystem>();
-	m_AudioSystem->EnumerateDevices<AS::Wasapi>(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, m_DevList);
+	AS::AudioSystem::GetInstance().EnumerateDevices<AS::Wasapi>(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, m_DevList);
 	AS::AudioFormat altFormat;
 	AS::WasapiLaunchInfo Launch(AS::DeviceInfo("", AS::Wasapi::GetAPIName()), AS::AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE_SHARED, &altFormat);
-	m_AudioSystem->LaunchDevice(Launch);
+	AS::AudioSystem::GetInstance().LaunchDevice(Launch);
 	AS::WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
-	m_AudioSystem->SetupDevice(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
-	m_spMasterTrack = m_AudioSystem->CreateMasterTrack();
+	AS::AudioSystem::GetInstance().SetupDevice(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
+	m_spMasterTrack = AS::AudioSystem::GetInstance().CreateMasterTrack();
 
 	AS::WasapiStartInfo start(m_spMasterTrack, 2000);
-	m_AudioSystem->Start(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, start);
+	AS::AudioSystem::GetInstance().Start(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, start);
 }
 
 ASQt::Source ASQt::CreateSource() {
 	Source s;
-	auto [source, effect] = m_AudioSystem->CreateSourceTrackWithEffect(m_spMasterTrack, 0, AS::EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
+	auto [source, effect] = AS::AudioSystem::GetInstance().CreateSourceTrackWithEffect(m_spMasterTrack, 0, AS::EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
 	s.reverb = effect->AddEffect<AS::Reverb>();
 	s.equalizer = effect->AddEffect<AS::Equalizer>();
 	s.effect = effect; s.source = source;

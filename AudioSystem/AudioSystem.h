@@ -2,6 +2,7 @@
 #define _AUDIOSYSTEM_
 
 #include "EndPointBase.h"
+#include "MSingleton.h"
 
 #define _DEBUGSINWAVE false
 #define _DEBUGNOARG true
@@ -12,10 +13,10 @@ namespace AS {
 	using SPAudioSystem = std::shared_ptr<AudioSystem>;
 	using WPAudioSystem = std::weak_ptr<AudioSystem>;
 
-	class AudioSystem {
+	class AudioSystem :public Singleton<AudioSystem> {
 	public:
-		AudioSystem();
-		~AudioSystem();
+		template<typename T>
+		friend class Singleton;
 
 		template <class ENDPOINT>
 		uint32_t EnumerateDevices(const EEndPointMode _mode, DeviceList& _destList);
@@ -23,6 +24,7 @@ namespace AS {
 		void SetupDevice(const EEndPointMode _mode, SetupInfo& _info);
 		void Start(const EEndPointMode _mode, StartInfo& _info);
 		void Stop(const EEndPointMode _mode);
+		void Close(const EEndPointMode _mode);
 
 		std::shared_ptr<MasterTrack> CreateMasterTrack();
 		std::shared_ptr<SourceTrack> CreateSourceTrack(std::weak_ptr<MasterTrack> _connectMaster, const uint32_t _bufferTime);
@@ -30,6 +32,9 @@ namespace AS {
 		std::shared_ptr<SourceTrack> CreateSourceTrackIndepend(const uint32_t _bufferTime);
 		std::shared_ptr<EffectManager> CreateEffectManager(std::weak_ptr<SourceTrack> _source);
 	private:
+		AudioSystem();
+		~AudioSystem();
+
 		void RenderThread(std::weak_ptr<MasterTrack> _master);
 		std::thread m_RenderThread;
 		std::unique_ptr<EndPointBase> m_upRenderEndPoint;

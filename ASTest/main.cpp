@@ -40,8 +40,6 @@ namespace Render {
 		};
 		//入力
 		InstantInput input;
-		//メインシステム
-		AudioSystem system;
 		//サウンドデバイス一覧
 		DeviceList list;
 		//マスタトラック
@@ -59,7 +57,7 @@ namespace Render {
 #endif
 		void Init();
 		void Exit() {
-			system.Stop(EEndPointMode::AS_ENDPOINTMODE_RENDER);
+			AudioSystem::GetInstance().Stop(EEndPointMode::AS_ENDPOINTMODE_RENDER);
 		}
 
 		void PlayTest();
@@ -68,7 +66,7 @@ namespace Render {
 
 	//デバイス起動
 	void Test::Init() {
-		system.EnumerateDevices<Wasapi>(EEndPointMode::AS_ENDPOINTMODE_RENDER, list);
+		AudioSystem::GetInstance().EnumerateDevices<Wasapi>(EEndPointMode::AS_ENDPOINTMODE_RENDER, list);
 
 		uint32_t selectDevice = 0;
 		for (uint32_t i = 0; i < list.size(); ++i) {
@@ -80,15 +78,15 @@ namespace Render {
 		//フォーマット設定(2ch 16bit 48000Hz)
 		AudioFormat alt;
 		WasapiLaunchInfo LaunchInfo(list[selectDevice], AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
-		system.LaunchDevice(LaunchInfo);
+		AudioSystem::GetInstance().LaunchDevice(LaunchInfo);
 
 		WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
-		system.SetupDevice(EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
+		AudioSystem::GetInstance().SetupDevice(EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
 
-		spMaster = system.CreateMasterTrack();
+		spMaster = AudioSystem::GetInstance().CreateMasterTrack();
 
 		WasapiStartInfo start(spMaster, 2000);
-		system.Start(EEndPointMode::AS_ENDPOINTMODE_RENDER, start);
+		AudioSystem::GetInstance().Start(EEndPointMode::AS_ENDPOINTMODE_RENDER, start);
 	}
 
 	//楽曲読み込み&エフェクト設定
@@ -98,7 +96,7 @@ namespace Render {
 
 #if ENABLEEFFECT
 		//std::pairで受け取る
-		auto [sou, eff] = system.CreateSourceTrackWithEffect(spMaster, 0, EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
+		auto [sou, eff] = AudioSystem::GetInstance().CreateSourceTrackWithEffect(spMaster, 0, EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
 		play.source = sou; play.effect = eff;
 		play.source->Bind(play.wav);
 		play.source->Volume(0.5f);
@@ -133,7 +131,7 @@ namespace Render {
 
 		play.source->SetEndingCallback(StopCallBack);
 #else
-		play.source = system.CreateSourceTrack(spMaster, 0);
+		play.source = AudioSystem::GetInstance().CreateSourceTrack(spMaster, 0);
 		play.source->Bind(play.wav);
 		play.source->Volume(0.5f);
 #endif
@@ -352,7 +350,7 @@ namespace Capture {
 	};
 
 	void Test::Init() {
-		system.EnumerateDevices<Wasapi>(EEndPointMode::AS_ENDPOINTMODE_CAPTURE, list);
+		AudioSystem::GetInstance().EnumerateDevices<Wasapi>(EEndPointMode::AS_ENDPOINTMODE_CAPTURE, list);
 	}
 }
 

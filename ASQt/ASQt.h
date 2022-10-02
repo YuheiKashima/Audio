@@ -58,7 +58,6 @@ private:
 	std::vector<std::string> m_FilePaths;
 
 	//AudioSystem
-	std::unique_ptr<AS::AudioSystem> m_AudioSystem;
 	AS::DeviceList m_DevList;
 	std::shared_ptr<AS::MasterTrack> m_spMasterTrack;
 	Source m_Source;

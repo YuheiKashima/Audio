@@ -148,6 +148,17 @@ void AS::AudioSystem::Stop(const EEndPointMode _mode) {
 	}
 }
 
+void AS::AudioSystem::Close(const EEndPointMode _mode) {
+	switch (_mode) {
+	case EEndPointMode::AS_ENDPOINTMODE_RENDER:
+		if (m_upRenderEndPoint) {
+			m_upRenderEndPoint.reset();
+		}
+	default:
+		assert(false);
+	}
+}
+
 std::shared_ptr<AS::MasterTrack> AS::AudioSystem::CreateMasterTrack() {
 	std::shared_ptr<MasterTrack> none;
 	if (!m_upRenderEndPoint)return none;
