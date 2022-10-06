@@ -53,6 +53,8 @@ void ASQt::LaunchAS() {
 
 	AS::WasapiStartInfo start(m_spMasterTrack, 2000);
 	AS::AudioSystem::GetInstance().Start(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, start);
+
+	m_Source = CreateSource();
 }
 
 ASQt::Source ASQt::CreateSource() {
@@ -88,7 +90,7 @@ void ASQt::Play() {
 	m_Ui.m_PauseButton->setEnabled(true);
 	m_Ui.m_PlayButton->setEnabled(false);
 	AS::PlayOption opt(AS::LoopInfinity);
-	m_Source.source->PlayShot();
+	m_Source.source->Play(opt);
 }
 
 void ASQt::Stop() {

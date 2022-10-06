@@ -51,6 +51,7 @@ private:
 	void SetUpExplorer(std::string _rootDir);
 	void Connect();
 	Source CreateSource();
+	Source GetCurrentSource();
 
 	//ASQt
 	const std::string m_DefaultRootDirectory = "%HOMEPATH%/Music";
