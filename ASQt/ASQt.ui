@@ -34,19 +34,6 @@
    <string>ASQt</string>
   </property>
   <widget class="QWidget" name="m_CentralWidget">
-   <widget class="QTreeView" name="m_MusicExplorer">
-    <property name="geometry">
-     <rect>
-      <x>15</x>
-      <y>11</y>
-      <width>291</width>
-      <height>511</height>
-     </rect>
-    </property>
-    <property name="headerHidden">
-     <bool>false</bool>
-    </property>
-   </widget>
    <widget class="QTextBrowser" name="m_InfoViewer">
     <property name="geometry">
      <rect>
@@ -119,6 +106,22 @@
      </rect>
     </property>
    </widget>
+   <widget class="QTreeView" name="m_MusicExplorer">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>301</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="m_StatusBar"/>
   <widget class="QToolBar" name="m_MainToolBar">
@@ -142,50 +145,35 @@
     <property name="title">
      <string>DSP</string>
     </property>
-    <addaction name="actionreverb"/>
-    <addaction name="actionEQ"/>
-    <addaction name="actionCompressor"/>
+    <addaction name="m_ActReverb"/>
+    <addaction name="m_ActEQ"/>
+    <addaction name="m_ActCompressor"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionPreference"/>
+    <addaction name="m_ActPref"/>
    </widget>
    <addaction name="menuDSP"/>
    <addaction name="menuTools"/>
   </widget>
-  <action name="m_ActionPreference">
-   <property name="text">
-    <string>Preference</string>
-   </property>
-  </action>
-  <action name="m_ActionReverb">
+  <action name="m_ActReverb">
    <property name="text">
     <string>Reverb</string>
    </property>
   </action>
-  <action name="m_ActionEQ">
+  <action name="m_ActEQ">
    <property name="text">
     <string>EQ</string>
    </property>
   </action>
-  <action name="actionreverb">
-   <property name="text">
-    <string>Reverb</string>
-   </property>
-  </action>
-  <action name="actionEQ">
-   <property name="text">
-    <string>EQ</string>
-   </property>
-  </action>
-  <action name="actionCompressor">
+  <action name="m_ActCompressor">
    <property name="text">
     <string>Compressor</string>
    </property>
   </action>
-  <action name="actionPreference">
+  <action name="m_ActPref">
    <property name="text">
     <string>Preference</string>
    </property>

@@ -33,33 +33,43 @@ void ASQt::keyPressEvent(QKeyEvent* _e) {
 }
 
 void ASQt::Connect() {
+	connect(m_Ui.m_PlayList, &QListWidget::doubleClicked, this, &ASQt::Play);
 	connect(m_Ui.m_PlayButton, &QPushButton::clicked, this, &ASQt::Play);
 	connect(m_Ui.m_PauseButton, &QPushButton::clicked, this, &ASQt::Pause);
 	connect(m_Ui.m_StopButton, &QPushButton::clicked, this, &ASQt::Stop);
-	//connect(m_Ui.m_AudioList, &QListWidget::doubleClicked, this, &ASQt::Play);
 	connect(m_Ui.m_VolController, &QSlider::sliderReleased, this, &ASQt::ChangeVol);
 	//connect(m_Ui.m_ActionReverb, &QAction::triggered, this, &ASQt::OpenReverbWindow);
 	//connect(m_Ui.m_ActionEQ, &QAction::triggered, this, &ASQt::OpenEqualizerWindow);
+
+	auto headerCount = m_Ui.m_MusicExplorer->header()->count();
+	for (auto i = 1; i < headerCount; ++i) {
+		m_Ui.m_MusicExplorer->header()->setSectionHidden(i, true);
+	}
+	m_Ui.m_MusicExplorer->setHeaderHidden(true);
+	m_TreeModel.setRootPath(m_DefaultRootDirectory);
+	m_Ui.m_MusicExplorer->setModel(&m_TreeModel);
 }
 
 void ASQt::LaunchAS() {
-	AS::AudioSystem::GetInstance().EnumerateDevices<AS::Wasapi>(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, m_DevList);
+	m_pAudioSystem = std::make_unique<AS::AudioSystem>();
+	m_pAudioSystem->EnumerateDevices<AS::Wasapi>(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, m_DevList);
 	AS::AudioFormat altFormat;
-	AS::WasapiLaunchInfo Launch(AS::DeviceInfo("", AS::Wasapi::GetAPIName()), AS::AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE_SHARED, &altFormat);
-	AS::AudioSystem::GetInstance().LaunchDevice(Launch);
-	AS::WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
-	AS::AudioSystem::GetInstance().SetupDevice(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
-	m_spMasterTrack = AS::AudioSystem::GetInstance().CreateMasterTrack();
+	AS::WasapiLaunchInfo launchInfo(AS::DeviceInfo("", AS::Wasapi::GetAPIName()), AS::AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE_SHARED, &altFormat);
+	m_pAudioSystem->LaunchDevice(launchInfo);
+	AS::WasapiSetupInfo setupInfo(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
+	m_pAudioSystem->SetupDevice(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, setupInfo);
 
-	AS::WasapiStartInfo start(m_spMasterTrack, 2000);
-	AS::AudioSystem::GetInstance().Start(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, start);
+	m_spMasterTrack = m_pAudioSystem->CreateMasterTrack();
+
+	AS::WasapiStartInfo startInfo(m_spMasterTrack, 2000);
+	m_pAudioSystem->Start(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, startInfo);
 
 	m_Source = CreateSource();
 }
 
 ASQt::Source ASQt::CreateSource() {
 	Source s;
-	auto [source, effect] = AS::AudioSystem::GetInstance().CreateSourceTrackWithEffect(m_spMasterTrack, 0, AS::EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
+	auto [source, effect] = m_pAudioSystem->CreateSourceTrackWithEffect(m_spMasterTrack, 0, AS::EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
 	s.reverb = effect->AddEffect<AS::Reverb>();
 	s.equalizer = effect->AddEffect<AS::Equalizer>();
 	s.effect = effect; s.source = source;

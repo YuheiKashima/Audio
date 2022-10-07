@@ -20,6 +20,8 @@ using namespace AS;
 namespace Render {
 	class Test {
 	public:
+		Test(std::shared_ptr<AudioSystem> _system) :m_spAudioSystem(_system) {}
+		~Test() {};
 		void Main() {
 			Init();
 			PlayTest();
@@ -38,6 +40,8 @@ namespace Render {
 			//コンプレッサエフェクト
 			std::weak_ptr<Compressor> compressor;
 		};
+
+		std::shared_ptr<AudioSystem> m_spAudioSystem;
 		//入力
 		InstantInput input;
 		//サウンドデバイス一覧
@@ -57,7 +61,7 @@ namespace Render {
 #endif
 		void Init();
 		void Exit() {
-			AudioSystem::GetInstance().Stop(EEndPointMode::AS_ENDPOINTMODE_RENDER);
+			m_spAudioSystem->Stop(EEndPointMode::AS_ENDPOINTMODE_RENDER);
 		}
 
 		void PlayTest();
@@ -66,7 +70,7 @@ namespace Render {
 
 	//デバイス起動
 	void Test::Init() {
-		AudioSystem::GetInstance().EnumerateDevices<Wasapi>(EEndPointMode::AS_ENDPOINTMODE_RENDER, list);
+		m_spAudioSystem->EnumerateDevices<Wasapi>(EEndPointMode::AS_ENDPOINTMODE_RENDER, list);
 
 		uint32_t selectDevice = 0;
 		for (uint32_t i = 0; i < list.size(); ++i) {
@@ -78,15 +82,15 @@ namespace Render {
 		//フォーマット設定(2ch 16bit 48000Hz)
 		AudioFormat alt;
 		WasapiLaunchInfo LaunchInfo(list[selectDevice], AudioFormat(48000, 16, 2), AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &alt);
-		AudioSystem::GetInstance().LaunchDevice(LaunchInfo);
+		m_spAudioSystem->LaunchDevice(LaunchInfo);
 
 		WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
-		AudioSystem::GetInstance().SetupDevice(EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
+		m_spAudioSystem->SetupDevice(EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
 
-		spMaster = AudioSystem::GetInstance().CreateMasterTrack();
+		spMaster = m_spAudioSystem->CreateMasterTrack();
 
 		WasapiStartInfo start(spMaster, 2000);
-		AudioSystem::GetInstance().Start(EEndPointMode::AS_ENDPOINTMODE_RENDER, start);
+		m_spAudioSystem->Start(EEndPointMode::AS_ENDPOINTMODE_RENDER, start);
 	}
 
 	//楽曲読み込み&エフェクト設定
@@ -96,7 +100,7 @@ namespace Render {
 
 #if ENABLEEFFECT
 		//std::pairで受け取る
-		auto [sou, eff] = AudioSystem::GetInstance().CreateSourceTrackWithEffect(spMaster, 0, EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
+		auto [sou, eff] = m_spAudioSystem->CreateSourceTrackWithEffect(spMaster, 0, EEffectTiming::AS_EFFECTTIMING_SENDBUFFER);
 		play.source = sou; play.effect = eff;
 		play.source->Bind(play.wav);
 		play.source->Volume(0.5f);
@@ -131,7 +135,7 @@ namespace Render {
 
 		play.source->SetEndingCallback(StopCallBack);
 #else
-		play.source = AudioSystem::GetInstance().CreateSourceTrack(spMaster, 0);
+		play.source = m_spAudioSystem->CreateSourceTrack(spMaster, 0);
 		play.source->Bind(play.wav);
 		play.source->Volume(0.5f);
 #endif
@@ -350,7 +354,6 @@ namespace Capture {
 	};
 
 	void Test::Init() {
-		AudioSystem::GetInstance().EnumerateDevices<Wasapi>(EEndPointMode::AS_ENDPOINTMODE_CAPTURE, list);
 	}
 }
 
@@ -364,8 +367,10 @@ void sourceLocationTest(std::source_location _loc = std::source_location::curren
 
 #define _RENDER_ true
 int main(int argc, char* argv[]) {
+	std::shared_ptr<AudioSystem> system(std::make_shared<AudioSystem>());
+
 #if _RENDER_
-	Render::Test test;
+	Render::Test test(system);
 #else
 	Capture::Test test;
 #endif

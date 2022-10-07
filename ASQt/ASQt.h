@@ -4,6 +4,7 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <QUrl>
+#include <QFileSystemModel>
 
 #include <AudioSystem.h>
 #include <Wasapi.h>
@@ -54,11 +55,17 @@ private:
 	Source GetCurrentSource();
 
 	//ASQt
-	const std::string m_DefaultRootDirectory = "%HOMEPATH%/Music";
+	QFileSystemModel m_TreeModel;
+#ifdef _DEBUG
+	const QString m_DefaultRootDirectory = "D:/Users/third/Music";
+#else
+	const QString m_DefaultRootDirectory = "%HOMEPATH%/Music";
+#endif
 	Ui::ASQtClass m_Ui;
 	std::vector<std::string> m_FilePaths;
 
 	//AudioSystem
+	std::unique_ptr<AS::AudioSystem> m_pAudioSystem;
 	AS::DeviceList m_DevList;
 	std::shared_ptr<AS::MasterTrack> m_spMasterTrack;
 	Source m_Source;
