@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B969AC2E-181B-46EB-A42B-96491BECBA8D}</ProjectGuid>
+    <ProjectGuid>{9EADC3A9-9FF3-4A2D-95B1-B7D2518774E1}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.20348.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.20348.0</WindowsTargetPlatformVersion>
@@ -60,34 +60,22 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\boost\1_80_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\boost\1_80_0\lib\$(PlatformShortName);../$(Platform)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libs\libvorbis\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\win32\VS2015\$(Platform)\$(Configuration);C:\boost\1_80_0\lib\$(PlatformShortName);..\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\boost\1_80_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\boost\1_80_0\lib\$(PlatformShortName);../$(Platform)/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libs\libvorbis\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\win32\VS2015\$(Platform)\$(Configuration);C:\boost\1_80_0\lib\$(PlatformShortName);..\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -121,7 +109,15 @@
     <QtUic Include="ASQt.ui" />
     <QtMoc Include="ASQt.h" />
     <ClCompile Include="ASQt.cpp" />
+    <ClCompile Include="ASQt_Source.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="ASQt_Source.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="ASQt_Source.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ASQt_Define.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

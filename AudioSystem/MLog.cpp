@@ -33,8 +33,8 @@ std::string myLib::Log::Logging(std::string _log, bool _viewHeader) {
 	std::stringstream strstr;
 
 	if (_viewHeader)
-		strstr << "TimeStamp\t:" << Chrono::GetTime_str() << std::endl;
-	strstr << _log << std::flush;
+		strstr << Chrono::GetTime_str();
+	strstr << _log;
 
 	if (m_sViewLogging) {
 		std::cout << strstr.str();
@@ -47,25 +47,25 @@ std::string myLib::Log::Logging(Log::ELogLevel _level, std::string _log, bool _v
 	std::stringstream output;
 
 	if (_viewHeader) {
-		output << "Level\t\t:";
+		output << "[";
 		switch (_level) {
 		case Log::ASLOG_TRACE:
-			output << "Trace" << std::endl;
+			output << "Trace]";
 			break;
 		case Log::ASLOG_DEBUG:
-			output << "Debug" << std::endl;
+			output << "Debug]";
 			break;
 		case Log::ASLOG_INFO:
-			output << "Info" << std::endl;
+			output << "Info]";
 			break;
 		case Log::ASLOG_WARN:
-			output << "Warning" << std::endl;
+			output << "Warning]";
 			break;
 		case Log::ASLOG_ERROR:
-			output << "Error" << std::endl;
+			output << "Error]";
 			break;
 		case Log::ASLOG_FATAL:
-			output << "Fatal" << std::endl;
+			output << "Fatal]";
 			break;
 		}
 	}
@@ -76,10 +76,11 @@ std::string myLib::Log::Logging(Log::ELogLevel _level, std::string _log, bool _v
 
 std::string myLib::Log::Logging(Log::ELogLevel _level, std::string _comment, std::source_location _location, bool _viewHeader) {
 	std::stringstream strstr;
-	if (_viewHeader)
-		strstr << "FileName\t:" << _location.file_name() << "\n" <<
-		"FunctionName\t:" << _location.function_name() << "\n" <<
-		"Line\t\t:" << _location.line() << std::endl;
-	if (!_comment.empty())strstr << "Comment\t\t:" << _comment << std::flush;
+	if (_viewHeader) {
+		auto fileDir = std::string(_location.file_name());
+		auto pos = fileDir.find_last_of("\\");
+		strstr << fileDir.substr(pos + 1) << "[" << _location.line() << "]" << std::endl;
+	}
+	if (!_comment.empty())strstr << _comment << std::endl;
 	return myLib::Log::Logging(_level, strstr.str(), _viewHeader);
 }

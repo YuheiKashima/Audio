@@ -75,7 +75,7 @@ void AS::SourceTrack::CreateBuffer(AudioFormat _format, uint32_t _createFrames) 
 	strstr << "CreateFrameSize\t:" << _createFrames << "(" << FramesToTime(_format, _createFrames) << "ms)" << std::endl;
 
 	m_PlayState = EPlayState::AS_PLAYSTATE_UNBIND;
-	Log::Logging(Log::ASLOG_INFO, strstr.str());
+	Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current());
 }
 
 size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {

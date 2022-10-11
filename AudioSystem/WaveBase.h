@@ -59,7 +59,7 @@ namespace AS {
 			strstr << ">" << std::endl;
 			strstr << "AllFrameSize\t:" << _allFrames << "(" << FramesToTime(_format, _allFrames) << "ms)" << std::endl;
 
-			Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current(), true);
+			Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current());
 		}
 
 		AudioFormat m_Format{};

@@ -10,7 +10,7 @@ AS::MasterTrack::MasterTrack(AudioFormat _format, uint32_t _createFrames) :Track
 	strstr << "\t" << "BitDepth\t:" << m_Format.bitDepth << std::endl;
 	strstr << ">" << std::endl;
 	strstr << "CreateFrameSize\t:" << _createFrames << std::endl;
-	Log::Logging(Log::ASLOG_INFO, strstr.str());
+	Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current());
 }
 
 AS::MasterTrack::~MasterTrack() {
