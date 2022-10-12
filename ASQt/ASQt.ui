@@ -28,6 +28,9 @@
     <height>400</height>
    </size>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>ASQt</string>
   </property>

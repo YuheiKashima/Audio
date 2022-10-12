@@ -1,4 +1,13 @@
-#pragma once
+#ifndef _ASQTDEFINE_
+#define _ASQTDEFINE_
+
+#include <memory>
+#include <vector>
+
+#include <QDropEvent>
+#include <QMimeData>
+#include <QUrl>
+
 #include <AudioSystem.h>
 #include <Wasapi.h>
 #include <WavFile.h>
@@ -23,3 +32,4 @@ struct SourcePlayer {
 	//EQ
 	std::weak_ptr <AS::Equalizer> equalizer;
 };
+#endif

@@ -22,6 +22,9 @@
     <height>300</height>
    </size>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>ASQt_Source</string>
   </property>
@@ -54,6 +57,9 @@
      <string>Player</string>
     </attribute>
     <widget class="QPushButton" name="m_PauseButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>510</x>
@@ -99,6 +105,9 @@
      </widget>
     </widget>
     <widget class="QPushButton" name="m_PlayButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>350</x>
@@ -112,6 +121,9 @@
      </property>
     </widget>
     <widget class="QPushButton" name="m_StopButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>430</x>
@@ -136,13 +148,13 @@
      <property name="title">
       <string>Playlist</string>
      </property>
-     <widget class="QListView" name="m_Playlist">
+     <widget class="QListWidget" name="m_Playlist">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>20</y>
         <width>551</width>
-        <height>191</height>
+        <height>192</height>
        </rect>
       </property>
      </widget>

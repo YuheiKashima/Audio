@@ -6,12 +6,13 @@
 
 namespace AS {
 	enum class EPlayState {
-		AS_PLAYSTATE_NONE = 0,	//バッファ非生成状態
-		AS_PLAYSTATE_UNBIND,	//非バインド状態
-		AS_PLAYSTATE_STOP, 		//停止中
-		AS_PLAYSTATE_PAUSE,		//一時停止中
-		AS_PLAYSTATE_PLAY,		//再生中
-		AS_PLAYSTATE_OUT,		//停止準備
+		AS_PLAYSTATE_NONE = 0,		//バッファ非生成状態
+		AS_PLAYSTATE_UNBIND,		//非バインド状態
+		AS_PLAYSTATE_STOP, 			//停止中
+		AS_PLAYSTATE_PAUSE,			//一時停止中
+		AS_PLAYSTATE_PLAY,			//再生中
+		AS_PLAYSTATE_OUT,			//停止準備(コールバックあり)
+		AS_PLAYSTATE_OUT_NOCALLBACK,//停止準備(コールバック無し)
 		AS_PLAYSTATE_MAX
 	};
 

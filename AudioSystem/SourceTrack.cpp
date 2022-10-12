@@ -7,7 +7,8 @@ const std::array<std::string, static_cast<size_t>(AS::EPlayState::AS_PLAYSTATE_M
 	"Stop",
 	"Pause",
 	"Play",
-	"Out"
+	"Out",
+	"Stopping"
 };
 
 AS::SourceTrack::SourceTrack(AudioFormat _format, uint32_t _createFrames) :TrackBase(_format, "SourceTrack"), m_PlayState(EPlayState::AS_PLAYSTATE_UNBIND) {
@@ -24,7 +25,7 @@ AS::SourceTrack::SourceTrack(AudioFormat _format, uint32_t _createFrames, EEffec
 		strstr << "Connect EffectManager" << std::endl;
 	}
 
-	Log::Logging(Log::ASLOG_INFO, strstr.str(), false);
+	Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current());
 }
 
 AS::SourceTrack::~SourceTrack() {
@@ -117,7 +118,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 			RegisterTask(request);
 		}
 	}
-	else if (m_PlayState == EPlayState::AS_PLAYSTATE_OUT) {
+	else if (m_PlayState == EPlayState::AS_PLAYSTATE_OUT || m_PlayState == EPlayState::AS_PLAYSTATE_OUT_NOCALLBACK) {
 		sendFrames = _frames;
 	}
 
@@ -130,17 +131,23 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 		m_wpEffectManager.reset();
 	}
 
+	bool bOut = false;
 	//è‡’lˆÈ‰º‚Ì‰¹ˆ³‚É‚È‚Á‚½‚ç’âŽ~
-	if (m_PlayState == EPlayState::AS_PLAYSTATE_OUT) {
-		auto db = 20 * std::log10f(_dest.max());
-		m_PlayState = db <= m_sOutLimitDB ? EPlayState::AS_PLAYSTATE_STOP : EPlayState::AS_PLAYSTATE_OUT;
+	if (m_PlayState == EPlayState::AS_PLAYSTATE_OUT || m_PlayState == EPlayState::AS_PLAYSTATE_OUT_NOCALLBACK) {
+		bOut = m_PlayState == EPlayState::AS_PLAYSTATE_OUT ? true : false;
+		float db = 20 * std::log10f(_dest.max());
+		m_PlayState = db <= m_sOutLimitDB ? EPlayState::AS_PLAYSTATE_STOP : m_PlayState;
 	}
 
 	if (m_PlayState == EPlayState::AS_PLAYSTATE_STOP) {
+		if (!m_wpEffectManager.expired()) {
+			if (auto effect = m_wpEffectManager.lock())
+				effect->Flush();
+		}
 		if (auto wav = m_Wave.lock()) {
 			wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
 		}
-		if (m_EndCallback)m_EndCallback();
+		if (m_EndCallback && bOut)m_EndCallback();
 	}
 
 	//‰¹—Ê’²®
@@ -229,7 +236,7 @@ void AS::SourceTrack::Pause() {
 
 void AS::SourceTrack::Stop() {
 	if (m_PlayState == EPlayState::AS_PLAYSTATE_PLAY) {
-		m_PlayState = EPlayState::AS_PLAYSTATE_OUT;
+		m_PlayState = EPlayState::AS_PLAYSTATE_OUT_NOCALLBACK;
 		if (auto wav = m_Wave.lock()) {
 			wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
 		}
