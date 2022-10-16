@@ -58,6 +58,26 @@ void ASQt_Source::Connect() {
 		ui.m_PlayButton->setEnabled(true);
 	else
 		ui.m_PlayButton->setEnabled(false);
+
+	connect(ui.m_55Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_77Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_110Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_156Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_220Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_311Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_440Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_622Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_880Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_1200Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_1800Hhz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_2500Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_3500Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_5000Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_7000Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_10000Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_14000Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_20000Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_EnableEq, &QCheckBox::stateChanged, this, &ASQt_Source::ChangeEqEnable);
 }
 
 std::shared_ptr<AS::WaveBase> ASQt_Source::GetWaveFromPath(std::string _dir) {
@@ -133,4 +153,50 @@ void ASQt_Source::Pause() {
 
 void ASQt_Source::ChangeVolume() {
 	m_Source.source->Volume(static_cast<float>(ui.m_SourceVol->value() / 100.0f));
+}
+
+void ASQt_Source::ChangeEqParam() {
+	if (auto eq = m_Source.equalizer.lock()) {
+		auto param = AS::EQParam(
+			1.0f,
+			ui.m_55Hz->value(),
+			ui.m_77Hz->value(),
+			ui.m_110Hz->value(),
+			ui.m_156Hz->value(),
+			ui.m_220Hz->value(),
+			ui.m_311Hz->value(),
+			ui.m_440Hz->value(),
+			ui.m_622Hz->value(),
+			ui.m_880Hz->value(),
+			ui.m_1200Hz->value(),
+			ui.m_1800Hhz->value(),
+			ui.m_2500Hz->value(),
+			ui.m_3500Hz->value(),
+			ui.m_5000Hz->value(),
+			ui.m_7000Hz->value(),
+			ui.m_10000Hz->value(),
+			ui.m_14000Hz->value(),
+			ui.m_20000Hz->value(),
+			1.0f
+		);
+		eq->SetEffectParam(param);
+	}
+}
+
+void ASQt_Source::ChangeEqEnable() {
+	if (auto eq = m_Source.equalizer.lock()) {
+		eq->SetEnable(ui.m_EnableEq->checkState() == Qt::CheckState::Checked);
+	}
+}
+
+void ASQt_Source::ChangeReverbParam() {
+}
+
+void ASQt_Source::ChangeReverbEnable() {
+}
+
+void ASQt_Source::ChangeCompParam() {
+}
+
+void ASQt_Source::ChangeCompEnable() {
 }

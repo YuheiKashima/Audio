@@ -20,7 +20,7 @@ protected:
 private:
 	void ASLaunch();
 	void Connect();
-	void AddSourceWithWave(QString _dir);
+	void AddSourceWithWave(QList<QString> _dir);
 
 	Ui::ASQtClass ui;
 	AS::AudioSystem m_AudioSystem;

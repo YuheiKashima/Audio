@@ -24,10 +24,17 @@ private:
 	Ui::ASQt_SourceClass ui;
 	SourcePlayer m_Source;
 	std::vector<std::string> m_FilePaths;
+
 private slots:
 	void Play();
 	void Stop();
 	void Pause();
 	void ChangeVolume();
+	void ChangeEqParam();
+	void ChangeEqEnable();
+	void ChangeReverbParam();
+	void ChangeReverbEnable();
+	void ChangeCompParam();
+	void ChangeCompEnable();
 };
 #endif

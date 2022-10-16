@@ -12,7 +12,7 @@ ASQt::~ASQt() {
 
 void ASQt::dragEnterEvent(QDragEnterEvent* _e) {
 	if (_e->mimeData()->hasUrls()) {
-		_e->acceptProposedAction();
+		//_e->acceptProposedAction();
 	}
 }
 
@@ -45,7 +45,7 @@ void ASQt::Connect() {
 	connect(ui.m_MasterVol, &QSlider::sliderReleased, this, &ASQt::ChangeMasterVol);
 }
 
-void ASQt::AddSourceWithWave(QString _dir) {
+void ASQt::AddSourceWithWave(QList<QString> _dir) {
 }
 
 void ASQt::AddSource() {
