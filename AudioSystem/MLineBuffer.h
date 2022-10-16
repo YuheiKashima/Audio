@@ -183,11 +183,11 @@ namespace myLib {
 			}
 		}
 
-		T max() {
+		T Max() {
 			return *std::max_element(m_arr_real.get(), m_arr_real.get() + capacity());
 		}
 
-		T min() {
+		T Min() {
 			return *std::min_element(m_arr_real.get(), m_arr_real.get() + capacity());
 		}
 

@@ -135,7 +135,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	//è‡’lˆÈ‰º‚Ì‰¹ˆ³‚É‚È‚Á‚½‚ç’âŽ~
 	if (m_PlayState == EPlayState::AS_PLAYSTATE_OUT || m_PlayState == EPlayState::AS_PLAYSTATE_OUT_NOCALLBACK) {
 		bOut = m_PlayState == EPlayState::AS_PLAYSTATE_OUT ? true : false;
-		float db = 20 * std::log10f(_dest.max());
+		float db = 20 * std::log10f(_dest.Max());
 		m_PlayState = db <= m_sOutLimitDB ? EPlayState::AS_PLAYSTATE_STOP : m_PlayState;
 	}
 

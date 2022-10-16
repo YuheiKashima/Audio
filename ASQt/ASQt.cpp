@@ -56,6 +56,29 @@ void ASQt::AddSource() {
 	source.effect = sourceEffect.second;
 	source.reverb = source.effect->AddEffect<AS::Reverb>();
 	source.equalizer = source.effect->AddEffect<AS::Equalizer>();
+	auto eqparam = AS::EQParam(
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f,
+		1.0f
+	);
+	source.equalizer.lock()->SetEffectParam(eqparam);
 	source.compressor = source.effect->AddEffect<AS::Compressor>();
 
 	auto asqtSource = std::make_unique<ASQt_Source>(this);

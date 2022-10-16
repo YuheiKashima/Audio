@@ -1,6 +1,10 @@
 #ifndef _UTITLITES_
 #define _UTILITIES_
 
+//#ifdef _WIN32
+//#include <Windows.h>
+//#endif
+
 #include <algorithm>
 #include <array>
 #include <atomic>
