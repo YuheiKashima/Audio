@@ -24,6 +24,10 @@ namespace AS {
 		const LineBuffer<float>& GetTrack() { return m_RealWave; }
 		const AudioFormat GetFormat() { return m_Format; }
 		const uint32_t Size() { return m_AllFrames; }
+		const uint32_t GetPlaingTime() {
+			auto ms = (m_Cursor / m_Format.samplingRate) * 1000.0;
+			return static_cast<uint32_t>(ms);
+		}
 		const uint32_t TotalTime() {
 			auto ms = (m_AllFrames / m_Format.samplingRate) * 1000.0;
 			return static_cast<uint32_t>(ms);
