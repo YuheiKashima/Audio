@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>300</height>
+    <width>700</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>600</width>
-    <height>300</height>
+    <width>700</width>
+    <height>400</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>600</width>
-    <height>300</height>
+    <width>700</width>
+    <height>400</height>
    </size>
   </property>
   <property name="acceptDrops">
@@ -33,14 +33,14 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
-     <height>300</height>
+     <width>700</width>
+     <height>400</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>600</width>
-     <height>300</height>
+     <width>700</width>
+     <height>400</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -50,33 +50,17 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="m_PlayerTab">
     <attribute name="title">
      <string>Player</string>
     </attribute>
-    <widget class="QPushButton" name="m_PauseButton">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
+    <widget class="QGroupBox" name="bx_volume">
      <property name="geometry">
       <rect>
-       <x>510</x>
-       <y>240</y>
-       <width>75</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Pause</string>
-     </property>
-    </widget>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="geometry">
-      <rect>
-       <x>139</x>
-       <y>219</y>
+       <x>230</x>
+       <y>310</y>
        <width>201</width>
        <height>51</height>
       </rect>
@@ -104,45 +88,13 @@
       </property>
      </widget>
     </widget>
-    <widget class="QPushButton" name="m_PlayButton">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>350</x>
-       <y>240</y>
-       <width>75</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Play</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="m_StopButton">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>240</y>
-       <width>75</width>
-       <height>24</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Stop</string>
-     </property>
-    </widget>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="bx_playlist">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>0</y>
-       <width>571</width>
-       <height>221</height>
+       <width>671</width>
+       <height>261</height>
       </rect>
      </property>
      <property name="title">
@@ -153,11 +105,106 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>551</width>
-        <height>192</height>
+        <width>651</width>
+        <height>231</height>
        </rect>
       </property>
      </widget>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>270</y>
+       <width>671</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="bx_seeker">
+      <item>
+       <layout class="QHBoxLayout" name="bx_playtime">
+        <item>
+         <widget class="QLabel" name="m_PlaingTimeLabel">
+          <property name="text">
+           <string>1:00:00</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lb_slash">
+          <property name="text">
+           <string>/</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="m_TotalTimeLabel">
+          <property name="text">
+           <string>1:00:00</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QSlider" name="m_SeekSlider">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>440</x>
+       <y>330</y>
+       <width>239</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="bx_playerbuttons">
+      <item>
+       <widget class="QPushButton" name="m_PlayButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Play</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="m_StopButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Stop</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="m_PauseButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Pause</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QWidget" name="m_EQTab">
@@ -168,7 +215,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>250</y>
+       <y>350</y>
        <width>75</width>
        <height>20</height>
       </rect>
@@ -182,11 +229,11 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>551</width>
-       <height>201</height>
+       <width>631</width>
+       <height>281</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="bx_sliders">
       <item>
        <widget class="QSlider" name="m_55Hz">
         <property name="minimum">
@@ -348,7 +395,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="m_1800Hhz">
+       <widget class="QSlider" name="m_1800Hz">
         <property name="minimum">
          <number>1</number>
         </property>
@@ -481,14 +528,14 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>210</y>
-       <width>531</width>
+       <y>300</y>
+       <width>601</width>
        <height>18</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="bx_freq1">
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="lb_55">
         <property name="text">
          <string>55Hz</string>
         </property>
@@ -498,7 +545,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="lb_110">
         <property name="text">
          <string>110Hz</string>
         </property>
@@ -508,7 +555,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="lb_220">
         <property name="text">
          <string>220Hz</string>
         </property>
@@ -518,7 +565,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="lb_440">
         <property name="text">
          <string>440Hz</string>
         </property>
@@ -528,7 +575,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_13">
+       <widget class="QLabel" name="lb_880">
         <property name="text">
          <string>880Hz</string>
         </property>
@@ -538,7 +585,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_11">
+       <widget class="QLabel" name="lb_1800">
         <property name="text">
          <string>1.8kHz</string>
         </property>
@@ -548,7 +595,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_15">
+       <widget class="QLabel" name="lb_3500">
         <property name="text">
          <string>3.5kHz</string>
         </property>
@@ -558,7 +605,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_9">
+       <widget class="QLabel" name="lb_7000">
         <property name="text">
          <string>7kHz</string>
         </property>
@@ -568,7 +615,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_17">
+       <widget class="QLabel" name="lb_14000">
         <property name="text">
          <string>14kHz</string>
         </property>
@@ -583,14 +630,14 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>230</y>
-       <width>531</width>
+       <y>320</y>
+       <width>611</width>
        <height>20</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="bx_freq2">
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="lb_77">
         <property name="text">
          <string>77Hz</string>
         </property>
@@ -600,7 +647,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="lb_156">
         <property name="text">
          <string>156Hz</string>
         </property>
@@ -610,7 +657,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="lb_311">
         <property name="text">
          <string>311Hz</string>
         </property>
@@ -620,7 +667,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_16">
+       <widget class="QLabel" name="lb_622">
         <property name="text">
          <string>622Hz</string>
         </property>
@@ -630,7 +677,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_14">
+       <widget class="QLabel" name="lb_1200">
         <property name="text">
          <string>1.2kHz</string>
         </property>
@@ -640,7 +687,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_18">
+       <widget class="QLabel" name="lb_2500">
         <property name="text">
          <string>2.5kHz</string>
         </property>
@@ -650,7 +697,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_10">
+       <widget class="QLabel" name="lb_5000">
         <property name="text">
          <string>5kHz</string>
         </property>
@@ -660,7 +707,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_12">
+       <widget class="QLabel" name="lb_10000">
         <property name="text">
          <string>10kHz</string>
         </property>
@@ -670,7 +717,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_8">
+       <widget class="QLabel" name="lb_20000">
         <property name="text">
          <string>20kHz</string>
         </property>
@@ -686,6 +733,547 @@
     <attribute name="title">
      <string>Reverb</string>
     </attribute>
+    <widget class="QGroupBox" name="bx_DryWet">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>230</y>
+       <width>361</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>DryWet</string>
+     </property>
+     <widget class="QGroupBox" name="bx_Dry">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>341</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Dry</string>
+      </property>
+      <widget class="QSlider" name="m_DrySlider">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>20</y>
+         <width>261</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="m_DryValue">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>49</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>1.0</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="bx_Wet">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>341</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Wet</string>
+      </property>
+      <widget class="QSlider" name="m_WetSlider">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>20</y>
+         <width>261</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="m_WetValue">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>49</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>1.0</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>301</width>
+       <height>361</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="bx_Combs">
+      <item>
+       <widget class="QGroupBox" name="bx_Comb0">
+        <property name="title">
+         <string>Comb0</string>
+        </property>
+        <widget class="QDoubleSpinBox" name="m_DelayTime0">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>30</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="m_Feedback0">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>30</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="lb_DT0">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>54</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>DelayTime</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="lb_FB0">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>30</y>
+           <width>50</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Feedback</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="m_EnableComb0">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>60</y>
+           <width>75</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Enable</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="bx_Comb1">
+        <property name="title">
+         <string>Comb1</string>
+        </property>
+        <widget class="QLabel" name="lb_DT1">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>54</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>DelayTime</string>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="m_DelayTime1">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>30</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="lb_FB1">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>30</y>
+           <width>50</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Feedback</string>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="m_Feedback1">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>30</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="m_EnableComb1">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>60</y>
+           <width>75</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Enable</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="bx_Comb2">
+        <property name="title">
+         <string>Comb2</string>
+        </property>
+        <widget class="QLabel" name="lb_DT2">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>54</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>DelayTime</string>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="m_DelayTime2">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>30</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="lb_FB2">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>30</y>
+           <width>50</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Feedback</string>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="m_Feedback2">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>30</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="m_EnableComb2">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>60</y>
+           <width>75</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Enable</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="bx_Comb3">
+        <property name="title">
+         <string>Comb3</string>
+        </property>
+        <widget class="QLabel" name="lb_DT3">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>54</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>DelayTime</string>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="m_DelayTime3">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>30</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLabel" name="lb_FB3">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>30</y>
+           <width>50</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Feedback</string>
+         </property>
+        </widget>
+        <widget class="QDoubleSpinBox" name="m_Feedback3">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>30</y>
+           <width>71</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="m_EnableComb3">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>60</y>
+           <width>75</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Enalbe</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>0</y>
+       <width>361</width>
+       <height>221</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="bx_APF">
+      <item>
+       <widget class="QGroupBox" name="bx_APF0">
+        <property name="title">
+         <string>APF0</string>
+        </property>
+        <widget class="QGroupBox" name="bx_APF0Freq">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>341</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Freq</string>
+         </property>
+         <widget class="QLabel" name="m_APF0FreqValue">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>20</y>
+            <width>51</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+         <widget class="QSlider" name="m_APF0FreqSlider">
+          <property name="geometry">
+           <rect>
+            <x>70</x>
+            <y>20</y>
+            <width>261</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QCheckBox" name="m_EnableAPF0">
+         <property name="geometry">
+          <rect>
+           <x>260</x>
+           <y>70</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Enable</string>
+         </property>
+        </widget>
+        <widget class="QWidget" name="">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>70</y>
+           <width>211</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="bx_APF0Q">
+          <item>
+           <widget class="QLabel" name="lb_APF0Q">
+            <property name="text">
+             <string>Q-Value</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="m_APF0QValue"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="bx_APF1">
+        <property name="title">
+         <string>APF0</string>
+        </property>
+        <widget class="QGroupBox" name="bx_APF1Freq">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>341</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Freq</string>
+         </property>
+         <widget class="QLabel" name="m_APF1FreqValue">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>20</y>
+            <width>51</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+         <widget class="QSlider" name="m_APF1FreqSlider">
+          <property name="geometry">
+           <rect>
+            <x>70</x>
+            <y>20</y>
+            <width>261</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="layoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>70</y>
+           <width>211</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="bx_APF1Q">
+          <item>
+           <widget class="QLabel" name="lb_APF1Q">
+            <property name="text">
+             <string>Q-Value</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="m_APF1QValue"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QCheckBox" name="m_EnalbeAPF1">
+         <property name="geometry">
+          <rect>
+           <x>260</x>
+           <y>70</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Enable</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
    <widget class="QWidget" name="m_CompressorTab">
     <attribute name="title">

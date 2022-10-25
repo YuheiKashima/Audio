@@ -50,6 +50,7 @@ void ASQt_Source::dropEvent(QDropEvent* _e) {
 
 void ASQt_Source::Connect() {
 	connect(ui.m_PlayButton, &QPushButton::clicked, this, &ASQt_Source::Play);
+	connect(ui.m_Playlist, &QListView::doubleClicked, this, &ASQt_Source::Play);
 	connect(ui.m_StopButton, &QPushButton::clicked, this, &ASQt_Source::Stop);
 	connect(ui.m_PauseButton, &QPushButton::clicked, this, &ASQt_Source::Pause);
 	connect(ui.m_SourceVol, &QSlider::sliderReleased, this, &ASQt_Source::ChangeVolume);
@@ -69,7 +70,7 @@ void ASQt_Source::Connect() {
 	connect(ui.m_622Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
 	connect(ui.m_880Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
 	connect(ui.m_1200Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
-	connect(ui.m_1800Hhz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
+	connect(ui.m_1800Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
 	connect(ui.m_2500Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
 	connect(ui.m_3500Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
 	connect(ui.m_5000Hz, &QSlider::sliderReleased, this, &ASQt_Source::ChangeEqParam);
@@ -110,12 +111,17 @@ void ASQt_Source::Play() {
 				m_Source.source->PlayShot();
 			}
 		}
+		else {
+			ui.m_StopButton->setEnabled(false);
+			ui.m_PauseButton->setEnabled(false);
+			ui.m_PlayButton->setEnabled(true);
+		}
 		});
 
 	int playIdx = ui.m_Playlist->currentRow();
 	if (playIdx < 0) {
 		playIdx = 0;
-		ui.m_Playlist->setCurrentRow(0);
+		ui.m_Playlist->setCurrentRow(playIdx);
 	}
 
 	m_Source.wav = GetWaveFromPath(m_FilePaths.at(playIdx));
@@ -169,7 +175,7 @@ void ASQt_Source::ChangeEqParam() {
 			ui.m_622Hz->value(),
 			ui.m_880Hz->value(),
 			ui.m_1200Hz->value(),
-			ui.m_1800Hhz->value(),
+			ui.m_1800Hz->value(),
 			ui.m_2500Hz->value(),
 			ui.m_3500Hz->value(),
 			ui.m_5000Hz->value(),
@@ -190,6 +196,11 @@ void ASQt_Source::ChangeEqEnable() {
 }
 
 void ASQt_Source::ChangeReverbParam() {
+	AS::CombParam combParam1();
+	AS::CombParam combParam2();
+	AS::CombParam combParam3();
+	AS::CombParam combParam4();
+	AS::ReverbParam revParam();
 }
 
 void ASQt_Source::ChangeReverbEnable() {

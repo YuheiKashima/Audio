@@ -10,9 +10,9 @@ namespace AS {
 		CombParam(float _delayTime, float _feedBackDecay)
 			:delayTime(_delayTime), decayLevel(_feedBackDecay), feedBack(_feedBackDecay) {}
 
-		float delayTime = 0.0f;
-		float decayLevel = 0.0f;
-		float feedBack = 0.0f;
+		float delayTime = 1.0f;
+		float decayLevel = 1.0f;
+		float feedBack = 1.0f;
 	};
 
 	class CombFilter :public EffectBase {
