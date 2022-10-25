@@ -52,11 +52,11 @@ namespace Render {
 
 #ifdef _DEBUG
 		std::vector<std::string> album{
-			"../Media/Somehow_480.ogg",
+			//ここに再生するwav,oggのディレクトリ(デバッグ用)
 		};
 #else
 		std::vector<std::string> album{
-			"Media/Somehow_480.ogg",
+			//ここに再生するwav,oggのディレクトリ(リリース用)
 		};
 #endif
 		void Init();

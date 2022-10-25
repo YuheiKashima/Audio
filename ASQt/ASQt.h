@@ -4,7 +4,6 @@
 #include <QtWidgets/QMainWindow>
 
 #include "ASQt_Define.h"
-#include "ui_ASQt.h"
 #include "ASQt_Source.h"
 
 class ASQt : public QMainWindow {

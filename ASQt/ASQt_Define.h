@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 
+#include <QWidget>
 #include <QDropEvent>
 #include <QMimeData>
 #include <QUrl>
@@ -15,6 +16,9 @@
 #include <Reverb.h>
 #include <Compressor.h>
 #include <Equalizer.h>
+
+#include "ui_ASQt.h"
+#include "ui_ASQt_Source.h"
 
 #pragma comment(lib,"AudioSystem.lib")
 

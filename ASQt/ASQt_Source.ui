@@ -52,7 +52,7 @@
    <property name="currentIndex">
     <number>0</number>
    </property>
-   <widget class="QWidget" name="m_PlayerTab">
+   <widget class="QWidget" name="tab_PlayerTab">
     <attribute name="title">
      <string>Player</string>
     </attribute>
@@ -207,7 +207,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="m_EQTab">
+   <widget class="QWidget" name="tab_EQTab">
     <attribute name="title">
      <string>EQ</string>
     </attribute>
@@ -729,7 +729,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="m_ReverbTab">
+   <widget class="QWidget" name="tab_Reverb">
     <attribute name="title">
      <string>Reverb</string>
     </attribute>
@@ -824,7 +824,7 @@
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -1100,7 +1100,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>320</x>
@@ -1167,7 +1167,7 @@
           <string>Enable</string>
          </property>
         </widget>
-        <widget class="QWidget" name="">
+        <widget class="QWidget" name="layoutWidget">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -1275,7 +1275,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="m_CompressorTab">
+   <widget class="QWidget" name="tab_Compressor">
     <attribute name="title">
      <string>Compressor</string>
     </attribute>

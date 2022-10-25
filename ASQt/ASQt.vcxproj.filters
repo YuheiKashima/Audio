@@ -43,6 +43,9 @@
     <ClCompile Include="ASQt_Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ASQt_EQTab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ASQt_Source.ui">
@@ -56,6 +59,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ASQt_Define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ASQt_EQTab.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ASQt_ReverbTab.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ASQt_CompressorTab.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

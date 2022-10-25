@@ -109,6 +109,7 @@
     <QtUic Include="ASQt.ui" />
     <QtMoc Include="ASQt.h" />
     <ClCompile Include="ASQt.cpp" />
+    <ClCompile Include="ASQt_EQTab.cpp" />
     <ClCompile Include="ASQt_Source.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="ASQt_Source.ui" />
@@ -117,7 +118,10 @@
     <QtMoc Include="ASQt_Source.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ASQt_CompressorTab.h" />
     <ClInclude Include="ASQt_Define.h" />
+    <ClInclude Include="ASQt_EQTab.h" />
+    <ClInclude Include="ASQt_ReverbTab.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

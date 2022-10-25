@@ -1,10 +1,8 @@
 #ifndef _ASQTSOURCE_
 #define _ASQTSOURCE_
 
-#include <QWidget>
-
 #include "ASQt_Define.h"
-#include "ui_ASQt_Source.h"
+#include "ASQt_EQTab.h"
 
 class ASQt_Source : public QWidget {
 	Q_OBJECT
@@ -21,7 +19,9 @@ private:
 	void Connect();
 	std::shared_ptr<AS::WaveBase> GetWaveFromPath(std::string _dir);
 
-	Ui::ASQt_SourceClass ui;
+	std::shared_ptr<Ui::ASQt_SourceClass> m_spUI;
+	std::unique_ptr<ASQt_EQTab> m_upEQUi;
+
 	SourcePlayer m_Source;
 	std::vector<std::string> m_FilePaths;
 
@@ -29,12 +29,8 @@ private slots:
 	void Play();
 	void Stop();
 	void Pause();
+	void Seeking();
+	void Seek();
 	void ChangeVolume();
-	void ChangeEqParam();
-	void ChangeEqEnable();
-	void ChangeReverbParam();
-	void ChangeReverbEnable();
-	void ChangeCompParam();
-	void ChangeCompEnable();
 };
 #endif
