@@ -19,7 +19,8 @@ void AS::Reverb::SetEffectParam(EffectParamBase& _param) {
 	}
 	for (auto& biquad : m_BiquadFilters) {
 		for (size_t i = 0; auto & filter : biquad) {
-			filter.AllPass(m_Format.samplingRate, 1200, m_Param.apfQ[i++]);
+			filter.AllPass(m_Format.samplingRate, m_Param.apfFreq[i], m_Param.apfQ[i]);
+			++i;
 		}
 	}
 	m_Param.wet = m_Param.wet > 0.0f ? m_Param.wet < 1.0f ? m_Param.wet : 1.0f : 0.0f;

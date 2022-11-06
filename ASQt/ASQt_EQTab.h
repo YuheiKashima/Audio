@@ -5,17 +5,17 @@
 
 class ASQt_EQTab :public QWidget {
 public:
-	ASQt_EQTab(std::weak_ptr<Ui::ASQt_SourceClass> _parent, std::weak_ptr<AS::Equalizer> _eq);
+	ASQt_EQTab(std::weak_ptr<Ui::ASQt_SourceClass> _parent, std::weak_ptr<AS::Equalizer> _effect);
 	~ASQt_EQTab();
 
 private:
 	std::weak_ptr<Ui::ASQt_SourceClass> m_wpUi;
-	std::weak_ptr<AS::Equalizer> m_wpEq;
+	std::weak_ptr<AS::Equalizer> m_wpEffect;
 
-	AS::EQParam m_EQParam;
+	AS::EQParam m_Param{};
 private slots:
-	void ChangeEqParam();
-	void ChangeEqEnable();
+	void ChangeParam();
+	void ChangeEnable();
 };
 
 #endif

@@ -110,6 +110,7 @@
     <QtMoc Include="ASQt.h" />
     <ClCompile Include="ASQt.cpp" />
     <ClCompile Include="ASQt_EQTab.cpp" />
+    <ClCompile Include="ASQt_ReverbTab.cpp" />
     <ClCompile Include="ASQt_Source.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="ASQt_Source.ui" />

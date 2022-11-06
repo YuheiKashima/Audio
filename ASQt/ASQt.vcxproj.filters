@@ -46,6 +46,9 @@
     <ClCompile Include="ASQt_EQTab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ASQt_ReverbTab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ASQt_Source.ui">
