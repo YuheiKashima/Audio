@@ -3,6 +3,7 @@
 
 #include "ASQt_Define.h"
 #include "ASQt_EQTab.h"
+#include "ASQt_ReverbTab.h"
 
 class ASQt_Source : public QWidget {
 	Q_OBJECT
@@ -21,6 +22,7 @@ private:
 
 	std::shared_ptr<Ui::ASQt_SourceClass> m_spUI;
 	std::unique_ptr<ASQt_EQTab> m_upEQUi;
+	std::unique_ptr<ASQt_ReverbTab> m_upReverb;
 
 	SourcePlayer m_Source;
 	std::vector<std::string> m_FilePaths;

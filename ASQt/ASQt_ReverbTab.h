@@ -10,7 +10,7 @@ public:
 
 private:
 	std::weak_ptr<Ui::ASQt_SourceClass> m_wpUi;
-	std::weak_ptr<AS::Equalizer> m_wpEffect;
+	std::weak_ptr<AS::Reverb> m_wpEffect;
 
 	AS::ReverbParam m_Param{};
 private slots:

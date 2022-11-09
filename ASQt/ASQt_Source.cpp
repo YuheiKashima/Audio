@@ -16,7 +16,11 @@ void ASQt_Source::Open(SourcePlayer _source) {
 	m_spUI->setupUi(this);
 
 	m_upEQUi = std::make_unique<ASQt_EQTab>(m_spUI, m_Source.equalizer);
+	m_upReverb = std::make_unique<ASQt_ReverbTab>(m_spUI, m_Source.reverb);
+
 	Connect();
+
+	m_upReverb = std::make_unique<ASQt_ReverbTab>(m_spUI, m_Source.reverb);
 
 	setWindowTitle("AudioSourceTrack");
 	setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint);

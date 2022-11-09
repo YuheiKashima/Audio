@@ -918,6 +918,9 @@
          <property name="text">
           <string>Enable</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </widget>
       </item>
@@ -983,6 +986,9 @@
          </property>
          <property name="text">
           <string>Enable</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </widget>
@@ -1050,6 +1056,9 @@
          <property name="text">
           <string>Enable</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </widget>
       </item>
@@ -1116,6 +1125,9 @@
          <property name="text">
           <string>Enable</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </widget>
       </item>
@@ -1158,7 +1170,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>0</string>
+           <string>1200</string>
           </property>
          </widget>
          <widget class="QSlider" name="m_APF0FreqSlider">
@@ -1198,6 +1210,9 @@
          </property>
          <property name="text">
           <string>Enable</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
         <widget class="QWidget" name="layoutWidget">
@@ -1264,7 +1279,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>0</string>
+           <string>1200</string>
           </property>
          </widget>
          <widget class="QSlider" name="m_APF1FreqSlider">
@@ -1339,6 +1354,9 @@
          </property>
          <property name="text">
           <string>Enable</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </widget>
