@@ -50,6 +50,56 @@ ASQt_ReverbTab::ASQt_ReverbTab(std::weak_ptr<Ui::ASQt_SourceClass> _parent, std:
 			});
 
 		connect(ui->m_EnableReverb, &QCheckBox::stateChanged, this, &ASQt_ReverbTab::ChangeEnable_Reverb);
+
+		std::array<AS::CombParam, 4> combParam;
+		combParam[0] = AS::CombParam(39.0f, 0.835603f);
+		combParam[1] = AS::CombParam(36.7f, 0.844501f);
+		combParam[2] = AS::CombParam(33.2f, 0.858223f);
+		combParam[3] = AS::CombParam(29.9f, 0.832147f);
+		std::array<bool, 4> combEna{ true, true, true, true };
+		std::array<float, 2> apfQ{ 5.05f ,1.65f };
+		std::array<bool, 2> apfEna{ true, true };
+		m_Param = AS::ReverbParam{
+			combParam,
+			combEna,
+			apfQ,
+			apfEna,
+			1.0f,
+			0.25f
+		};
+		if (auto rev = m_wpEffect.lock())
+			rev->SetEffectParam(m_Param);
+		if (auto ui = m_wpUi.lock()) {
+			ui->m_DelayTime0->setValue(m_Param.comb[0].delayTime);
+			ui->m_DelayTime1->setValue(m_Param.comb[1].delayTime);
+			ui->m_DelayTime2->setValue(m_Param.comb[2].delayTime);
+			ui->m_DelayTime3->setValue(m_Param.comb[3].delayTime);
+			ui->m_Feedback0->setValue(m_Param.comb[0].feedBack);
+			ui->m_Feedback1->setValue(m_Param.comb[1].feedBack);
+			ui->m_Feedback2->setValue(m_Param.comb[2].feedBack);
+			ui->m_Feedback3->setValue(m_Param.comb[3].feedBack);
+			ui->m_EnableComb0->setCheckState(m_Param.combEnable[0] ? Qt::Checked : Qt::Unchecked);
+			ui->m_EnableComb1->setCheckState(m_Param.combEnable[1] ? Qt::Checked : Qt::Unchecked);
+			ui->m_EnableComb2->setCheckState(m_Param.combEnable[2] ? Qt::Checked : Qt::Unchecked);
+			ui->m_EnableComb3->setCheckState(m_Param.combEnable[3] ? Qt::Checked : Qt::Unchecked);
+
+			ui->m_APF0FreqSlider->setValue(m_Param.apfFreq[0]);
+			ui->m_APF1FreqSlider->setValue(m_Param.apfFreq[1]);
+			ui->m_APF0FreqValue->setText(QString::number(m_Param.apfFreq[0]));
+			ui->m_APF1FreqValue->setText(QString::number(m_Param.apfFreq[1]));
+
+			ui->m_APF0QValue->setValue(m_Param.apfQ[0]);
+			ui->m_APF1QValue->setValue(m_Param.apfQ[1]);
+
+			ui->m_EnableAPF0->setCheckState(m_Param.apfEnable[0] ? Qt::Checked : Qt::Unchecked);
+			ui->m_EnableAPF1->setCheckState(m_Param.apfEnable[1] ? Qt::Checked : Qt::Unchecked);
+
+			ui->m_WetSlider->setValue(m_Param.wet);
+			ui->m_WetValue->setText(QString::number(m_Param.wet, 'f', 2));
+
+			ui->m_DrySlider->setValue(m_Param.wet);
+			ui->m_DryValue->setText(QString::number(m_Param.wet, 'f', 2));
+		}
 	}
 }
 
