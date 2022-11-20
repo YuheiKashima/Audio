@@ -6,8 +6,14 @@ void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, con
 	std::function<void(byte*, float*)> func;
 	uint16_t bdSize = _format.bitDepth / BitsPerByte;
 	switch (_format.bitDepth) {
+	case 8:
+		func = PCM_Normalize_8bit;
+		break;
 	case 16:
 		func = PCM_Normalize_16bit;
+		break;
+	case 32:
+		func = PCM_Normalize_32bit;
 		break;
 	}
 	if (!func)return;
@@ -28,8 +34,14 @@ void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, c
 	std::function<void(float*, byte*)> func;
 	uint16_t bdSize = _format.bitDepth / BitsPerByte;
 	switch (_format.bitDepth) {
+	case 8:
+		func = PCM_Denormalize_8bit;
+		break;
 	case 16:
 		func = PCM_Denormalize_16bit;
+		break;
+	case 32:
+		func = PCM_Denormalize_32bit;
 		break;
 	}
 	if (!func)return;
@@ -42,6 +54,12 @@ void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, c
 			pDest += (bdSize * _format.channnels);
 		}
 	}
+}
+
+void AS::PCMNormalizer::PCM_Normalize_8bit(byte* pSrc, float* pDest) {
+}
+
+void AS::PCMNormalizer::PCM_Denormalize_8bit(float* pSrc, byte* pDest) {
 }
 
 void AS::PCMNormalizer::PCM_Normalize_16bit(byte* pSrc, float* pDest) {
@@ -61,6 +79,12 @@ void AS::PCMNormalizer::PCM_Denormalize_16bit(float* pSrc, byte* pDest) {
 
 	int16_t data = static_cast<int16_t>(static_cast<int32_t>(src + 0.5) - static_cast<int32_t>(0x8000));
 	memcpy(pDest, &data, 2);
+}
+
+void AS::PCMNormalizer::PCM_Normalize_32bit(byte* pSrc, float* pDest) {
+}
+
+void AS::PCMNormalizer::PCM_Denormalize_32bit(float* pSrc, byte* pDest) {
 }
 
 uint32_t AS::TimeToFrames(const AudioFormat _format, const uint32_t _time) {

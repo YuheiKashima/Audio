@@ -26,6 +26,11 @@ void ASQt::dropEvent(QDropEvent* _e) {
 }
 
 void ASQt::ASLaunch() {
+	myLib::Log::Open(true, AS::Log::ASLOG_ALL);
+	myLib::Log::SetLogOutputCallback([this](std::string _log) {
+		ui.m_LogView->append(QString::fromStdString(_log));
+		});
+
 	AS::DeviceInfo devInfo("", AS::Wasapi::GetAPIName(), AS::EEndPointMode::AS_ENDPOINTMODE_RENDER);
 	AS::AudioFormat audFormat(48000, 16, 2), altFormat;
 	AS::WasapiLaunchInfo launch(devInfo, audFormat, AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &altFormat);

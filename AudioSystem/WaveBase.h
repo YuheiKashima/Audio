@@ -57,7 +57,7 @@ namespace AS {
 			strstr << "Directory\t:" << _directory << std::endl;
 			strstr << "BufferMode\t:" << mode << std::endl;
 			strstr << "TrackFormat<" << std::endl;
-			strstr << "\t" << "Channel\t\t:" << _format.channnels << std::endl;
+			strstr << "\t" << "Channel\t:" << _format.channnels << std::endl;
 			strstr << "\t" << "SamplingRate\t:" << _format.samplingRate << std::endl;
 			strstr << "\t" << "BitDepth\t:" << _format.bitDepth << std::endl;
 			strstr << ">" << std::endl;

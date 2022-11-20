@@ -68,7 +68,11 @@ std::map<HRESULT, std::string>		AS::Wasapi::m_sErrorDetails{
 };
 
 AS::Wasapi::Wasapi() {
+#if USE_COINITIALIZEEX
+	HRESULT res = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+#else
 	HRESULT res = CoInitialize(nullptr);
+#endif
 	assert(res == S_OK || res == S_FALSE);
 }
 
@@ -168,6 +172,7 @@ IMMDevice* AS::Wasapi::FindDeviceFromMap(const std::map<std::string, IMMDevice*>
 	}
 
 	//見つからなかったらデフォルトデバイスを返す
+
 	return pDefaultDev;
 }
 
@@ -206,7 +211,7 @@ HRESULT AS::Wasapi::CheckFormat(ComPtr<IAudioClient> _pClient, const AudioFormat
 	}
 
 	if (output) {
-		strstr << "\t\t" << "Channel\t\t:" << _destFormat.channnels << std::endl;
+		strstr << "\t\t" << "Channel\t:" << _destFormat.channnels << std::endl;
 		strstr << "\t\t" << "SamplingRate\t:" << _destFormat.samplingRate << std::endl;
 		strstr << "\t\t" << "BitDepth\t:" << _destFormat.bitDepth << std::endl;
 	}
@@ -338,7 +343,7 @@ void AS::Wasapi::LaunchDevice(LaunchInfo& _info) {
 	{
 		strstr << "\tLaunchedDevice\t:" << wa_info.LaunchDevice.deviceName << std::endl;
 		strstr << "\t" << "LaunchOrderFormat" << std::endl;
-		strstr << "\t\t" << "Channel\t\t:" << wa_info.LaunchFormat.channnels << std::endl;
+		strstr << "\t\t" << "Channel\t:" << wa_info.LaunchFormat.channnels << std::endl;
 		strstr << "\t\t" << "SamplingRate\t:" << wa_info.LaunchFormat.samplingRate << std::endl;
 		strstr << "\t\t" << "BitDepth\t:" << wa_info.LaunchFormat.bitDepth << std::endl;
 		Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current(), true);
@@ -367,14 +372,16 @@ void AS::Wasapi::SetupDevice(SetupInfo& _info) {
 	WasapiSetupInfo& wa_info = static_cast<WasapiSetupInfo&>(_info);
 	REFERENCE_TIME period = 0, minPeriod = 0, wait = 0, fix = 0;
 	if (wa_info.periodTime != 0) {
-		wait = (static_cast<REFERENCE_TIME>(wa_info.periodTime) / 2);
+		wait = (static_cast<REFERENCE_TIME>(wa_info.periodTime));
 		period = wa_info.periodTime * 10000.0;//ms->ns
 	}
 	else {
 		//Get default device period
 		res = m_pClient->GetDevicePeriod(&period, &minPeriod);
 		///todo:CheckError
-		wait = (period / 10000.0) / 2;//ns->ms
+
+		//待機時間
+		wait = (period / 10000.0);//ns->ms
 	}
 
 	res = InitializeClient(m_pClient, m_ShareMode, wa_info.streamFlags, period, m_Format, fix);

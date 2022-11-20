@@ -201,6 +201,7 @@
     <ClInclude Include="OggFile.h" />
     <ClInclude Include="MSingleton.h" />
     <ClInclude Include="MOTFFT.h" />
+    <ClInclude Include="Resampler.h" />
     <ClInclude Include="Reverb.h" />
     <ClInclude Include="SourceTrack.h" />
     <ClInclude Include="TrackBase.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="MLog.cpp" />
     <ClCompile Include="OggFile.cpp" />
     <ClCompile Include="MOTFFT.cpp" />
+    <ClCompile Include="Resampler.cpp" />
     <ClCompile Include="Reverb.cpp" />
     <ClCompile Include="SourceTrack.cpp" />
     <ClCompile Include="TrackBase.cpp" />

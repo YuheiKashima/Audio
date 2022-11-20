@@ -5,7 +5,7 @@ AS::MasterTrack::MasterTrack(AudioFormat _format, uint32_t _createFrames) :Track
 	strstr << "Track\t\t:" << m_InstanceID << std::endl;
 	strstr << "Type\t\t:" << m_TrackType << std::endl;
 	strstr << "TrackFormat<" << std::endl;
-	strstr << "\t" << "Channel\t\t:" << m_Format.channnels << std::endl;
+	strstr << "\t" << "Channel\t:" << m_Format.channnels << std::endl;
 	strstr << "\t" << "SamplingRate\t:" << m_Format.samplingRate << std::endl;
 	strstr << "\t" << "BitDepth\t:" << m_Format.bitDepth << std::endl;
 	strstr << ">" << std::endl;

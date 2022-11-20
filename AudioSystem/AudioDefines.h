@@ -48,8 +48,12 @@ namespace AS {
 		static void PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const AudioFormat _format, const uint32_t _frames);
 
 	private:
+		static void PCM_Normalize_8bit(byte* _pSrc, float* _pDest);
+		static void PCM_Denormalize_8bit(float* _pSrc, byte* _pDest);
 		static void PCM_Normalize_16bit(byte* _pSrc, float* _pDest);
 		static void PCM_Denormalize_16bit(float* _pSrc, byte* _pDest);
+		static void PCM_Normalize_32bit(byte* _pSrc, float* _pDest);
+		static void PCM_Denormalize_32bit(float* _pSrc, byte* _pDest);
 	};
 
 	uint32_t TimeToFrames(const AudioFormat _format, const uint32_t _time);

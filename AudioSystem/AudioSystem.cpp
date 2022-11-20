@@ -22,8 +22,6 @@ void AS::AudioSystem::testSin(LineBuffer<float>& _buf, const AudioFormat _format
 
 AS::AudioSystem::AudioSystem() {
 	setlocale(LC_ALL, "Japanese");
-
-	Log::Open(true, Log::ASLOG_ALL);
 }
 
 AS::AudioSystem::~AudioSystem() {
@@ -78,7 +76,7 @@ void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 		}
 #endif
 	}
-}
+	}
 
 void AS::AudioSystem::LaunchDevice(LaunchInfo& _info) {
 	std::unique_ptr<EndPointBase> instance;

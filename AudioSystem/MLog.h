@@ -27,12 +27,14 @@ namespace  myLib {
 		static std::string Logging(std::string _log, bool _viewHeader = true);
 		static std::string Logging(Log::ELogLevel _level, std::string _log, bool _viewHeader = true);
 		static std::string Logging(Log::ELogLevel _level, std::string _comment, std::source_location _location, bool _viewHeader = true);
+		static void SetLogOutputCallback(std::function<void(std::string)> _logCallback) { m_sLogOutputCallback = _logCallback; }
 
 		static bool is_Open() { return m_sLogStream.is_open(); }
 	private:
 		static std::ofstream m_sLogStream;
 		static uint32_t m_sLevel;
 		static bool m_sViewLogging;
+		static std::function<void(std::string)> m_sLogOutputCallback;
 	};
 }
 #endif // _CLOG_

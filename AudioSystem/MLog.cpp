@@ -2,6 +2,7 @@
 std::ofstream myLib::Log::m_sLogStream;
 uint32_t myLib::Log::m_sLevel = ELogLevel::ASLOG_NONE;
 bool myLib::Log::m_sViewLogging = true;
+std::function<void(std::string)> myLib::Log::m_sLogOutputCallback;
 
 myLib::Log::Log() {
 }
@@ -39,6 +40,8 @@ std::string myLib::Log::Logging(std::string _log, bool _viewHeader) {
 	if (m_sViewLogging) {
 		std::cout << strstr.str();
 	}
+	if (m_sLogOutputCallback)
+		m_sLogOutputCallback(strstr.str());
 	m_sLogStream << strstr.str();
 	return strstr.str();
 }

@@ -32,7 +32,7 @@ namespace Render {
 			//ソーストラック
 			std::shared_ptr<SourceTrack> source;
 			//音源ファイル
-			std::shared_ptr<OggFile> wav;
+			std::shared_ptr<WaveBase> wav;
 			//エフェクト管理
 			std::shared_ptr<EffectManager> effect;
 			//リバーブエフェクト
@@ -52,10 +52,12 @@ namespace Render {
 
 #ifdef _DEBUG
 		std::vector<std::string> album{
+			"D:/Users/third/Desktop/Development/TestMedia/Somehow_480.ogg"
 			//ここに再生するwav,oggのディレクトリ(デバッグ用)
 		};
 #else
 		std::vector<std::string> album{
+			"D:/Users/third/Desktop/Development/TestMedia/Somehow_480.ogg"
 			//ここに再生するwav,oggのディレクトリ(リリース用)
 		};
 #endif
@@ -96,7 +98,10 @@ namespace Render {
 	//楽曲読み込み&エフェクト設定
 	Test::player Test::makePlayer(std::string directory) {
 		player play;
-		play.wav = std::make_shared<OggFile>(directory, EBufferMode::WAVE_BUFFERMODE_STREAM);
+		if (directory.find(".ogg", 0) != std::string::npos)
+			play.wav = std::make_shared<OggFile>(directory, EBufferMode::WAVE_BUFFERMODE_STREAM);
+		else if (directory.find(".wav", 0) != std::string::npos)
+			play.wav = std::make_shared<WavFile>(directory, EBufferMode::WAVE_BUFFERMODE_STREAM);
 
 #if ENABLEEFFECT
 		//std::pairで受け取る
@@ -367,8 +372,8 @@ void sourceLocationTest(std::source_location _loc = std::source_location::curren
 
 #define _RENDER_ true
 int main(int argc, char* argv[]) {
+	myLib::Log::Open(true, AS::Log::ASLOG_ALL);
 	std::shared_ptr<AudioSystem> system(std::make_shared<AudioSystem>());
-
 #if _RENDER_
 	Render::Test test(system);
 #else

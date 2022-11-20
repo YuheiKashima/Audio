@@ -1,6 +1,10 @@
 #ifndef _WASAPI_
 #define _WASAPI_
 
+#ifdef _WIN32
+
+#define USE_COINITIALIZEEX false
+
 #include "EndPointBase.h"
 #include <Windows.h>
 #include <mmsystem.h>
@@ -110,4 +114,5 @@ namespace AS {
 		uint32_t m_TimeOutTime = 0;
 	};
 }
+#endif
 #endif

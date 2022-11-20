@@ -204,6 +204,9 @@
     <ClInclude Include="CPUSupportChecker.h">
       <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
     </ClInclude>
+    <ClInclude Include="Resampler.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioDefines.cpp">
@@ -265,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="CPUSupportChecker.cpp">
       <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="Resampler.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
