@@ -34,6 +34,8 @@ void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 	AudioFormat format = m_upRenderEndPoint->GetFormat();
 	FramesInfo frames{};
 	uint32_t renderFrames = 0;
+	LineBuffer<float> renderBuffer;
+	m_wpRenderMaster = _master;
 
 	while (m_bRenderLoop) {
 		frames = FramesInfo();
@@ -41,16 +43,17 @@ void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 
 		m_upRenderEndPoint->WaitForProcess();
 
-#if MEASUREMENT_RENDER
-		boost::timer::cpu_timer timer;
-		timer.start();
-#endif
+		if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime)) {
+			m_CPUTimer.StartTimer();
+		}
 
 		//要求フレーム数を取得
 		m_upRenderEndPoint->GetFrames(frames);
 		renderFrames = frames.paddingFrameSize <= 0 ? frames.maxFrameSize : frames.paddingFrameSize;
 
-		LineBuffer<float> renderBuffer(format.channnels, renderFrames);
+		if (renderBuffer.empty()) {
+			renderBuffer = LineBuffer<float>(format.channnels, frames.maxFrameSize);
+		}
 		renderBuffer.zeroclear();
 
 #if _DEBUGSINWAVE
@@ -66,17 +69,12 @@ void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 
 		//エンドポイントへ送信
 		m_upRenderEndPoint->Process(renderBuffer, renderFrames);
-#if MEASUREMENT_RENDER
-		timer.stop();
-		m_DebMeasurement.Record(timer.elapsed());
 
-		if (m_DebMeasurement.Count() >= MEASUREMENT_AVERAGE) {
-			OutputAverageTime("Render", m_DebMeasurement);
-			m_DebMeasurement.Reset();
+		if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime)) {
+			m_CPUTimer.StopTimer();
 		}
-#endif
 	}
-	}
+}
 
 void AS::AudioSystem::LaunchDevice(LaunchInfo& _info) {
 	std::unique_ptr<EndPointBase> instance;
@@ -124,15 +122,18 @@ void AS::AudioSystem::Start(const EEndPointMode _mode, StartInfo& _info) {
 	switch (_mode) {
 	case EEndPointMode::AS_ENDPOINTMODE_RENDER:
 		if (m_upRenderEndPoint) {
+			if (auto master = _info.startMaster.lock())master->SetupCPUMeasure(m_CPUTimerLayer, m_CPUTimerInfo);
+			m_upRenderEndPoint->Start(_info);
 			m_bRenderLoop = true;
 			m_RenderThread = std::thread(&AudioSystem::RenderThread, this, _info.startMaster);
-			return m_upRenderEndPoint->Start(_info);
+			return;
 		}
 	default:
 		assert(false);
 		break;
 	}
 }
+
 void AS::AudioSystem::Stop(const EEndPointMode _mode) {
 	switch (_mode) {
 	case EEndPointMode::AS_ENDPOINTMODE_RENDER:
@@ -229,4 +230,20 @@ std::shared_ptr<AS::SourceTrack> AS::AudioSystem::CreateSourceTrackIndepend(cons
 	source = SourceTrack::CreateInstance(format, createFrames);
 
 	return source;
+}
+
+void AS::AudioSystem::SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info) {
+	m_CPUTimerLayer = _layers;
+	m_CPUTimerInfo = _info;
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime)) {
+		m_CPUTimer = CPUTimer(_info);
+	}
+}
+
+std::string AS::AudioSystem::OutputCPUMeasure() {
+	std::string dest = m_CPUTimer.GetAverageStr("system");
+	if (auto master = m_wpRenderMaster.lock()) {
+		dest += master->OutputCPUMeasure();
+	}
+	return myLib::Log::Logging(dest, false);
 }

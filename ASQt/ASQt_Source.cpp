@@ -80,28 +80,28 @@ void ASQt_Source::Play() {
 	if (m_Source.source->GetState() > AS::EPlayState::AS_PLAYSTATE_STOP) {
 		this->Stop();
 	}
-	m_Source.source->SetEndingCallback([this]() {
+	m_Source.source->SetEndingCallback([&]() {
 		int playIdx = m_spUI->m_Playlist->currentRow();
-		if (++playIdx < m_FilePaths.size()) {
-			std::string path = m_FilePaths.at(playIdx);
-			m_spUI->m_Playlist->setCurrentRow(playIdx);
+	if (++playIdx < m_FilePaths.size()) {
+		std::string path = m_FilePaths.at(playIdx);
+		m_spUI->m_Playlist->setCurrentRow(playIdx);
 
-			m_Source.wav.reset();
-			m_Source.wav = GetWaveFromPath(path);
+		m_Source.wav.reset();
+		m_Source.wav = GetWaveFromPath(path);
 
-			if (m_Source.wav) {
-				m_spUI->m_StopButton->setEnabled(true);
-				m_spUI->m_PauseButton->setEnabled(true);
-				m_spUI->m_PlayButton->setEnabled(false);
-				m_Source.source->Bind(m_Source.wav);
-				m_Source.source->PlayShot();
-			}
+		if (m_Source.wav) {
+			m_spUI->m_StopButton->setEnabled(true);
+			m_spUI->m_PauseButton->setEnabled(true);
+			m_spUI->m_PlayButton->setEnabled(false);
+			m_Source.source->Bind(m_Source.wav);
+			m_Source.source->PlayShot();
 		}
-		else {
-			m_spUI->m_StopButton->setEnabled(false);
-			m_spUI->m_PauseButton->setEnabled(false);
-			m_spUI->m_PlayButton->setEnabled(true);
-		}
+	}
+	else {
+		m_spUI->m_StopButton->setEnabled(false);
+		m_spUI->m_PauseButton->setEnabled(false);
+		m_spUI->m_PlayButton->setEnabled(true);
+	}
 		});
 
 	int playIdx = m_spUI->m_Playlist->currentRow();

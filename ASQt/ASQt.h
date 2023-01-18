@@ -15,11 +15,14 @@ public:
 protected:
 	void dragEnterEvent(QDragEnterEvent* _e) override;
 	void dropEvent(QDropEvent* _e) override;
+	void timerEvent(QTimerEvent* _e)override;
 
 private:
 	void ASLaunch();
 	void Connect();
 	void AddSourceWithWave(QList<QString> _dir);
+
+	int m_TimerID;
 
 	Ui::ASQtClass ui;
 	AS::AudioSystem m_AudioSystem;

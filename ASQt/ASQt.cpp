@@ -4,6 +4,7 @@ ASQt::ASQt(QWidget* parent) : QMainWindow(parent) {
 	ui.setupUi(this);
 	ASLaunch();
 	Connect();
+	m_TimerID = startTimer(1000);
 }
 
 ASQt::~ASQt() {
@@ -25,18 +26,26 @@ void ASQt::dropEvent(QDropEvent* _e) {
 	}
 }
 
+void ASQt::timerEvent(QTimerEvent* _e) {
+	if (_e->timerId() == m_TimerID) {
+		m_AudioSystem.OutputCPUMeasure();
+	}
+}
+
 void ASQt::ASLaunch() {
 	myLib::Log::Open(true, AS::Log::ASLOG_ALL);
 	myLib::Log::SetLogOutputCallback([this](std::string _log) {
 		ui.m_LogView->append(QString::fromStdString(_log));
 		});
 
+	m_AudioSystem.SetupCPUMeasure(AS::TimerLayers::Timerlayer_RenderingTime, myLib::CPUTimerInfo(myLib::TimerViewDuration::ViewDuration_MilliSeconds, 500));
+
 	AS::DeviceInfo devInfo("", AS::Wasapi::GetAPIName(), AS::EEndPointMode::AS_ENDPOINTMODE_RENDER);
 	AS::AudioFormat audFormat(48000, 16, 2), altFormat;
 	AS::WasapiLaunchInfo launch(devInfo, audFormat, AUDCLNT_SHAREMODE::AUDCLNT_SHAREMODE_SHARED, &altFormat);
 	m_AudioSystem.LaunchDevice(launch);
 
-	AS::WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
+	AS::WasapiSetupInfo setup(100, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
 	m_AudioSystem.SetupDevice(AS::EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
 
 	m_spMasterTrack = m_AudioSystem.CreateMasterTrack();

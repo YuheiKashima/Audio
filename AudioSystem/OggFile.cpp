@@ -79,7 +79,7 @@ size_t AS::OggFile::GetStream(LineBuffer<float>& _dest, const uint32_t _frames, 
 
 		readDestSize = ov_read(&m_OggFile, reinterpret_cast<char*>(pPCM), requestSize, 0, 2, 1, &bitStream);
 
-		//detect eof
+		//ファイル終了検知
 		if (readDestSize <= 0) {
 			assert(ov_pcm_seek(&m_OggFile, 0) == 0);
 			if (_loopFlg) {

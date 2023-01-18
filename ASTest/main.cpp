@@ -89,6 +89,8 @@ namespace Render {
 		WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
 		m_spAudioSystem->SetupDevice(EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
 
+		m_spAudioSystem->SetupCPUMeasure(AS::TimerLayers::Timerlayer_RenderingTime, myLib::CPUTimerInfo(myLib::TimerViewDuration::ViewDuration_MilliSeconds, 100));
+
 		spMaster = m_spAudioSystem->CreateMasterTrack();
 
 		WasapiStartInfo start(spMaster, 2000);
@@ -231,6 +233,9 @@ namespace Render {
 					for (auto i = 0; auto & arc : archive) {
 						std::cout << "Track" << i << "\tState:" << arc.source->GetStateStr() << std::endl;
 					}
+				}
+				if (input.GetTrigger('Z')) {
+					m_spAudioSystem->OutputCPUMeasure();
 				}
 
 #if ENABLEEFFECT
@@ -387,6 +392,11 @@ int main(int argc, char* argv[]) {
 	//for (auto i = 0; i < 5; ++i) {
 	//	cir.push_back(i + 1);
 	//}
+	//std::cout << cir.size() << std::endl;
+	//std::cout << cir.capacity() << std::endl;
+
+	//cir.clear();
+
 	//std::cout << cir.size() << std::endl;
 	//std::cout << cir.capacity() << std::endl;
 

@@ -9,6 +9,7 @@ namespace AS {
 		friend class StdPtrHelper;
 		friend class AudioSystem;
 	public:
+		std::string OutputCPUMeasure() override;
 		size_t GetChildrenSize() { return m_Children.size(); }
 	private:
 		MasterTrack(AudioFormat _format, uint32_t _createFrames);
@@ -22,10 +23,6 @@ namespace AS {
 		size_t ConnectTrack(const std::weak_ptr<TrackBase> _child)override;
 
 		std::vector<std::weak_ptr<TrackBase>> m_Children;
-
-#if MEASUREMENT_MASTER
-		boostMeasurement m_DebMeasurement;
-#endif
 	};
 }
 #endif

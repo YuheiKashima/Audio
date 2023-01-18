@@ -33,23 +33,32 @@ namespace AS {
 
 		virtual size_t GetBuffer(LineBuffer<float>& _track, const uint32_t frames) = 0;
 		virtual size_t ConnectTrack(const std::weak_ptr<TrackBase> _child) = 0;
+		virtual void SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info);
+		virtual std::string OutputCPUMeasure();
+
 	protected:
+		const uint32_t GetInstancesSize() { return m_sTaskInstances; }
+
 		void RegisterTask(TrackRequest& _request);
 
 		virtual void TaskProcess(TrackRequest& _request);
-		const uint32_t GetInstancesSize() { return m_sTaskInstances; }
+
+		CPUTimerInfo m_CPUTimerInfo;
+		CPUTimer m_CPUTimer;
+		TimerLayers m_CPUTimerLayer = TimerLayers::Timerlayer_None;
 
 		const AudioFormat m_Format;
-		float m_Volume = 1.0f;
 		const uint32_t m_InstanceID = 0;
 		const std::string m_TrackType;
+
+		float m_Volume = 1.0f;
 	private:
+		static void TaskThread();
+
 		static std::thread m_sTaskThread;
 		static std::queue<TrackRequest> m_sTaskQueue;
 		static std::condition_variable m_sTaskVariable;
 		static uint32_t m_sTaskInstances;
-
-		static void TaskThread();
 	};
 };
 

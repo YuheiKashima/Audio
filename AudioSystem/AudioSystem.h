@@ -4,7 +4,6 @@
 #include "EndPointBase.h"
 
 #define _DEBUGSINWAVE false
-#define _DEBUGNOARG true
 
 namespace AS {
 	class AudioSystem;
@@ -30,27 +29,29 @@ namespace AS {
 		std::pair<std::shared_ptr<SourceTrack>, std::shared_ptr<EffectManager>> CreateSourceTrackWithEffect(std::weak_ptr<MasterTrack> _connectMaster, const uint32_t _bufferTime, const EEffectTiming _effectTiming);
 		std::shared_ptr<SourceTrack> CreateSourceTrackIndepend(const uint32_t _bufferTime);
 		std::shared_ptr<EffectManager> CreateEffectManager(std::weak_ptr<SourceTrack> _source);
-	private:
 
+		void SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info);
+		std::string OutputCPUMeasure();
+	private:
 		void RenderThread(std::weak_ptr<MasterTrack> _master);
 		std::thread m_RenderThread;
 		std::unique_ptr<EndPointBase> m_upRenderEndPoint;
 		bool m_bRenderLoop = false;
+		std::weak_ptr<MasterTrack> m_wpRenderMaster;
 
 		void CaptureThread(std::weak_ptr<SourceTrack> _record);
 		std::thread m_CaptureThread;
 		std::unique_ptr<EndPointBase> m_upCaptureEndPoint;
 		bool m_bCaptureLoop = false;
 
+		CPUTimer m_CPUTimer;
+		CPUTimerInfo m_CPUTimerInfo;
+		TimerLayers m_CPUTimerLayer = TimerLayers::Timerlayer_None;
 #if _DEBUGSINWAVE
 		static float m_stestSin_a;
 		static float m_stestSin_f0;
 		static uint32_t m_stestSinWave;
 		void testSin(LineBuffer<float>& _buf, const AudioFormat _format);
-#endif
-
-#if MEASUREMENT_RENDER
-		boostMeasurement m_DebMeasurement;
 #endif
 	};
 

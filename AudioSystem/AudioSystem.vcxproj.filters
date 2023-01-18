@@ -115,6 +115,12 @@
     <Filter Include="ソース ファイル\Effects\IIRFilter">
       <UniqueIdentifier>{74668829-12a9-481e-b62d-4b000a631ab4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Resampler">
+      <UniqueIdentifier>{fd1b05f2-5d14-4e22-8d6a-3df7f0941c5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibs\MCPUTimer">
+      <UniqueIdentifier>{ee80f4d4-95a4-474e-8958-2f915ea17c32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioDefines.h">
@@ -204,8 +210,11 @@
     <ClInclude Include="CPUSupportChecker.h">
       <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
     </ClInclude>
+    <ClInclude Include="MCPUTimer.h">
+      <Filter>ソース ファイル\MyLibs\MCPUTimer</Filter>
+    </ClInclude>
     <ClInclude Include="Resampler.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ソース ファイル\Resampler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -269,8 +278,11 @@
     <ClCompile Include="CPUSupportChecker.cpp">
       <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
     </ClCompile>
+    <ClCompile Include="MCPUTimer.cpp">
+      <Filter>ソース ファイル\MyLibs\MCPUTimer</Filter>
+    </ClCompile>
     <ClCompile Include="Resampler.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Resampler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

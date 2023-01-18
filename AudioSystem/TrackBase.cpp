@@ -31,7 +31,20 @@ void AS::TrackBase::RegisterTask(TrackRequest& _request) {
 	m_sTaskVariable.notify_all();
 }
 
-void AS::TrackBase::TaskProcess(TrackRequest& _request) {}
+void AS::TrackBase::TaskProcess(TrackRequest& _request) {
+}
+
+void AS::TrackBase::SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info) {
+	m_CPUTimerLayer = _layers;
+	m_CPUTimerInfo = _info;
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime)) {
+		m_CPUTimer = CPUTimer(_info);
+	}
+}
+
+std::string AS::TrackBase::OutputCPUMeasure() {
+	return "none";
+}
 
 void AS::TrackBase::TaskThread() {
 	std::mutex taskMutex;

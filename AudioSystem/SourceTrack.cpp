@@ -32,17 +32,20 @@ AS::SourceTrack::~SourceTrack() {
 }
 
 void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_IOTime))
+		m_IOTimer.StartTimer();
+
 	std::lock_guard lock(_request.taskTrack.mutex);
 
 	size_t filling = 0;
-	LineBuffer<float> loadBuffer(m_Format.channnels, _request.orderFrames);
+	m_IOLoadBuffer = LineBuffer<float>(m_Format.channnels, _request.orderFrames);
 
-	filling = Load(loadBuffer, _request.orderFrames, _request.taskTrack.is_End);
+	filling = Load(m_IOLoadBuffer, _request.orderFrames, _request.taskTrack.is_End);
 
 	//エフェクト処理(IO時処理に設定しているとき)
 	if (m_EffectTiming == EEffectTiming::AS_EFFECTTIMING_IO && !m_wpEffectManager.expired()) {
 		if (auto effect = m_wpEffectManager.lock())
-			effect->Execute(loadBuffer, filling);
+			effect->Execute(m_IOLoadBuffer, filling);
 	}
 	else if (m_wpEffectManager.expired()) {
 		m_wpEffectManager.reset();
@@ -50,13 +53,15 @@ void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
 
 	//バッファ書き込み
 	for (uint16_t chan = 0; auto & circular : _request.taskTrack.circular) {
-		auto src = &loadBuffer.at(chan).front();
+		auto src = &m_IOLoadBuffer.at(chan).front();
 		for (uint32_t i = 0; i < _request.orderFrames; ++i) {
 			circular.push_back(*src);
 			src++;
 		}
 		chan++;
 	}
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_IOTime))
+		m_IOTimer.StopTimer();
 }
 
 void AS::SourceTrack::CreateBuffer(AudioFormat _format, uint32_t _createFrames) {
@@ -81,6 +86,9 @@ void AS::SourceTrack::CreateBuffer(AudioFormat _format, uint32_t _createFrames) 
 
 size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	if (m_PlayState < EPlayState::AS_PLAYSTATE_PLAY)return 0;
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SourceTime))
+		m_CPUTimer.StartTimer();
+
 	size_t sendFrames = 0, remainFrames = 0, orderFrames = 0;
 
 	if (m_PlayState == EPlayState::AS_PLAYSTATE_PLAY) {
@@ -152,6 +160,9 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 
 	//音量調整
 	_dest.mul(m_Volume);
+
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SourceTime))
+		m_CPUTimer.StopTimer();
 
 	return sendFrames + remainFrames;
 }
@@ -248,4 +259,21 @@ void AS::SourceTrack::Stop() {
 			wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
 		}
 	}
+}
+
+void AS::SourceTrack::SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info) {
+	m_CPUTimerLayer = _layers;
+	m_CPUTimerInfo = _info;
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SourceTime)) {
+		m_CPUTimer = CPUTimer(_info);
+		if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_IOTime)) {
+			m_IOTimer = CPUTimer(_info);
+		}
+	}
+}
+
+std::string AS::SourceTrack::OutputCPUMeasure() {
+	std::string dest = m_CPUTimer.GetAverageStr("Source");
+	dest += m_IOTimer.GetAverageStr("SourceIO");
+	return myLib::Log::Logging(dest, false);
 }

@@ -38,16 +38,20 @@ namespace AS {
 		friend class StdPtrHelper;
 		friend class AudioSystem;
 	public:
-
 		void Bind(std::weak_ptr<WaveBase> _wave);
 		void Play(PlayOption& _option);
 		void PlayShot();
 		void Pause();
 		void Stop();
+
+		void SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info) override;
+		std::string OutputCPUMeasure() override;
+
 		EPlayState GetState() { return m_PlayState; }
 		std::string GetStateStr() { return m_sPlayStateStr[static_cast<size_t>(GetState())]; }
 		bool IsBinding() { return !m_Wave.expired(); }
 		void SetEndingCallback(std::function<void(void)> _stopCall) { m_EndCallback = _stopCall; }
+
 	private:
 		SourceTrack(AudioFormat _format, uint32_t _createFrames);
 		SourceTrack(AudioFormat _format, uint32_t _createFrames, EEffectTiming _effectTiming, std::weak_ptr<EffectManager> _effectManager);
@@ -58,29 +62,26 @@ namespace AS {
 		static std::shared_ptr<SourceTrack> CreateInstance(AudioFormat _format, uint32_t _createFrames, EEffectTiming _effectTiming, std::weak_ptr<EffectManager> _effectManager) {
 			return StdPtrHelper<SourceTrack>::make_shared(_format, _createFrames, _effectTiming, _effectManager);
 		}
-
-		EEffectTiming m_EffectTiming = EEffectTiming::AS_EFFECTTIMING_SENDBUFFER;
-		EPlayState m_PlayState = EPlayState::AS_PLAYSTATE_NONE;
-		EPlayState m_TempState = EPlayState::AS_PLAYSTATE_NONE;
-
-		Track m_Track;
-
-		uint32_t m_Loop = 0;
-		std::weak_ptr<WaveBase> m_Wave;
-
-		std::weak_ptr<EffectManager> m_wpEffectManager;
-
-		std::function<void(void)> m_EndCallback;
-
-		static const float m_sOutLimitDB;
 		static const std::array < std::string, static_cast<size_t>(EPlayState::AS_PLAYSTATE_MAX)> m_sPlayStateStr;
+		static const float m_sOutLimitDB;
 
 		void TaskProcess(TrackRequest& _request) override;
-
 		void CreateBuffer(AudioFormat _format, uint32_t _createFrames);
 		size_t GetBuffer(LineBuffer<float>& _dest, uint32_t _frames)override;
 		size_t Load(LineBuffer<float>& _dest, size_t loadFrames, bool& _isEnd);
 		size_t ConnectTrack(const std::weak_ptr<TrackBase> _child) override { return 0; }
+
+		EEffectTiming m_EffectTiming = EEffectTiming::AS_EFFECTTIMING_SENDBUFFER;
+		EPlayState m_PlayState = EPlayState::AS_PLAYSTATE_NONE;
+		EPlayState m_TempState = EPlayState::AS_PLAYSTATE_NONE;
+		Track m_Track;
+		uint32_t m_Loop = 0;
+		std::weak_ptr<WaveBase> m_Wave;
+		std::weak_ptr<EffectManager> m_wpEffectManager;
+		std::function<void(void)> m_EndCallback;
+		LineBuffer<float> m_IOLoadBuffer;
+
+		CPUTimer m_IOTimer;
 	};
 }
 #endif

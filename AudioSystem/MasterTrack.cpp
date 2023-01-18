@@ -16,16 +16,24 @@ AS::MasterTrack::MasterTrack(AudioFormat _format, uint32_t _createFrames) :Track
 AS::MasterTrack::~MasterTrack() {
 }
 
+std::string AS::MasterTrack::OutputCPUMeasure() {
+	std::string dest = m_CPUTimer.GetAverageStr("Master");
+	for (auto& wpchild : m_Children) {
+		if (auto child = wpchild.lock()) {
+			dest += child->OutputCPUMeasure();
+		}
+	}
+	return dest;
+}
+
 size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
+		m_CPUTimer.StartTimer();
+
 	std::erase_if(m_Children, [](auto child) {return child.expired(); });
 
 	const uint32_t avxAdd = sizeof(__m256) / sizeof(float);
 	LineBuffer<float> mixBuffer(m_Format.channnels, _frames);
-
-#if MEASUREMENT_MASTER
-	boost::timer::cpu_timer timer;
-	timer.start();
-#endif
 
 	for (auto& wpchild : m_Children) {
 		if (auto child = wpchild.lock()) {
@@ -37,16 +45,9 @@ size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 			_dest.add(mixBuffer);
 		}
 	}
-#if MEASUREMENT_MASTER
-	timer.stop();
-	m_DebMeasurement.Record(timer.elapsed());
 
-	if (m_DebMeasurement.Count() >= MEASUREMENT_AVERAGE) {
-		OutputAverageTime("Master", m_DebMeasurement);
-		m_DebMeasurement.Reset();
-	}
-#endif
-
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
+		m_CPUTimer.StopTimer();
 	return _frames;
 }
 

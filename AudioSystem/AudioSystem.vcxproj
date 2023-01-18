@@ -187,6 +187,7 @@
     <ClInclude Include="CPUSupportChecker.h" />
     <ClInclude Include="EffectBase.h" />
     <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="MCPUTimer.h" />
     <ClInclude Include="ParallelEffector.h" />
     <ClInclude Include="EndPointBase.h" />
     <ClInclude Include="Equalizer.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="Equalizer.cpp" />
     <ClCompile Include="InstantInput.cpp" />
     <ClCompile Include="MasterTrack.cpp" />
+    <ClCompile Include="MCPUTimer.cpp" />
     <ClCompile Include="MLog.cpp" />
     <ClCompile Include="OggFile.cpp" />
     <ClCompile Include="MOTFFT.cpp" />

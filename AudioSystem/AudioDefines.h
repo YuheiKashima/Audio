@@ -7,11 +7,7 @@
 #include "MStdPtrHelper.h"
 #include "MLog.h"
 #include "MOTFFT.h"
-
-#define NStoMS 1000000.0
-#define MEASUREMENT_AVERAGE 100
-#define MEASUREMENT_MASTER false
-#define MEASUREMENT_RENDER false
+#include "MCPUTimer.h"
 
 namespace AS {
 	using namespace myLib;
@@ -22,6 +18,23 @@ namespace AS {
 	const float Volume_Max = 2.0f;
 	const uint32_t LoopInfinity = std::numeric_limits<uint32_t>::max BOOST_PREVENT_MACRO_SUBSTITUTION();
 	const std::string DefaultDeviceStr = "(Default)";
+
+	enum class TimerLayers {
+		Timerlayer_None = 0x0000,
+		Timerlayer_SystemTime = 0x0001,
+		Timerlayer_MasterTime = 0x004,
+		Timerlayer_SourceTime = 0x008,
+		Timerlayer_IOTime = 0x0010,
+		Timerlayer_RenderingTime = Timerlayer_SystemTime | Timerlayer_MasterTime | Timerlayer_SourceTime | Timerlayer_IOTime,
+
+		//ï°çáíËã`
+		DTL_SyMaSo = Timerlayer_SystemTime | Timerlayer_MasterTime | Timerlayer_SourceTime,
+		DTL_SySoIo = Timerlayer_SystemTime | Timerlayer_SourceTime | Timerlayer_IOTime,
+		DTL_SyMa = Timerlayer_SystemTime | Timerlayer_MasterTime,
+		DTL_SySo = Timerlayer_SystemTime | Timerlayer_SourceTime,
+		DTL_MaSo = Timerlayer_MasterTime | Timerlayer_SourceTime,
+		DTL_SoIo = Timerlayer_SourceTime | Timerlayer_IOTime
+	};
 
 	struct AudioFormat {
 		AudioFormat() :samplingRate(0), bitDepth(0), channnels(0) {}
@@ -58,31 +71,5 @@ namespace AS {
 
 	uint32_t TimeToFrames(const AudioFormat _format, const uint32_t _time);
 	uint32_t FramesToTime(const AudioFormat _format, const uint32_t _frames);
-
-	struct boostMeasurement {
-		std::array<double, MEASUREMENT_AVERAGE> wall;
-		std::array<double, MEASUREMENT_AVERAGE> user;
-		std::array<double, MEASUREMENT_AVERAGE> system;
-		uint32_t timerCount = 0;
-
-		void Record(boost::timer::cpu_times _elapse) {
-			if (timerCount < MEASUREMENT_AVERAGE) {
-				wall[timerCount] = _elapse.wall * NStoMS;
-				user[timerCount] = _elapse.user * NStoMS;
-				system[timerCount] = _elapse.system * NStoMS;
-				timerCount++;
-			}
-		}
-
-		void Reset() {
-			std::fill(wall.begin(), wall.end(), 0.0);
-			std::fill(user.begin(), user.end(), 0.0);
-			std::fill(system.begin(), system.end(), 0.0);
-			timerCount = 0;
-		}
-
-		uint32_t Count() { return timerCount; }
-	};
-	std::string OutputAverageTime(std::string _name, boostMeasurement& _measurement);
 }
 #endif
