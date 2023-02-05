@@ -23,6 +23,7 @@
 #include <mutex>
 #include <numbers>
 #include <numeric>
+#include <optional>
 #include <queue>
 #include <shared_mutex>
 #include <source_location>

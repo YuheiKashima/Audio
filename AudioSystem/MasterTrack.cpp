@@ -17,7 +17,10 @@ AS::MasterTrack::~MasterTrack() {
 }
 
 std::string AS::MasterTrack::OutputCPUMeasure() {
-	std::string dest = m_CPUTimer.GetAverageStr("Master");
+	std::string dest;
+	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
+		dest += m_CPUTimer.GetAverageStr("Master");
+
 	for (auto& wpchild : m_Children) {
 		if (auto child = wpchild.lock()) {
 			dest += child->OutputCPUMeasure();
@@ -27,13 +30,13 @@ std::string AS::MasterTrack::OutputCPUMeasure() {
 }
 
 size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
-		m_CPUTimer.StartTimer();
-
 	std::erase_if(m_Children, [](auto child) {return child.expired(); });
 
 	const uint32_t avxAdd = sizeof(__m256) / sizeof(float);
 	LineBuffer<float> mixBuffer(m_Format.channnels, _frames);
+
+	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
+		m_CPUTimer.StartTimer();
 
 	for (auto& wpchild : m_Children) {
 		if (auto child = wpchild.lock()) {
@@ -46,7 +49,7 @@ size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 		}
 	}
 
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
+	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
 		m_CPUTimer.StopTimer();
 	return _frames;
 }

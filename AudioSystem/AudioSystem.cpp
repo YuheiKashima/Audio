@@ -241,7 +241,10 @@ void AS::AudioSystem::SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info) {
 }
 
 std::string AS::AudioSystem::OutputCPUMeasure() {
-	std::string dest = m_CPUTimer.GetAverageStr("system");
+	std::string dest;
+	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime))
+		dest += m_CPUTimer.GetAverageStr("system");
+
 	if (auto master = m_wpRenderMaster.lock()) {
 		dest += master->OutputCPUMeasure();
 	}

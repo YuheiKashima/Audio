@@ -7,13 +7,11 @@ namespace myLib {
 	struct CPUTime {
 		CPUTime(double _wall, double _user, double _system) {
 			wall = _wall; user = _user; system = _system;
-			cpuUsage = (user + system) / wall;
+			cpuUsage = (user.value() + system.value()) / wall.value();
 		}
-		CPUTime() {}
-		double wall = 0.0;
-		double user = 0.0;
-		double system = 0.0;
-		double cpuUsage = 0.0;
+		CPUTime() {};
+		bool hasValue() { return cpuUsage.has_value(); }
+		std::optional<double> wall, user, system, cpuUsage;
 	};
 
 	enum class TimerViewDuration {
@@ -43,11 +41,12 @@ namespace myLib {
 		void StopTimer();
 		bool isTimerMeasuring() { return !m_Timer.is_stopped(); }
 		CPUTime GetAvarage();
-		CPUTimerInfo GetTimerInfo() { return  m_TimerInfo; }
+		CPUTimerInfo GetTimerInfo() { return  m_sTimerInfo; }
 		std::string GetAverageStr(std::string _name);
 
 	private:
-		CPUTimerInfo m_TimerInfo;
+		static CPUTimerInfo m_sTimerInfo;
+
 		boost::timer::cpu_timer m_Timer;
 		boost::circular_buffer<double> m_WallTimeRecorder;
 		boost::circular_buffer<double> m_UserTimeRecorder;

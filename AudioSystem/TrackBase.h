@@ -31,21 +31,18 @@ namespace AS {
 		std::string GetTrackType() { return m_TrackType; }
 		uint32_t GetInstanceID() { return m_InstanceID; }
 
+		static void SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info);
+
 		virtual size_t GetBuffer(LineBuffer<float>& _track, const uint32_t frames) = 0;
 		virtual size_t ConnectTrack(const std::weak_ptr<TrackBase> _child) = 0;
-		virtual void SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info);
 		virtual std::string OutputCPUMeasure();
-
 	protected:
 		const uint32_t GetInstancesSize() { return m_sTaskInstances; }
-
 		void RegisterTask(TrackRequest& _request);
-
 		virtual void TaskProcess(TrackRequest& _request);
 
-		CPUTimerInfo m_CPUTimerInfo;
+		static TimerLayers m_sCPUTimerLayer;
 		CPUTimer m_CPUTimer;
-		TimerLayers m_CPUTimerLayer = TimerLayers::Timerlayer_None;
 
 		const AudioFormat m_Format;
 		const uint32_t m_InstanceID = 0;

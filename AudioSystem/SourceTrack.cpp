@@ -31,8 +31,19 @@ AS::SourceTrack::SourceTrack(AudioFormat _format, uint32_t _createFrames, EEffec
 AS::SourceTrack::~SourceTrack() {
 }
 
+std::string AS::SourceTrack::OutputCPUMeasure() {
+	std::string dest;
+	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SourceTime)) {
+		dest += m_CPUTimer.GetAverageStr("Source");
+		if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_IOTime)) {
+			dest += m_IOTimer.GetAverageStr("SourceIO");
+		}
+	}
+	return dest;
+}
+
 void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_IOTime))
+	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_IOTime))
 		m_IOTimer.StartTimer();
 
 	std::lock_guard lock(_request.taskTrack.mutex);
@@ -60,7 +71,7 @@ void AS::SourceTrack::TaskProcess(TrackRequest& _request) {
 		}
 		chan++;
 	}
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_IOTime))
+	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_IOTime))
 		m_IOTimer.StopTimer();
 }
 
@@ -86,7 +97,7 @@ void AS::SourceTrack::CreateBuffer(AudioFormat _format, uint32_t _createFrames) 
 
 size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	if (m_PlayState < EPlayState::AS_PLAYSTATE_PLAY)return 0;
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SourceTime))
+	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SourceTime))
 		m_CPUTimer.StartTimer();
 
 	size_t sendFrames = 0, remainFrames = 0, orderFrames = 0;
@@ -161,7 +172,7 @@ size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 	//âπó í≤êÆ
 	_dest.mul(m_Volume);
 
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SourceTime))
+	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SourceTime))
 		m_CPUTimer.StopTimer();
 
 	return sendFrames + remainFrames;
@@ -259,21 +270,4 @@ void AS::SourceTrack::Stop() {
 			wav->Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
 		}
 	}
-}
-
-void AS::SourceTrack::SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info) {
-	m_CPUTimerLayer = _layers;
-	m_CPUTimerInfo = _info;
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SourceTime)) {
-		m_CPUTimer = CPUTimer(_info);
-		if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_IOTime)) {
-			m_IOTimer = CPUTimer(_info);
-		}
-	}
-}
-
-std::string AS::SourceTrack::OutputCPUMeasure() {
-	std::string dest = m_CPUTimer.GetAverageStr("Source");
-	dest += m_IOTimer.GetAverageStr("SourceIO");
-	return myLib::Log::Logging(dest, false);
 }

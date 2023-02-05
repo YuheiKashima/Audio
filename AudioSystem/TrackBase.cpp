@@ -4,6 +4,7 @@ std::thread AS::TrackBase::m_sTaskThread;
 std::queue<AS::TrackBase::TrackRequest> AS::TrackBase::m_sTaskQueue{};
 std::condition_variable AS::TrackBase::m_sTaskVariable;
 uint32_t AS::TrackBase::m_sTaskInstances = 0;
+AS::TimerLayers AS::TrackBase::m_sCPUTimerLayer = AS::TimerLayers::Timerlayer_None;
 
 AS::TrackBase::TrackBase(AudioFormat _format, std::string _trackType) :m_Format(_format), m_TrackType(_trackType), m_InstanceID(m_sTaskInstances) {
 	if (m_sTaskInstances++ <= 0) {
@@ -35,11 +36,7 @@ void AS::TrackBase::TaskProcess(TrackRequest& _request) {
 }
 
 void AS::TrackBase::SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info) {
-	m_CPUTimerLayer = _layers;
-	m_CPUTimerInfo = _info;
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime)) {
-		m_CPUTimer = CPUTimer(_info);
-	}
+	m_sCPUTimerLayer = _layers;
 }
 
 std::string AS::TrackBase::OutputCPUMeasure() {

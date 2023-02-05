@@ -44,7 +44,6 @@ namespace AS {
 		void Pause();
 		void Stop();
 
-		void SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info) override;
 		std::string OutputCPUMeasure() override;
 
 		EPlayState GetState() { return m_PlayState; }
