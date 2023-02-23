@@ -28,7 +28,7 @@ namespace AS {
 		std::shared_ptr<SourceTrack> CreateSourceTrack(std::weak_ptr<MasterTrack> _connectMaster, const uint32_t _bufferTime);
 		std::pair<std::shared_ptr<SourceTrack>, std::shared_ptr<EffectManager>> CreateSourceTrackWithEffect(std::weak_ptr<MasterTrack> _connectMaster, const uint32_t _bufferTime, const EEffectTiming _effectTiming);
 		std::shared_ptr<SourceTrack> CreateSourceTrackIndepend(const uint32_t _bufferTime);
-		std::shared_ptr<EffectManager> CreateEffectManager(std::weak_ptr<SourceTrack> _source);
+		//std::shared_ptr<EffectManager> CreateEffectManager(std::weak_ptr<SourceTrack> _source);
 
 		void SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info);
 		std::string OutputCPUMeasure();

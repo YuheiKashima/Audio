@@ -216,6 +216,9 @@
     <ClInclude Include="Resampler.h">
       <Filter>ソース ファイル\Resampler</Filter>
     </ClInclude>
+    <ClInclude Include="FIRFilter.h">
+      <Filter>ソース ファイル\Effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioDefines.cpp">
@@ -283,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="Resampler.cpp">
       <Filter>ソース ファイル\Resampler</Filter>
+    </ClCompile>
+    <ClCompile Include="FIRFilter.cpp">
+      <Filter>ソース ファイル\Effects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

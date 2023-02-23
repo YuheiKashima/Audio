@@ -187,6 +187,7 @@
     <ClInclude Include="CPUSupportChecker.h" />
     <ClInclude Include="EffectBase.h" />
     <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="FIRFilter.h" />
     <ClInclude Include="MCPUTimer.h" />
     <ClInclude Include="ParallelEffector.h" />
     <ClInclude Include="EndPointBase.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="CPUSupportChecker.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="Equalizer.cpp" />
+    <ClCompile Include="FIRFilter.cpp" />
     <ClCompile Include="InstantInput.cpp" />
     <ClCompile Include="MasterTrack.cpp" />
     <ClCompile Include="MCPUTimer.cpp" />
