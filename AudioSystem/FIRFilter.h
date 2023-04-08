@@ -1,4 +1,13 @@
 #include "EffectBase.h"
 
-class FIRFilter {
-};
+namespace AS {
+	class FIRFilter {
+	public:
+		FIRFilter();
+		~FIRFilter();
+
+		float Process(float _src);
+		void Flush();
+	private:
+	};
+}
