@@ -1,7 +1,7 @@
 #ifndef _COMPRESSOR_
 #define _COMPRESSOR_
 #include "EffectBase.h"
-#include "BiquadFilter.h"
+#include "IIRFilter.h"
 
 namespace AS {
 	struct CompressorParam :public EffectParamBase {
@@ -24,8 +24,8 @@ namespace AS {
 	private:
 		CompressorParam m_Param;
 
-		std::array<BiquadFilter, 2> m_EnvFilter;
-		std::array<BiquadFilter, 2> m_GainFilter;
+		std::array<IIRFilter, 2> m_EnvFilter;
+		std::array<IIRFilter, 2> m_GainFilter;
 	};
 }
 #endif

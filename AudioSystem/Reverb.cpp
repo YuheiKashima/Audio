@@ -2,7 +2,7 @@
 
 AS::Reverb::Reverb(AudioFormat _format) :EffectBase(_format) {
 	m_Comb = std::make_shared<TEMPLATE::ParallelEffector<CombFilter, 4>>(_format);
-	m_BiquadFilters.resize(m_Format.channnels);
+	m_IIRFilters.resize(m_Format.channnels);
 }
 
 AS::Reverb::~Reverb() {
@@ -17,7 +17,7 @@ void AS::Reverb::SetEffectParam(EffectParamBase& _param) {
 		comb->SetEffectParam(m_Param.comb[i]);
 		comb->SetEnable(m_Param.combEnable[i]);
 	}
-	for (auto& biquad : m_BiquadFilters) {
+	for (auto& biquad : m_IIRFilters) {
 		for (size_t i = 0; auto & filter : biquad) {
 			filter.AllPass(m_Format.samplingRate, m_Param.apfFreq[i], m_Param.apfQ[i]);
 			++i;
@@ -40,7 +40,7 @@ void AS::Reverb::Process(LineBuffer<float>& _buffer, uint32_t _renderFrames) {
 
 	//直列オールパスフィルタ
 	for (uint32_t chan = 0; chan < m_Format.channnels; ++chan) {
-		auto& biquad = m_BiquadFilters.at(chan);
+		auto& biquad = m_IIRFilters.at(chan);
 		for (auto& filter : biquad) {
 			for (uint32_t fram = 0; fram < _renderFrames; ++fram)
 				m_DestTempBuf[chan][fram] = filter.Process(m_DestTempBuf[chan][fram]);
@@ -56,7 +56,7 @@ void AS::Reverb::Process(LineBuffer<float>& _buffer, uint32_t _renderFrames) {
 
 void AS::Reverb::Flush() {
 	m_Comb->Flush();
-	for (auto& biquad : m_BiquadFilters)
+	for (auto& biquad : m_IIRFilters)
 		for (auto& filter : biquad)
 			filter.Flush();
 }

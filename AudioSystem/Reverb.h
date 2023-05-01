@@ -1,7 +1,7 @@
 #ifndef _REVERB_
 #define _REVERB_
 #include "CombFilter.h"
-#include "BiquadFilter.h"
+#include "IIRFilter.h"
 #include "ParallelEffector.h"
 
 namespace AS {
@@ -30,7 +30,7 @@ namespace AS {
 		}
 	private:
 		std::shared_ptr<TEMPLATE::ParallelEffector<CombFilter, 4>> m_Comb;
-		std::vector<std::array<BiquadFilter, 2>> m_BiquadFilters;
+		std::vector<std::array<IIRFilter, 2>> m_IIRFilters;
 
 		ReverbParam m_Param;
 		LineBuffer<float>  m_DestTempBuf;

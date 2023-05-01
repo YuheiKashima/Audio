@@ -1,14 +1,14 @@
-#ifndef _BIQUADFILTER_
-#define _BIQUADFILTER_
+#ifndef _IIRFILTER_
+#define _IIRFILTER_
 #include "EffectBase.h"
 
 namespace AS {
 	const uint32_t cBuffers = 2;
 	const uint32_t cCoeficients = 3;
-	class BiquadFilter {
+	class IIRFilter {
 	public:
-		BiquadFilter();
-		~BiquadFilter();
+		IIRFilter();
+		~IIRFilter();
 
 		float Process(float _src);
 		void Flush();
