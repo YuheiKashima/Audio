@@ -201,7 +201,7 @@
     <ClInclude Include="Reverb.h">
       <Filter>ソース ファイル\Effects\Reverb</Filter>
     </ClInclude>
-    <ClInclude Include="BiquadFilter.h">
+    <ClInclude Include="IIRFilter.h">
       <Filter>ソース ファイル\Effects\IIRFilter</Filter>
     </ClInclude>
     <ClInclude Include="Compressor.h">
@@ -272,7 +272,7 @@
     <ClCompile Include="Reverb.cpp">
       <Filter>ソース ファイル\Effects\Reverb</Filter>
     </ClCompile>
-    <ClCompile Include="BiquadFilter.cpp">
+    <ClCompile Include="IIRFilter.cpp">
       <Filter>ソース ファイル\Effects\IIRFilter</Filter>
     </ClCompile>
     <ClCompile Include="Compressor.cpp">

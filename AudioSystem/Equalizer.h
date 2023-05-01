@@ -1,7 +1,7 @@
 #ifndef _EQUALIZER_
 #define _EQUALIZER_
 
-#include "BiquadFilter.h"
+#include "IIRFilter.h"
 
 //方針
 //イコライザはピーキングのみで
@@ -31,7 +31,7 @@ namespace AS {
 
 	private:
 		std::array<const float, 18>m_EQFreqs{ 55.0f,77.0f,110.0f,156.0f,220.0f,311.0f,440.0f,622.0f,880.0f,1200.0f,1800.0f,2500.0f,3500.0f,5000.0f,7000.0f,10000.0f,14000.0f,20000.0f };
-		std::vector<std::array<BiquadFilter, 18>> m_BiquadFilters;
+		std::vector<std::array<IIRFilter, 18>> m_IIRFilters;
 		EQParam m_Param;
 	};
 }

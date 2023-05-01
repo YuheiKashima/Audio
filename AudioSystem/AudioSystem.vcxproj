@@ -181,7 +181,7 @@
   <ItemGroup>
     <ClInclude Include="AudioDefines.h" />
     <ClInclude Include="AudioSystem.h" />
-    <ClInclude Include="BiquadFilter.h" />
+    <ClInclude Include="IIRFilter.h" />
     <ClInclude Include="CombFilter.h" />
     <ClInclude Include="Compressor.h" />
     <ClInclude Include="CPUSupportChecker.h" />
@@ -215,7 +215,7 @@
   <ItemGroup>
     <ClCompile Include="AudioDefines.cpp" />
     <ClCompile Include="AudioSystem.cpp" />
-    <ClCompile Include="BiquadFilter.cpp" />
+    <ClCompile Include="IIRFilter.cpp" />
     <ClCompile Include="CombFilter.cpp" />
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="CPUSupportChecker.cpp" />
