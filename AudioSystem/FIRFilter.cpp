@@ -6,11 +6,15 @@ AS::FIRFilter::FIRFilter() {
 AS::FIRFilter::~FIRFilter() {
 }
 
-float AS::FIRFilter::Process(float _src) {
+void AS::FIRFilter::Process(float* _src, uint32_t _renderFrames) {
 	//FIR
-	float dest = 0.0f;
+	if (m_Coeficients.empty())return;
 
-	return dest;
+	for (uint32_t fram = 0; fram < _renderFrames; ++fram) {
+		for (uint32_t cntCoef = 0; auto & coef : m_Coeficients) {
+			if (fram - cntCoef >= 0)_src[fram] += _src[fram] * coef;
+		}
+	}
 }
 
 void AS::FIRFilter::Flush() {
@@ -22,7 +26,7 @@ void AS::FIRFilter::Flush() {
 * @param _cutofFreq カットオフ周波数
 * @param _bandwidth 帯域幅
 */
-void AS::FIRFilter::LowPass(int32_t _samplingFreq, float _cutoffFreq, float _bandwidth) {
+void AS::FIRFilter::LowPass(FIRWindow _window, int32_t _samplingFreq, float _cutoffFreq, float _bandwidth) {
 	//エッジ周波数
 	float ef = _cutoffFreq / _samplingFreq;
 	//遷移帯域幅
@@ -41,7 +45,7 @@ void AS::FIRFilter::LowPass(int32_t _samplingFreq, float _cutoffFreq, float _ban
 		++i;
 	}
 
-	WindowFunc(m_Coeficients);
+	WindowFunc(m_Coeficients, _window);
 }
 
 /**
@@ -50,7 +54,7 @@ void AS::FIRFilter::LowPass(int32_t _samplingFreq, float _cutoffFreq, float _ban
 * @param _cutofFreq カットオフ周波数
 * @param _bandwidth 帯域幅
 */
-void AS::FIRFilter::HighPass(int32_t _samplingFreq, float _cutoffFreq, float _bandwidth) {
+void AS::FIRFilter::HighPass(FIRWindow _window, int32_t _samplingFreq, float _cutoffFreq, float _bandwidth) {
 	//エッジ周波数
 	float ef = _cutoffFreq / _samplingFreq;
 	//遷移帯域幅
@@ -69,7 +73,7 @@ void AS::FIRFilter::HighPass(int32_t _samplingFreq, float _cutoffFreq, float _ba
 		++i;
 	}
 
-	WindowFunc(m_Coeficients);
+	WindowFunc(m_Coeficients, _window);
 }
 
 /**
@@ -79,7 +83,7 @@ void AS::FIRFilter::HighPass(int32_t _samplingFreq, float _cutoffFreq, float _ba
 * @param _cutofFreq2 カットオフ周波数2
 * @param _bandwidth 帯域幅
 */
-void AS::FIRFilter::BandPass(int32_t _samplingFreq, float _cutoffFreq1, float _cutoffFreq2, float _bandwidth) {
+void AS::FIRFilter::BandPass(FIRWindow _window, int32_t _samplingFreq, float _cutoffFreq1, float _cutoffFreq2, float _bandwidth) {
 	//エッジ周波数
 	float ef1 = _cutoffFreq1 / _samplingFreq;
 	float ef2 = _cutoffFreq2 / _samplingFreq;
@@ -100,10 +104,10 @@ void AS::FIRFilter::BandPass(int32_t _samplingFreq, float _cutoffFreq1, float _c
 		++i;
 	}
 
-	WindowFunc(m_Coeficients);
+	WindowFunc(m_Coeficients, _window);
 }
 
-void AS::FIRFilter::BandEliminate(int32_t _samplingFreq, float _cutoffFreq1, float _cutoffFreq2, float _bandwidth) {
+void AS::FIRFilter::BandEliminate(FIRWindow _window, int32_t _samplingFreq, float _cutoffFreq1, float _cutoffFreq2, float _bandwidth) {
 	//エッジ周波数
 	float ef1 = _cutoffFreq1 / _samplingFreq;
 	float ef2 = _cutoffFreq2 / _samplingFreq;
@@ -123,17 +127,17 @@ void AS::FIRFilter::BandEliminate(int32_t _samplingFreq, float _cutoffFreq1, flo
 			- 2.0 * ef2 * sincf(2.0 * std::numbers::pi * ef2 * m(i))
 			+ 2.0 * ef1 * sincf(2.0 * std::numbers::pi * ef1 * m(i));
 	}
+	WindowFunc(m_Coeficients, _window);
 }
 
 float AS::FIRFilter::sincf(float _x) {
-	double y = 0.0;
+	float y = 0.0f;
 
-	if (_x == 0.0) {
-		y = 1.0;
-	}
-	else {
-		y = sin(_x) / _x;
-	}
+	if (_x == 0.0f)
+		y = 1.0f;
+	else
+		y = std::sinf(_x) / _x;
+
 	return y;
 }
 
@@ -143,18 +147,58 @@ int32_t AS::FIRFilter::calctaps(float _delta) {
 	return d;
 }
 
-void AS::FIRFilter::SingbellWindow() {
+void AS::FIRFilter::WindowFunc(std::vector<float>& _coefs, FIRWindow _window) {
+	switch (_window)
+	{
+	case AS::FIRFilter::FIRWindow::FIR_WINDOW_SINGBELL:
+		SingbellWindow(_coefs);
+		break;
+	case AS::FIRFilter::FIRWindow::FIR_WINDOW_HANNING:
+		HanningWindow(_coefs);
+		break;
+	case AS::FIRFilter::FIRWindow::FIR_WINDOW_HAMMING:
+		HammingWindow(_coefs);
+		break;
+	case AS::FIRFilter::FIRWindow::FIR_WINDOW_BLACKMAN:
+		BlackmanWindow(_coefs);
+		break;
+	default:
+		break;
+	}
 }
 
-void AS::FIRFilter::HanningWindow(std::vector<double>& _w) {
-	if (_w.size() % 2 == 0) {
-		for (auto i = 0; i < _w.size(); ++i) {
-			_w[i] = 0.5 - 0.5 * cos(2.0 * std::numbers::pi * i / _w.size());
-		}
+void AS::FIRFilter::SingbellWindow(std::vector<float>& _coefs) {
+	float f = 2.0f * std::numbers::pi / static_cast<float>(_coefs.size() - 1);
+
+	for (size_t i = 0; auto & coef:_coefs) {
+		coef *= std::sinf(f * i);
+		++i;
 	}
-	else {
-		for (auto i = 0; i < _w.size(); ++i) {
-			_w[i] = 0.5 * 0.5 * cos(2.0 * std::numbers::pi * (i + 0.5) / _w.size());
-		}
+}
+
+void AS::FIRFilter::HanningWindow(std::vector<float>& _coefs) {
+	float f = 2.0f * std::numbers::pi / static_cast<float>(_coefs.size() - 1);
+
+	for (size_t i = 0; auto & coef:_coefs) {
+		coef *= 0.5f * (1.0f - std::cosf(f * i));
+		++i;
+	}
+}
+
+void AS::FIRFilter::HammingWindow(std::vector<float>& _coefs) {
+	float f = 2.0f * std::numbers::pi / static_cast<float>(_coefs.size() - 1);
+
+	for (size_t i = 0; auto & coef:_coefs) {
+		coef *= 0.54 - 0.46 * std::cosf(f * i);
+		++i;
+	}
+}
+
+void AS::FIRFilter::BlackmanWindow(std::vector<float>& _coefs) {
+	float f = 2.0f * std::numbers::pi / static_cast<float>(_coefs.size() - 1);
+
+	for (size_t i = 0; auto & coef:_coefs) {
+		coef *= 0.42f - 0.5f * std::cosf(f * i) + 0.08f * std::cosf(2.0f * f * i);
+		++i;
 	}
 }

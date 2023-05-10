@@ -9,7 +9,7 @@ namespace myLib {
 	template<typename T>
 	class LineBuffer_XY {
 	public:
-		constexpr LineBuffer_XY<T>(const size_t _id, const std::unique_ptr<T[]>& _arr)
+		constexpr LineBuffer_XY<T>(const size_t _id, const std::shared_ptr<T[]>& _arr)
 			: m_id_xy(_id), m_arr_ref(_arr) {}
 		constexpr T operator+() const { return +m_arr_ref[m_id_xy]; }
 		constexpr T operator-() const { return -m_arr_ref[m_id_xy]; }
@@ -51,13 +51,13 @@ namespace myLib {
 		//ここに2次元配列最終的な配列番号に見立てた1次元配列の座標が入る
 		const size_t m_id_xy = 0;
 		//1次元配列の参照(LineBuffer.tの参照)
-		const std::unique_ptr<T[]>& m_arr_ref;
+		const std::shared_ptr<T[]>& m_arr_ref;
 	};
 
 	template<typename T>
 	class LineBuffer_X {
 	public:
-		constexpr LineBuffer_X<T>(const size_t _id, const std::unique_ptr<T[]>& _arr) : m_id_x(_id), m_arr_ref(_arr) {}
+		constexpr LineBuffer_X<T>(const size_t _id, const std::shared_ptr<T[]>& _arr) : m_id_x(_id), m_arr_ref(_arr) {}
 		//(2つ目の[])
 		constexpr const LineBuffer_XY<T> operator[](const size_t _x) const {
 			const LineBuffer_XY<T> arr_xy(m_id_x + _x, m_arr_ref);
@@ -71,11 +71,12 @@ namespace myLib {
 			const LineBuffer_XY<T> arr_xy(m_id_x, m_arr_ref);
 			return arr_xy;
 		}
+
 	private:
 		//ここには2次元配列のx軸先頭に見立てた1次元配列の座標が入る
 		const size_t m_id_x = 0;
 		//1次元配列の参照(LineBuffer.tの参照)
-		const std::unique_ptr<T[]>& m_arr_ref;
+		const std::shared_ptr<T[]>& m_arr_ref;
 	};
 
 	template<typename T>
@@ -183,6 +184,10 @@ namespace myLib {
 			}
 		}
 
+		void abs() {
+			sequential_abs();
+		}
+
 		T Max() {
 			return *std::max_element(m_arr_real.get(), m_arr_real.get() + capacity());
 		}
@@ -192,7 +197,7 @@ namespace myLib {
 		}
 
 	private:
-		std::unique_ptr<T[]> m_arr_real;
+		std::shared_ptr<T[]> m_arr_real;
 		size_t m_Size_x = 0, m_Size_y = 0, m_Capacity_x = 0;
 
 		void create(const size_t _y, const size_t _x) {
@@ -254,6 +259,13 @@ namespace myLib {
 					*ptrThis *= _mul;
 					ptrThis++;
 				}
+			}
+		}
+
+		void sequential_abs() {
+			float* ptrThis = get();
+			for (uint32_t i = 0; i < capacity(); ++i) {
+				*ptrThis = std::fabsf(*ptrThis++);
 			}
 		}
 	};

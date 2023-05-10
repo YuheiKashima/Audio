@@ -18,29 +18,31 @@ void AS::Compressor::SetEffectParam(EffectParamBase& _param) {
 
 void AS::Compressor::Process(LineBuffer<float>& _buffer, uint32_t _renderFrames) {
 	std::lock_guard lock(m_ParamMutex);
+	LineBuffer<float> copy = _buffer;
 
 	for (uint32_t chan = 0; chan < m_Format.channnels; ++chan) {
 		auto& env = m_EnvFilter.at(chan);
 		auto& gain = m_GainFilter.at(chan);
-		float temp = 0.0f, gainTemp = 1.0f;
+
+		//入力値の絶対値をローパスに掛けて音圧を検知
+		env.Process(&copy[chan].front(), _renderFrames);
+
 		for (uint32_t fram = 0; fram < _renderFrames; ++fram) {
-			//入力値の絶対値をローパスに掛けて音圧を検知
-			temp = env.Process(std::fabsf(_buffer[chan][fram]));
-
-			//音圧をもとに音量(ゲイン)を調整
-			gainTemp = 1.0f;
-
-			if (temp > m_Param.threshold) {
-				//スレッショルドを超えると音量(ゲイン)を調整(圧縮)
-				gainTemp = m_Param.threshold + (temp - m_Param.threshold) / m_Param.ratio;
+			if (copy[chan][fram] > m_Param.threshold) {
+				//閾値を超えると音量(ゲイン)を調整(圧縮)
+				copy[chan][fram] = m_Param.threshold + (copy[chan][fram] - m_Param.threshold) / m_Param.ratio;
 			}
-			//音量(ゲイン)が急激に変化しないようローパスを通す
-			gainTemp = gain.Process(gainTemp);
-
-			//入力に音量(ゲイン)を掛け、さらに最終的な音量を調節し出力
-			if (GetEnable())
-				_buffer[chan][fram] = m_Param.gain * _buffer[chan][fram];
 		}
+
+		//音量(ゲイン)が急激に変化しないようローパスを通す
+		gain.Process(&copy[chan].front(), _renderFrames);
+	}
+
+	copy.mul(m_Param.gain);
+
+	//入力に音量(ゲイン)を掛け、さらに最終的な音量を調節し出力
+	if (GetEnable()) {
+		_buffer = copy;
 	}
 }
 

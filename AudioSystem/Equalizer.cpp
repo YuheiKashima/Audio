@@ -21,19 +21,18 @@ void AS::Equalizer::SetEffectParam(EffectParamBase& _param) {
 
 void AS::Equalizer::Process(LineBuffer<float>& _buffer, uint32_t _renderFrames) {
 	std::lock_guard lock(m_ParamMutex);
+	LineBuffer<float> copy = _buffer;
 
 	_buffer.mul(m_Param.preGain);
 	for (uint16_t chan = 0; chan < m_Format.channnels; ++chan) {
 		auto& biquad = m_IIRFilters.at(chan);
 		float dest = 0.0f;
 		for (auto& filter : biquad) {
-			for (uint32_t fram = 0; fram < _renderFrames; ++fram) {
-				dest = filter.Process(_buffer[chan][fram]);
-				if (GetEnable())
-					_buffer[chan][fram] = dest;
-			}
+			filter.Process(&copy[chan].front(), _renderFrames);
 		}
 	}
+	if (GetEnable())
+		_buffer = copy;
 }
 
 void AS::Equalizer::Flush() {

@@ -10,7 +10,7 @@ namespace AS {
 		IIRFilter();
 		~IIRFilter();
 
-		float Process(float _src);
+		void Process(float* _src, uint32_t _renderFrames);
 		void Flush();
 
 		void LowPass(uint32_t _samplingFreq, float _cutoffFreq, float _q);

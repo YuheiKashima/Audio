@@ -6,20 +6,20 @@ AS::IIRFilter::IIRFilter() {
 AS::IIRFilter::~IIRFilter() {
 }
 
-float AS::IIRFilter::Process(float _src) {
-	float dest = m_BiCoef.beta[0] / m_BiCoef.alpha[0] * _src +
-		m_BiCoef.beta[1] / m_BiCoef.alpha[0] * m_IIRBuff.in[0] +
-		m_BiCoef.beta[2] / m_BiCoef.alpha[0] * m_IIRBuff.in[1] -
-		m_BiCoef.alpha[1] / m_BiCoef.alpha[0] * m_IIRBuff.out[0] -
-		m_BiCoef.alpha[2] / m_BiCoef.alpha[0] * m_IIRBuff.out[1];
+void AS::IIRFilter::Process(float* _src, uint32_t _renderFrames) {
+	for (uint32_t fram = 0; fram < _renderFrames; ++fram) {
+		float dest = m_BiCoef.beta[0] / m_BiCoef.alpha[0] * _src[fram] +
+			m_BiCoef.beta[1] / m_BiCoef.alpha[0] * m_IIRBuff.in[0] +
+			m_BiCoef.beta[2] / m_BiCoef.alpha[0] * m_IIRBuff.in[1] -
+			m_BiCoef.alpha[1] / m_BiCoef.alpha[0] * m_IIRBuff.out[0] -
+			m_BiCoef.alpha[2] / m_BiCoef.alpha[0] * m_IIRBuff.out[1];
 
-	m_IIRBuff.in[1] = m_IIRBuff.in[0];
-	m_IIRBuff.in[0] = _src;
+		m_IIRBuff.in[1] = m_IIRBuff.in[0];
+		m_IIRBuff.in[0] = _src[fram];
 
-	m_IIRBuff.out[1] = m_IIRBuff.out[0];
-	m_IIRBuff.out[0] = dest;
-
-	return dest;
+		m_IIRBuff.out[1] = m_IIRBuff.out[0];
+		m_IIRBuff.out[0] = dest;
+	}
 }
 
 void AS::IIRFilter::Flush() {

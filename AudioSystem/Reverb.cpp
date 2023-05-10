@@ -42,8 +42,7 @@ void AS::Reverb::Process(LineBuffer<float>& _buffer, uint32_t _renderFrames) {
 	for (uint32_t chan = 0; chan < m_Format.channnels; ++chan) {
 		auto& biquad = m_IIRFilters.at(chan);
 		for (auto& filter : biquad) {
-			for (uint32_t fram = 0; fram < _renderFrames; ++fram)
-				m_DestTempBuf[chan][fram] = filter.Process(m_DestTempBuf[chan][fram]);
+			filter.Process(&m_DestTempBuf[chan].front(), _renderFrames);
 		}
 	}
 
