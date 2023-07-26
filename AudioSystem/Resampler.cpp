@@ -7,22 +7,17 @@ AS::Resampler::~Resampler() {
 }
 
 uint32_t AS::Resampler::CalcSamples(uint32_t _freqFrom, uint32_t _cntSammp, uint32_t _freqTo) {
-	if (_freqTo > _freqFrom) {
-		return _cntSammp / (_freqTo / _freqFrom);
-	}
-	else if (_freqFrom > _freqTo) {
-		return _cntSammp * (_freqFrom / _freqTo);
-	}
-	return 0;
+	int32_t resampRate = (std::max(_freqTo, _freqFrom) / std::min(_freqTo, _freqFrom));
+	return _freqTo > _freqFrom ? _cntSammp / resampRate : _freqFrom > _freqTo ? _cntSammp * resampRate : 0;
 }
 
 uint32_t AS::Resampler::Resampling(LineBuffer<float>& _src, uint32_t _freqFrom, uint32_t _freqTo, LineBuffer<float>& _dest) {
-	double reSampRate = (_freqTo / _freqFrom);
-	double nyquistFreq = _freqTo > _freqFrom ? _freqFrom / 2.0 : _freqTo / 2.0;
+	int32_t reSampRate = (std::max(_freqTo, _freqFrom) / std::min(_freqTo, _freqFrom));
+	double nyquistFreq = std::min(_freqFrom, _freqTo) / 2.0;
 	uint32_t dest = 0;
 
 	if (_freqTo > _freqFrom) {
-		dest = UpSampling(_src, reSampRate, _dest);
+		dest = Expansion(_src, reSampRate, _dest);
 	}
 
 	//アップサンプリングは0補完後変換前ナイキスト周波数をカットオフとするローパスフィルタを通す
@@ -33,56 +28,43 @@ uint32_t AS::Resampler::Resampling(LineBuffer<float>& _src, uint32_t _freqFrom, 
 	}
 
 	if (_freqFrom > _freqTo) {
-		dest = DownSampling(_src, reSampRate, _dest);
+		dest = Decimation(_src, reSampRate, _dest);
 	}
 
 	return dest;
 }
 
-uint32_t AS::Resampler::UpSampling(LineBuffer<float>& _src, double _resampRate, LineBuffer<float>& _dest) {
-	double upsampRate = _resampRate - 1;
+uint32_t AS::Resampler::Expansion(LineBuffer<float>& _src, double _resampRate, LineBuffer<float>& _dest) {
+	int32_t upsampRate = _resampRate - 1;
 	_dest = LineBuffer<float>(_src.sizeX(), _src.sizeY() * _resampRate);
+	_dest.zeroclear();
 
-	for (uint32_t chan = 0; chan < _dest.sizeY(); ++chan) {
+	for (uint32_t chan = 0; chan < _src.sizeY(); ++chan) {
 		auto pDest = &_dest.at(chan).front();
 		auto pSrc = &_src.at(chan).front();
-		double counter = 0.0;
 
-		for (uint32_t frams = 0; frams < _dest.sizeX(); ++frams) {
-			if (counter >= 1.0) {
-				*pDest = 0.0;
-				counter -= 1.0;
-			}
-			else {
-				*pDest = *pSrc;
-				++pSrc;
-			}
-			++pDest;
-			counter += upsampRate;
+		for (uint32_t frams = 0; frams < _src.sizeX(); ++frams) {
+			*pDest = *pSrc;
+			pDest += upsampRate;
+			++pSrc;
 		}
 	}
 	return _dest.size();
 }
 
-uint32_t AS::Resampler::DownSampling(LineBuffer<float>& _src, double _resampRate, LineBuffer<float>& _dest) {
-	double upsampRate = _resampRate - 1;
-	_dest = LineBuffer<float>(_src.sizeX(), _src.sizeY() * _resampRate);
+uint32_t AS::Resampler::Decimation(LineBuffer<float>& _src, double _resampRate, LineBuffer<float>& _dest) {
+	int32_t upsampRate = _resampRate - 1;
+	_dest = LineBuffer<float>(_src.sizeX(), _src.sizeY() / _resampRate);
+	_dest.zeroclear();
 
 	for (uint32_t chan = 0; chan < _dest.sizeY(); ++chan) {
 		auto pDest = &_dest.at(chan).front();
 		auto pSrc = &_src.at(chan).front();
-		double counter = 0.0;
 
 		for (uint32_t frams = 0; frams < _dest.sizeX(); ++frams) {
-			if (counter >= 1.0) {
-				counter -= 1.0;
-			}
-			else {
-				*pDest = *pSrc;
-				++pDest;
-			}
-			++pSrc;
-			counter += upsampRate;
+			*pDest = *pSrc;
+			pSrc += upsampRate;
+			++pDest;
 		}
 	}
 	return _dest.size();
