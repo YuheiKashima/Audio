@@ -15,6 +15,7 @@ public:
 protected:
 	void dragEnterEvent(QDragEnterEvent* _e)override;
 	void dropEvent(QDropEvent* _e)override;
+	void timerEvent(QTimerEvent* _e)override;
 
 private:
 	void Connect();
@@ -26,6 +27,8 @@ private:
 
 	SourcePlayer m_Source;
 	std::vector<std::string> m_FilePaths;
+
+	int m_TimerID;
 
 private slots:
 	void Play();

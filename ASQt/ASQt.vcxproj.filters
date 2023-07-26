@@ -49,14 +49,23 @@
     <ClCompile Include="ASQt_ReverbTab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ASQt_Preferences.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ASQt_Source.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="ASQt_Preferences.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ASQt_Source.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ASQt_Preferences.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

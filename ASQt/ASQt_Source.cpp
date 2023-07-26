@@ -23,8 +23,10 @@ void ASQt_Source::Open(SourcePlayer _source) {
 	m_upReverb = std::make_unique<ASQt_ReverbTab>(m_spUI, m_Source.reverb);
 
 	setWindowTitle("AudioSourceTrack");
-	setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint);
+	setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint | Qt::CustomizeWindowHint | Qt::MSWindowsFixedSizeDialogHint);
 	show();
+
+	m_TimerID = startTimer(100);
 }
 
 void ASQt_Source::dragEnterEvent(QDragEnterEvent* _e) {
@@ -54,12 +56,17 @@ void ASQt_Source::dropEvent(QDropEvent* _e) {
 		m_spUI->m_PlayButton->setEnabled(false);
 }
 
+void ASQt_Source::timerEvent(QTimerEvent* _e) {
+	if (_e->timerId() == m_TimerID) {
+	}
+}
+
 void ASQt_Source::Connect() {
 	connect(m_spUI->m_PlayButton, &QPushButton::clicked, this, &ASQt_Source::Play);
 	connect(m_spUI->m_Playlist, &QListView::doubleClicked, this, &ASQt_Source::Play);
 	connect(m_spUI->m_StopButton, &QPushButton::clicked, this, &ASQt_Source::Stop);
 	connect(m_spUI->m_PauseButton, &QPushButton::clicked, this, &ASQt_Source::Pause);
-	connect(m_spUI->m_SourceVol, &QSlider::sliderReleased, this, &ASQt_Source::ChangeVolume);
+	connect(m_spUI->m_SourceVol, &QSlider::sliderMoved, this, &ASQt_Source::ChangeVolume);
 
 	if (m_Source.wav)
 		m_spUI->m_PlayButton->setEnabled(true);
@@ -82,26 +89,26 @@ void ASQt_Source::Play() {
 	}
 	m_Source.source->SetEndingCallback([&]() {
 		int playIdx = m_spUI->m_Playlist->currentRow();
-	if (++playIdx < m_FilePaths.size()) {
-		std::string path = m_FilePaths.at(playIdx);
-		m_spUI->m_Playlist->setCurrentRow(playIdx);
+		if (++playIdx < m_FilePaths.size()) {
+			std::string path = m_FilePaths.at(playIdx);
+			m_spUI->m_Playlist->setCurrentRow(playIdx);
 
-		m_Source.wav.reset();
-		m_Source.wav = GetWaveFromPath(path);
+			m_Source.wav.reset();
+			m_Source.wav = GetWaveFromPath(path);
 
-		if (m_Source.wav) {
-			m_spUI->m_StopButton->setEnabled(true);
-			m_spUI->m_PauseButton->setEnabled(true);
-			m_spUI->m_PlayButton->setEnabled(false);
-			m_Source.source->Bind(m_Source.wav);
-			m_Source.source->PlayShot();
+			if (m_Source.wav) {
+				m_spUI->m_StopButton->setEnabled(true);
+				m_spUI->m_PauseButton->setEnabled(true);
+				m_spUI->m_PlayButton->setEnabled(false);
+				m_Source.source->Bind(m_Source.wav);
+				m_Source.source->PlayShot();
+			}
 		}
-	}
-	else {
-		m_spUI->m_StopButton->setEnabled(false);
-		m_spUI->m_PauseButton->setEnabled(false);
-		m_spUI->m_PlayButton->setEnabled(true);
-	}
+		else {
+			m_spUI->m_StopButton->setEnabled(false);
+			m_spUI->m_PauseButton->setEnabled(false);
+			m_spUI->m_PlayButton->setEnabled(true);
+		}
 		});
 
 	int playIdx = m_spUI->m_Playlist->currentRow();
