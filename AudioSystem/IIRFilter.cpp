@@ -6,9 +6,41 @@ AS::IIRFilter::IIRFilter() {
 AS::IIRFilter::~IIRFilter() {
 }
 
-void AS::IIRFilter::Process(float* _src, uint32_t _renderFrames) {
-	for (uint32_t fram = 0; fram < _renderFrames; ++fram) {
-		float dest = m_BiCoef.beta[0] / m_BiCoef.alpha[0] * _src[fram] +
+void AS::IIRFilter::SetFilterParam(FilterParamBase& _filterParam) {
+	IIRParam& param = static_cast<IIRParam&>(_filterParam);
+	switch (param.filterType) {
+	case IIRFilterType::AS_IIRTYPE_LPF:
+		LowPass(param.lpfParam);
+		break;
+	case IIRFilterType::AS_IIRTYPE_HPF:
+		HighPass(param.hpfParam);
+		break;
+	case IIRFilterType::AS_IIRTYPE_BPF:
+		BandPass(param.bpfParam);
+		break;
+	case IIRFilterType::AS_IIRTYPE_BEF:
+		BandEliminate(param.befParam);
+		break;
+	case IIRFilterType::AS_IIRTYPE_LSF:
+		LowShelf(param.lsfParam);
+		break;
+	case IIRFilterType::AS_IIRTYPE_HSF:
+		HighShelf(param.hsfParam);
+		break;
+	case IIRFilterType::AS_IIRTYPE_PEAK:
+		Peaking(param.peakParam);
+		break;
+	case IIRFilterType::AS_IIRTYPE_APF:
+		AllPass(param.apfParam);
+		break;
+	default:
+		break;
+	}
+}
+
+void AS::IIRFilter::Process(float* _src, int32_t _renderFrames) {
+	for (int32_t fram = 0; fram < _renderFrames; ++fram) {
+		double dest = m_BiCoef.beta[0] / m_BiCoef.alpha[0] * _src[fram] +
 			m_BiCoef.beta[1] / m_BiCoef.alpha[0] * m_IIRBuff.in[0] +
 			m_BiCoef.beta[2] / m_BiCoef.alpha[0] * m_IIRBuff.in[1] -
 			m_BiCoef.alpha[1] / m_BiCoef.alpha[0] * m_IIRBuff.out[0] -
@@ -19,6 +51,8 @@ void AS::IIRFilter::Process(float* _src, uint32_t _renderFrames) {
 
 		m_IIRBuff.out[1] = m_IIRBuff.out[0];
 		m_IIRBuff.out[0] = dest;
+
+		_src[fram] = static_cast<float>(dest);
 	}
 }
 
@@ -26,11 +60,11 @@ void AS::IIRFilter::Flush() {
 	m_IIRBuff.Flush();
 }
 
-void AS::IIRFilter::LowPass(uint32_t _samplingFreq, float _cutoffFreq, float _q) {
-	const float omega = 2.0f * static_cast<float>(M_PI) * _cutoffFreq / _samplingFreq;
-	const float alpha = sin(omega) / (2.0f * _q);
+void AS::IIRFilter::LowPass(int32_t _samplingFreq, double _cutoffFreq, double _q) {
+	const double omega = 2.0f * static_cast<double>(M_PI) * _cutoffFreq / _samplingFreq;
+	const double alpha = sin(omega) / (2.0f * _q);
 
-	const float cosOmega = cos(omega);
+	const double cosOmega = cos(omega);
 
 	m_BiCoef = BiquadCoeficients(
 		1.0f + alpha,
@@ -41,11 +75,11 @@ void AS::IIRFilter::LowPass(uint32_t _samplingFreq, float _cutoffFreq, float _q)
 		(1.0f - cosOmega) / 2.0f
 	);
 }
-void AS::IIRFilter::HighPass(uint32_t _samplingFreq, float _cutoffFreq, float _q) {
-	const float omega = 2.0f * static_cast<float>(M_PI) * _cutoffFreq / _samplingFreq;
-	const float alpha = sin(omega) / (2.0f * _q);
+void AS::IIRFilter::HighPass(int32_t _samplingFreq, double _cutoffFreq, double _q) {
+	const double omega = 2.0f * static_cast<double>(M_PI) * _cutoffFreq / _samplingFreq;
+	const double alpha = sin(omega) / (2.0f * _q);
 
-	const float cosOmega = cos(omega);
+	const double cosOmega = cos(omega);
 
 	m_BiCoef = BiquadCoeficients(
 		1.0f + alpha,
@@ -56,11 +90,11 @@ void AS::IIRFilter::HighPass(uint32_t _samplingFreq, float _cutoffFreq, float _q
 		(1.0f + cosOmega) / 2.0f
 	);
 }
-void AS::IIRFilter::BandPass(uint32_t _samplingFreq, float _centerFreq, float _bandwidth) {
-	const float omega = 2.0f * static_cast<float>(M_PI) * _centerFreq / _samplingFreq;
-	const float alpha = sin(omega) * sinh(log(2.0f) / 2.0f * _bandwidth * omega / sin(omega));
+void AS::IIRFilter::BandPass(int32_t _samplingFreq, double _centerFreq, double _bandwidth) {
+	const double omega = 2.0f * static_cast<double>(M_PI) * _centerFreq / _samplingFreq;
+	const double alpha = sin(omega) * sinh(log(2.0f) / 2.0f * _bandwidth * omega / sin(omega));
 
-	const float cosOmega = cos(omega);
+	const double cosOmega = cos(omega);
 
 	m_BiCoef = BiquadCoeficients(
 		1.0f + alpha,
@@ -71,11 +105,11 @@ void AS::IIRFilter::BandPass(uint32_t _samplingFreq, float _centerFreq, float _b
 		-alpha
 	);
 }
-void AS::IIRFilter::Notch(uint32_t _samplingFreq, float _centerFreq, float _bandwidth) {
-	const float omega = 2.0f * static_cast<float>(M_PI) * _centerFreq / _samplingFreq;
-	const float alpha = sin(omega) * sinh(log(2.0f) / 2.0f * _bandwidth * omega / sin(omega));
+void AS::IIRFilter::BandEliminate(int32_t _samplingFreq, double _centerFreq, double _bandwidth) {
+	const double omega = 2.0f * static_cast<double>(M_PI) * _centerFreq / _samplingFreq;
+	const double alpha = sin(omega) * sinh(log(2.0f) / 2.0f * _bandwidth * omega / sin(omega));
 
-	const float cosOmega = cos(omega);
+	const double cosOmega = cos(omega);
 
 	m_BiCoef = BiquadCoeficients(
 		1.0f + alpha,
@@ -86,15 +120,15 @@ void AS::IIRFilter::Notch(uint32_t _samplingFreq, float _centerFreq, float _band
 		1.0f
 	);
 }
-void AS::IIRFilter::LowShelf(uint32_t _samplingFreq, float _cutoffFreq, float _q, float _gain) {
-	const float omega = 2.0f * static_cast<float>(M_PI) * _cutoffFreq / _samplingFreq;
-	const float alpha = sin(omega) / (2.0f * _q);
+void AS::IIRFilter::LowShelf(int32_t _samplingFreq, double _cutoffFreq, double _q, double _gain) {
+	const double omega = 2.0f * static_cast<double>(M_PI) * _cutoffFreq / _samplingFreq;
+	const double alpha = sin(omega) / (2.0f * _q);
 
-	const float ampli = pow(10.0f, (_gain / 40.0f));
-	const float beta = sqrt(ampli) / _q;
+	const double ampli = pow(10.0f, (_gain / 40.0f));
+	const double beta = sqrt(ampli) / _q;
 
-	const float cosOmega = cos(omega);
-	const float sinOmega = sin(omega);
+	const double cosOmega = cos(omega);
+	const double sinOmega = sin(omega);
 
 	m_BiCoef = BiquadCoeficients(
 		(ampli + 1.0f) + (ampli - 1.0f) * cosOmega + beta * sinOmega,
@@ -105,15 +139,15 @@ void AS::IIRFilter::LowShelf(uint32_t _samplingFreq, float _cutoffFreq, float _q
 		ampli * (ampli + 1.0f) - (ampli - 1.0f) * cosOmega - beta * sinOmega
 	);
 }
-void AS::IIRFilter::HighShelf(uint32_t _samplingFreq, float _cutoffFreq, float _q, float _gain) {
-	const float omega = 2.0f * static_cast<float>(M_PI) * _cutoffFreq / _samplingFreq;
-	const float alpha = sin(omega) / (2.0f * _q);
+void AS::IIRFilter::HighShelf(int32_t _samplingFreq, double _cutoffFreq, double _q, double _gain) {
+	const double omega = 2.0f * static_cast<double>(M_PI) * _cutoffFreq / _samplingFreq;
+	const double alpha = sin(omega) / (2.0f * _q);
 
-	const float ampli = pow(10.0f, (_gain / 40.0f));
-	const float beta = sqrt(ampli) / _q;
+	const double ampli = pow(10.0f, (_gain / 40.0f));
+	const double beta = sqrt(ampli) / _q;
 
-	const float cosOmega = cos(omega);
-	const float sinOmega = sin(omega);
+	const double cosOmega = cos(omega);
+	const double sinOmega = sin(omega);
 
 	m_BiCoef = BiquadCoeficients(
 		(ampli + 1.0f) - (ampli - 1.0f) * cosOmega + beta * sinOmega,
@@ -124,14 +158,14 @@ void AS::IIRFilter::HighShelf(uint32_t _samplingFreq, float _cutoffFreq, float _
 		ampli * (ampli + 1.0f) + (ampli - 1.0f) * cosOmega - beta * sinOmega
 	);
 }
-void AS::IIRFilter::Peaking(uint32_t _samplingFreq, float _centerFreq, float _bandwidth, float _gain) {
-	const float omega = 2.0f * static_cast<float>(M_PI) * _centerFreq / _samplingFreq;
-	const float alpha = sin(omega) * sinh(log(2.0f) / 2.0f * _bandwidth * omega / sin(omega));
+void AS::IIRFilter::Peaking(int32_t _samplingFreq, double _centerFreq, double _bandwidth, double _gain) {
+	const double omega = 2.0f * static_cast<double>(M_PI) * _centerFreq / _samplingFreq;
+	const double alpha = sin(omega) * sinh(log(2.0f) / 2.0f * _bandwidth * omega / sin(omega));
 
-	const float ampli = pow(10.0f, (_gain / 40.0f));
+	const double ampli = pow(10.0f, (_gain / 40.0f));
 
-	const float cosOmega = cos(omega);
-	const float sinOmega = sin(omega);
+	const double cosOmega = cos(omega);
+	const double sinOmega = sin(omega);
 
 	m_BiCoef = BiquadCoeficients(
 		1.0f + alpha / ampli,
@@ -142,12 +176,12 @@ void AS::IIRFilter::Peaking(uint32_t _samplingFreq, float _centerFreq, float _ba
 		1.0f - alpha * ampli
 	);
 }
-void AS::IIRFilter::AllPass(uint32_t _samplingFreq, float _centerFreq, float _q) {
-	const float omega = 2.0f * static_cast<float>(M_PI) * _centerFreq / _samplingFreq;
-	const float alpha = sin(omega) / (2.0f * _q);
+void AS::IIRFilter::AllPass(int32_t _samplingFreq, double _centerFreq, double _q) {
+	const double omega = 2.0f * static_cast<double>(M_PI) * _centerFreq / _samplingFreq;
+	const double alpha = sin(omega) / (2.0f * _q);
 
-	const float cosOmega = cos(omega);
-	const float sinOmega = sin(omega);
+	const double cosOmega = cos(omega);
+	const double sinOmega = sin(omega);
 
 	m_BiCoef = BiquadCoeficients(
 		1.0f + alpha,

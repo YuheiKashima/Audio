@@ -53,7 +53,7 @@ void AS::WavFile::Create(std::string _fileName, AudioFormat _createFormat) {
 
 void AS::WavFile::Write(LineBuffer<float>& _writeBuf, const size_t _frames) {
 	if (m_StreamMode != StreamMode::WAV_STREAMMODE_WRITE || !m_WaveStream.is_open())return;
-	uint32_t size = (m_FMT.bitDepth / BitsPerByte) * m_FMT.channels * _frames;
+	int32_t size = (m_FMT.bitDepth / BitsPerByte) * m_FMT.channels * _frames;
 	std::unique_ptr<byte[]> buf(new byte[size]);
 
 	memset(buf.get(), NULL, sizeof(byte) * size);
@@ -74,7 +74,7 @@ bool AS::WavFile::Open(std::string _directory, EBufferMode _mode) {
 	std::fstream fstr(m_FileDirectory, std::ios::in | std::ios::binary);
 	if (!fstr.is_open()) return false;
 
-	uint32_t wavPoint = 0;
+	int32_t wavPoint = 0;
 	{
 		char id[5];
 		while (!fstr.eof()) {
@@ -84,15 +84,15 @@ bool AS::WavFile::Open(std::string _directory, EBufferMode _mode) {
 			std::string str_id(id);
 			if (str_id.compare("RIFF") == 0) {
 				fstr.read((char*)&m_RIFF, sizeof(RIFFChunk));
-				wavPoint = (uint32_t)fstr.tellg();
+				wavPoint = (int32_t)fstr.tellg();
 			}
 			else if (str_id.compare("fmt ") == 0) {
 				fstr.read((char*)&m_FMT, sizeof(FMTChunk));
-				wavPoint = (uint32_t)fstr.tellg();
+				wavPoint = (int32_t)fstr.tellg();
 			}
 			else if (str_id.compare("data") == 0) {
 				fstr.read((char*)&m_DATA, sizeof(DATAChunk));
-				wavPoint = (uint32_t)fstr.tellg();
+				wavPoint = (int32_t)fstr.tellg();
 				break;
 			}
 			else if (str_id.compare("junk") == 0) {
@@ -100,14 +100,14 @@ bool AS::WavFile::Open(std::string _directory, EBufferMode _mode) {
 				fstr.read((char*)&junk, sizeof(OtherChunk));
 				std::unique_ptr<byte[]> junkData(new byte[junk.chunk_size]);
 				fstr.read((char*)junkData.get(), junk.chunk_size);
-				wavPoint = (uint32_t)fstr.tellg();
+				wavPoint = (int32_t)fstr.tellg();
 			}
 			else if (str_id.compare("LIST") == 0) {
 				OtherChunk list{};
 				fstr.read((char*)&list, sizeof(OtherChunk));
 				std::unique_ptr<byte[]> listData(new byte[list.chunk_size]);
 				fstr.read((char*)listData.get(), list.chunk_size);
-				wavPoint = (uint32_t)fstr.tellg();
+				wavPoint = (int32_t)fstr.tellg();
 			}
 			else {
 				fstr.close();
@@ -148,7 +148,7 @@ bool AS::WavFile::Open(std::string _directory, EBufferMode _mode) {
 	return true;
 }
 
-size_t AS::WavFile::GetStream(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd) {
+size_t AS::WavFile::GetStream(LineBuffer<float>& _dest, const int32_t _frames, const bool _loopFlg, bool& _isEnd) {
 	if (!m_WaveStream.is_open() || m_StreamMode != StreamMode::WAV_STREAMMODE_LOAD)return 0;
 
 	auto framesToFilePoint = m_Format.channnels * (m_Format.bitDepth / BitsPerByte);
@@ -188,12 +188,12 @@ size_t AS::WavFile::GetStream(LineBuffer<float>& _dest, const uint32_t _frames, 
 	return streamFrames + remainFrames;
 }
 
-void AS::WavFile::SeekStream(const uint32_t _seek) {
+void AS::WavFile::SeekStream(const int32_t _seek) {
 	if (!m_WaveStream.is_open() || m_StreamMode != StreamMode::WAV_STREAMMODE_LOAD)return;
 	double seek = _seek * (m_Format.samplingRate / 1000.0);
 
 	if (seek <= m_AllFrames) {
-		uint32_t seekPoint = m_StreamBeginPoint + (seek * m_Format.channnels * (m_Format.bitDepth / BitsPerByte));
+		int32_t seekPoint = m_StreamBeginPoint + (seek * m_Format.channnels * (m_Format.bitDepth / BitsPerByte));
 		if (m_WaveStream.tellg() != seekPoint)
 			m_WaveStream.seekg(seekPoint, std::ios::beg);
 	}

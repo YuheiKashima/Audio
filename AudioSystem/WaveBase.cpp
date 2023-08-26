@@ -9,7 +9,7 @@ AS::WaveBase::~WaveBase() {
 	}
 }
 
-size_t AS::WaveBase::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames, const bool _loopFlg, bool& _isEnd) {
+size_t AS::WaveBase::GetBuffer(LineBuffer<float>& _dest, int32_t _frames, const bool _loopFlg, bool& _isEnd) {
 	if (_dest.sizeX() < _frames) {
 		return 0;
 	}
@@ -17,7 +17,7 @@ size_t AS::WaveBase::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames, const
 	std::lock_guard<std::recursive_mutex> lock(m_WavMutex);
 
 	_dest.zeroclear();
-	uint32_t useFrames = 0;
+	int32_t useFrames = 0;
 	switch (m_BufMode) {
 	case EBufferMode::WAVE_BUFFERMODE_LOADALL:
 		return GetMemory(_dest, _frames, _loopFlg, _isEnd);
@@ -30,7 +30,7 @@ size_t AS::WaveBase::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames, const
 	}
 }
 
-size_t AS::WaveBase::GetMemory(LineBuffer<float>& _dest, uint32_t _frames, const bool _loopFlg, bool& _isEnd) {
+size_t AS::WaveBase::GetMemory(LineBuffer<float>& _dest, int32_t _frames, const bool _loopFlg, bool& _isEnd) {
 	auto sendFrames = 0, remainFrames = 0;
 	if ((m_Cursor + _frames) < m_AllFrames) {
 		sendFrames = _frames;
@@ -42,7 +42,7 @@ size_t AS::WaveBase::GetMemory(LineBuffer<float>& _dest, uint32_t _frames, const
 		_isEnd = true;
 	}
 
-	for (uint32_t c = 0; c < m_Format.channnels; ++c) {
+	for (int32_t c = 0; c < m_Format.channnels; ++c) {
 		std::memcpy(&_dest[c].front(), &m_RealWave[c][m_Cursor], sizeof(float) * sendFrames);
 	}
 
@@ -50,7 +50,7 @@ size_t AS::WaveBase::GetMemory(LineBuffer<float>& _dest, uint32_t _frames, const
 		//どちらにしろ頭には移動するのでシーク。
 		Seek(ESeekPoint::WAVE_SEEKPOINT_BEGIN, 0);
 		if (_loopFlg) {
-			for (uint32_t c = 0; c < m_Format.channnels; ++c) {
+			for (int32_t c = 0; c < m_Format.channnels; ++c) {
 				std::memcpy(&_dest[c][sendFrames], &m_RealWave[c].front(), sizeof(float) * remainFrames);
 			}
 			m_Cursor = remainFrames;
@@ -63,7 +63,7 @@ size_t AS::WaveBase::GetMemory(LineBuffer<float>& _dest, uint32_t _frames, const
 	return sendFrames + remainFrames;
 }
 
-const uint32_t AS::WaveBase::Seek(const ESeekPoint _point, const uint32_t _seek) {
+const int32_t AS::WaveBase::Seek(const ESeekPoint _point, const int32_t _seek) {
 	if (_seek > m_AllFrames) {
 		return 0;
 	}

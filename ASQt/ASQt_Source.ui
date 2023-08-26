@@ -50,7 +50,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_PlayerTab">
     <attribute name="title">
@@ -237,13 +237,13 @@
       <item>
        <widget class="QSlider" name="m_55Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -253,13 +253,13 @@
       <item>
        <widget class="QSlider" name="m_77Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -269,13 +269,13 @@
       <item>
        <widget class="QSlider" name="m_110Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -285,13 +285,13 @@
       <item>
        <widget class="QSlider" name="m_156Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -301,13 +301,13 @@
       <item>
        <widget class="QSlider" name="m_220Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -317,13 +317,13 @@
       <item>
        <widget class="QSlider" name="m_311Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -333,13 +333,13 @@
       <item>
        <widget class="QSlider" name="m_440Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -349,13 +349,13 @@
       <item>
        <widget class="QSlider" name="m_622Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -365,13 +365,13 @@
       <item>
        <widget class="QSlider" name="m_880Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -381,13 +381,13 @@
       <item>
        <widget class="QSlider" name="m_1200Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -397,13 +397,13 @@
       <item>
        <widget class="QSlider" name="m_1800Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -413,13 +413,13 @@
       <item>
        <widget class="QSlider" name="m_2500Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -429,13 +429,13 @@
       <item>
        <widget class="QSlider" name="m_3500Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -445,13 +445,13 @@
       <item>
        <widget class="QSlider" name="m_5000Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -461,13 +461,13 @@
       <item>
        <widget class="QSlider" name="m_7000Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -477,13 +477,13 @@
       <item>
        <widget class="QSlider" name="m_10000Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -493,13 +493,13 @@
       <item>
        <widget class="QSlider" name="m_14000Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -509,13 +509,13 @@
       <item>
        <widget class="QSlider" name="m_20000Hz">
         <property name="minimum">
-         <number>1</number>
+         <number>-15</number>
         </property>
         <property name="maximum">
-         <number>20</number>
+         <number>15</number>
         </property>
         <property name="value">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="orientation">
          <enum>Qt::Vertical</enum>

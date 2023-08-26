@@ -104,7 +104,7 @@ namespace myLib {
 		std::unique_ptr<T[]> m_Buffer = nullptr;
 		size_t m_size = 0;
 		size_t m_Realsize = 0;
-		uint32_t m_Beg = 0;
+		int32_t m_Beg = 0;
 		bool m_reverse = false;
 
 		void create(size_t _n) {

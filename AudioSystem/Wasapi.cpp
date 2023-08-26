@@ -88,7 +88,7 @@ AS::Wasapi::~Wasapi() {
 	CoUninitialize();
 }
 
-uint32_t AS::Wasapi::CreateDeviceMap(const EEndPointMode _mode, std::map<std::string, IMMDevice*>& _destMap) {
+int32_t AS::Wasapi::CreateDeviceMap(const EEndPointMode _mode, std::map<std::string, IMMDevice*>& _destMap) {
 	HRESULT res;
 	ComPtr<IMMDeviceEnumerator> pDevEnum = nullptr;
 	ComPtr<IMMDeviceCollection> pDevCol = nullptr;
@@ -273,13 +273,13 @@ void AS::Wasapi::SetupHandle(ComPtr<IAudioClient> _pClient, const DWORD _streamF
 	return;
 }
 
-uint32_t AS::Wasapi::RenderProcess(LineBuffer<float>& _output, uint32_t& _frames) {
+int32_t AS::Wasapi::RenderProcess(LineBuffer<float>& _output, int32_t& _frames) {
 	HRESULT res;
 	byte* pBuffer = nullptr;
 
 	FramesInfo framesInfo;
 	GetFrames(framesInfo);
-	uint32_t renderFrames = framesInfo.paddingFrameSize == NoPadding ? framesInfo.maxFrameSize : framesInfo.paddingFrameSize;
+	int32_t renderFrames = framesInfo.paddingFrameSize == NoPadding ? framesInfo.maxFrameSize : framesInfo.paddingFrameSize;
 
 	if (renderFrames > 0) {
 		//デバイスへのバッファを取得
@@ -300,11 +300,11 @@ uint32_t AS::Wasapi::RenderProcess(LineBuffer<float>& _output, uint32_t& _frames
 	return renderFrames;
 }
 
-uint32_t AS::Wasapi::CaptureProcess(LineBuffer<float>& _output, uint32_t& _frames) {
+int32_t AS::Wasapi::CaptureProcess(LineBuffer<float>& _output, int32_t& _frames) {
 	return 0;
 }
 
-uint32_t AS::Wasapi::EnumrareDevices(const EEndPointMode _mode, DeviceList& _destList) {
+int32_t AS::Wasapi::EnumrareDevices(const EEndPointMode _mode, DeviceList& _destList) {
 	auto count = CreateDeviceMap(_mode, m_DeviceMap);
 	std::stringstream strstr;
 	strstr << m_APIName << "->" << std::source_location::current().function_name() << std::endl;
@@ -373,7 +373,7 @@ void AS::Wasapi::SetupDevice(SetupInfo& _info) {
 	REFERENCE_TIME period = 0, minPeriod = 0, wait = 0, fix = 0;
 	if (wa_info.periodTime != 0) {
 		wait = (static_cast<REFERENCE_TIME>(wa_info.periodTime));
-		period = wa_info.periodTime * 10000.0;//ms->ns
+		period = static_cast<REFERENCE_TIME>(wa_info.periodTime * 10000.0);//ms->ns
 	}
 	else {
 		//Get default device period
@@ -408,7 +408,7 @@ void AS::Wasapi::SetupDevice(SetupInfo& _info) {
 	res = m_pClient->GetBufferSize(&m_MaxFrameSize);
 	assert(res == S_OK);
 
-	uint32_t oneFrameSize = m_Format.channnels * (m_Format.bitDepth / BitsPerByte);
+	int32_t oneFrameSize = m_Format.channnels * (m_Format.bitDepth / BitsPerByte);
 
 	//Clear initial buffer
 	res = m_pRenderClient->GetBuffer(m_MaxFrameSize, &pBuffer);
@@ -473,7 +473,6 @@ void AS::Wasapi::GetFrames(FramesInfo& _destInfo) {
 	}
 
 	HRESULT res;
-	uint32_t frames = 0;
 	uint32_t padding = 0;
 
 	//res = m_pClient->GetBufferSize(&frames);
@@ -488,6 +487,6 @@ void AS::Wasapi::GetFrames(FramesInfo& _destInfo) {
 	return;
 }
 
-uint32_t AS::Wasapi::Process(LineBuffer<float>& _output, uint32_t& _frames) {
+int32_t AS::Wasapi::Process(LineBuffer<float>& _output, int32_t& _frames) {
 	return m_EndpointState == EEndPointState::AS_ENDPOINTSTATE_RENDERING ? RenderProcess(_output, _frames) : CaptureProcess(_output, _frames);
 }

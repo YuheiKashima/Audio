@@ -8,6 +8,7 @@
 #include "OggFile.h"
 #include "Reverb.h"
 #include "Compressor.h"
+#include "FilterEffect.h"
 #include <random>
 
 #define ENABLEEFFECT true
@@ -39,6 +40,8 @@ namespace Render {
 			std::weak_ptr<Reverb> reverb;
 			//コンプレッサエフェクト
 			std::weak_ptr<Compressor> compressor;
+			//filter
+			std::weak_ptr<FilterEffect<FIRFilter>> filter;
 		};
 
 		std::shared_ptr<AudioSystem> m_spAudioSystem;
@@ -74,8 +77,8 @@ namespace Render {
 	void Test::Init() {
 		m_spAudioSystem->EnumerateDevices<Wasapi>(EEndPointMode::AS_ENDPOINTMODE_RENDER, list);
 
-		uint32_t selectDevice = 0;
-		for (uint32_t i = 0; i < list.size(); ++i) {
+		int32_t selectDevice = 0;
+		for (int32_t i = 0; i < list.size(); ++i) {
 			std::cout << i << " : " << list[i].deviceName << std::endl;
 		}
 		std::cout << ">" << std::flush;
@@ -88,8 +91,6 @@ namespace Render {
 
 		WasapiSetupInfo setup(0, AUDCLNT_STREAMFLAGS_NOPERSIST | AUDCLNT_STREAMFLAGS_EVENTCALLBACK);
 		m_spAudioSystem->SetupDevice(EEndPointMode::AS_ENDPOINTMODE_RENDER, setup);
-
-		m_spAudioSystem->SetupCPUMeasure(AS::TimerLayers::Timerlayer_RenderingTime, myLib::CPUTimerInfo(myLib::TimerViewDuration::ViewDuration_MilliSeconds, 100));
 
 		spMaster = m_spAudioSystem->CreateMasterTrack();
 
@@ -113,6 +114,7 @@ namespace Render {
 		play.source->Volume(0.5f);
 		play.reverb = play.effect->AddEffect<Reverb>();
 		play.compressor = play.effect->AddEffect<Compressor>();
+		play.filter = play.effect->AddEffect<FilterEffect<FIRFilter>>();
 
 		//エフェクトパラメタ設定
 		std::array<CombParam, 4> combParam;
@@ -139,6 +141,11 @@ namespace Render {
 		compParam.gain = 1.0f;
 		auto comp = play.compressor.lock();
 		comp->SetEffectParam(compParam);
+
+		FIRParam firParam(FIRFilterType::AS_FIRTYPE_LPF, FIRLPFParam(play.source->GetFormat().samplingRate, 500.0f, 1000.0f), WindowFuncType::AS_WINDOWFUNC_HANNING);
+		FilterParam filterParam(firParam);
+		auto filter = play.filter.lock();
+		filter->SetEffectParam(filterParam);
 
 		play.source->SetEndingCallback(StopCallBack);
 #else
@@ -235,7 +242,6 @@ namespace Render {
 					}
 				}
 				if (input.GetTrigger('Z')) {
-					m_spAudioSystem->OutputCPUMeasure();
 				}
 
 #if ENABLEEFFECT
@@ -244,13 +250,13 @@ namespace Render {
 					sel -= 5;
 					if (sel < archive.size()) {
 						std::cout << "Track" << sel << "Effect:Reverb:" << std::flush;
-						if (auto rev = archive[sel].reverb.lock())
-							if (rev->GetEnable()) {
-								rev->SetEnable(false);
+						if (auto eff = archive[sel].reverb.lock())
+							if (eff->GetEnable()) {
+								eff->SetEnable(false);
 								std::cout << "Diable" << std::endl;
 							}
 							else {
-								rev->SetEnable(true);
+								eff->SetEnable(true);
 								std::cout << "Enable" << std::endl;
 							}
 					}
@@ -259,14 +265,14 @@ namespace Render {
 				else if (sel >= 10 && sel <= 14) {
 					sel -= 10;
 					if (sel < archive.size()) {
-						std::cout << "Track" << sel << "Effect:Compressor:" << std::flush;
-						if (auto rev = archive[sel].compressor.lock())
-							if (rev->GetEnable()) {
-								rev->SetEnable(false);
+						std::cout << "Track" << sel << "Effect:FIRFilter:" << std::flush;
+						if (auto eff = archive[sel].filter.lock())
+							if (eff->GetEnable()) {
+								eff->SetEnable(false);
 								std::cout << "Diable" << std::endl;
 							}
 							else {
-								rev->SetEnable(true);
+								eff->SetEnable(true);
 								std::cout << "Enable" << std::endl;
 							}
 					}
@@ -325,7 +331,7 @@ namespace Render {
 		WavFile wav("../Media/noise.wav", EBufferMode::WAVE_BUFFERMODE_LOADALL);
 		auto& linebuf = wav.GetTrack();
 
-		for (uint32_t i = 0; i < LENGTH; ++i) {
+		for (int32_t i = 0; i < LENGTH; ++i) {
 			fft_comp[i].Re = linebuf[0][i];
 		}
 
@@ -334,7 +340,7 @@ namespace Render {
 
 		std::filesystem::create_directory("../FFT");
 		std::ofstream file("../FFT/FFT_" + Chrono::GetTime_str() + ".csv", std::ios::out);
-		for (uint32_t i = 0; i < LENGTH; ++i) {
+		for (int32_t i = 0; i < LENGTH; ++i) {
 			if (i == 0)file << "Real,Imag" << std::endl;
 			file << fft_comp[i].Re << std::flush;
 			file << "," << std::flush;
@@ -377,14 +383,14 @@ void sourceLocationTest(std::source_location _loc = std::source_location::curren
 
 #define _RENDER_ true
 int main(int argc, char* argv[]) {
-	//myLib::Log::Open(true, AS::Log::ASLOG_ALL);
-	//std::shared_ptr<AudioSystem> system(std::make_shared<AudioSystem>());
-//#if _RENDER_
-//	Render::Test test(system);
-//#else
-//	Capture::Test test;
-//#endif
-//	test.Main();
+	myLib::Log::Open(true, AS::Log::ASLOG_ALL);
+	std::shared_ptr<AudioSystem> system(std::make_shared<AudioSystem>());
+#if _RENDER_
+	Render::Test test(system);
+#else
+	Capture::Test test;
+#endif
+	test.Main();
 
 	//OggFile ogg("../Media/Somehow_480.ogg", AS::EBufferMode::WAVE_BUFFERMODE_LOADALL);
 

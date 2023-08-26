@@ -112,14 +112,26 @@
     <Filter Include="ソース ファイル\MyLibs\MCPUSupportChecker">
       <UniqueIdentifier>{a62ac34b-336a-425f-ab75-8831671a075c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Effects\IIRFilter">
-      <UniqueIdentifier>{74668829-12a9-481e-b62d-4b000a631ab4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Resampler">
       <UniqueIdentifier>{fd1b05f2-5d14-4e22-8d6a-3df7f0941c5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MCPUTimer">
+    <Filter Include="ソース ファイル\MyLibs\MCPUPerfCounter">
       <UniqueIdentifier>{ee80f4d4-95a4-474e-8958-2f915ea17c32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Filter">
+      <UniqueIdentifier>{eabd776a-1fa4-479a-9ed9-dbe15b3bd4e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Filter\IIRFilter">
+      <UniqueIdentifier>{74668829-12a9-481e-b62d-4b000a631ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Filter\FIRFilter">
+      <UniqueIdentifier>{7aaaceca-24c8-4449-9b77-9c649a24c03b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Filter\FilterBase">
+      <UniqueIdentifier>{71f47f59-0d0e-49b2-846d-c7ea612590ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Effects\FilterEffect">
+      <UniqueIdentifier>{f18249a7-ea7a-4f0b-b9e9-295500189006}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -202,7 +214,7 @@
       <Filter>ソース ファイル\Effects\Reverb</Filter>
     </ClInclude>
     <ClInclude Include="IIRFilter.h">
-      <Filter>ソース ファイル\Effects\IIRFilter</Filter>
+      <Filter>ソース ファイル\Filter\IIRFilter</Filter>
     </ClInclude>
     <ClInclude Include="Compressor.h">
       <Filter>ソース ファイル\Effects\Compressor</Filter>
@@ -210,14 +222,20 @@
     <ClInclude Include="CPUSupportChecker.h">
       <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
     </ClInclude>
-    <ClInclude Include="MCPUTimer.h">
-      <Filter>ソース ファイル\MyLibs\MCPUTimer</Filter>
-    </ClInclude>
     <ClInclude Include="Resampler.h">
       <Filter>ソース ファイル\Resampler</Filter>
     </ClInclude>
     <ClInclude Include="FIRFilter.h">
-      <Filter>ソース ファイル\Effects</Filter>
+      <Filter>ソース ファイル\Filter\FIRFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterBase.h">
+      <Filter>ソース ファイル\Filter\FilterBase</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterEffect.h">
+      <Filter>ソース ファイル\Effects\FilterEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="MCPUPerfCounter.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -273,7 +291,7 @@
       <Filter>ソース ファイル\Effects\Reverb</Filter>
     </ClCompile>
     <ClCompile Include="IIRFilter.cpp">
-      <Filter>ソース ファイル\Effects\IIRFilter</Filter>
+      <Filter>ソース ファイル\Filter\IIRFilter</Filter>
     </ClCompile>
     <ClCompile Include="Compressor.cpp">
       <Filter>ソース ファイル\Effects\Compressor</Filter>
@@ -281,14 +299,17 @@
     <ClCompile Include="CPUSupportChecker.cpp">
       <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
     </ClCompile>
-    <ClCompile Include="MCPUTimer.cpp">
-      <Filter>ソース ファイル\MyLibs\MCPUTimer</Filter>
-    </ClCompile>
     <ClCompile Include="Resampler.cpp">
       <Filter>ソース ファイル\Resampler</Filter>
     </ClCompile>
     <ClCompile Include="FIRFilter.cpp">
-      <Filter>ソース ファイル\Effects</Filter>
+      <Filter>ソース ファイル\Filter\FIRFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterBase.cpp">
+      <Filter>ソース ファイル\Filter\FilterBase</Filter>
+    </ClCompile>
+    <ClCompile Include="MCPUPerfCounter.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

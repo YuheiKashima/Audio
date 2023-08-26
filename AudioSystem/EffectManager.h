@@ -16,7 +16,7 @@ namespace AS {
 		template<class E, size_t SIZE>
 		std::weak_ptr<TEMPLATE::ParallelEffector<E, SIZE>> AddParallel();
 
-		void Execute(LineBuffer<float>& _buffer, const uint32_t _processFrames);
+		void Execute(LineBuffer<float>& _buffer, const int32_t _processFrames);
 		const size_t GetEffectSize() { return m_Effects.size(); }
 		void Flush();
 

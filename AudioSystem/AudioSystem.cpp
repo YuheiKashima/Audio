@@ -3,11 +3,11 @@
 #if _DEBUGSINWAVE
 float AS::AudioSystem::m_stestSin_a = 0.1f;
 float AS::AudioSystem::m_stestSin_f0 = 1000.0f;
-uint32_t AS::AudioSystem::m_stestSinWave = 0;
+int32_t AS::AudioSystem::m_stestSinWave = 0;
 void AS::AudioSystem::testSin(LineBuffer<float>& _buf, const AudioFormat _format) {
-	for (uint32_t frames = 0; frames < _buf.sizeX(); ++frames) {
+	for (int32_t frames = 0; frames < _buf.sizeX(); ++frames) {
 		auto _wave = m_stestSin_a * sin((2.0f * M_PI * m_stestSin_f0 * m_stestSinWave) / _format.samplingRate);
-		for (uint32_t chan = 0; chan < _format.channnels; ++chan) {
+		for (int32_t chan = 0; chan < _format.channnels; ++chan) {
 			_buf[chan][frames] = _wave;
 		}
 		++m_stestSinWave;
@@ -33,7 +33,7 @@ AS::AudioSystem::~AudioSystem() {
 void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 	AudioFormat format = m_upRenderEndPoint->GetFormat();
 	FramesInfo frames{};
-	uint32_t renderFrames = 0;
+	int32_t renderFrames = 0;
 	LineBuffer<float> renderBuffer;
 	m_wpRenderMaster = _master;
 
@@ -42,10 +42,6 @@ void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 		renderFrames = 0;
 
 		m_upRenderEndPoint->WaitForProcess();
-
-		if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime)) {
-			m_CPUTimer.StartTimer();
-		}
 
 		//要求フレーム数を取得
 		m_upRenderEndPoint->GetFrames(frames);
@@ -69,10 +65,6 @@ void AS::AudioSystem::RenderThread(std::weak_ptr<MasterTrack> _master) {
 
 		//エンドポイントへ送信
 		m_upRenderEndPoint->Process(renderBuffer, renderFrames);
-
-		if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime)) {
-			m_CPUTimer.StopTimer();
-		}
 	}
 }
 
@@ -122,10 +114,12 @@ void AS::AudioSystem::Start(const EEndPointMode _mode, StartInfo& _info) {
 	switch (_mode) {
 	case EEndPointMode::AS_ENDPOINTMODE_RENDER:
 		if (m_upRenderEndPoint) {
-			if (auto master = _info.startMaster.lock())master->SetupCPUMeasure(m_CPUTimerLayer, m_CPUTimerInfo);
-			m_upRenderEndPoint->Start(_info);
-			m_bRenderLoop = true;
-			m_RenderThread = std::thread(&AudioSystem::RenderThread, this, _info.startMaster);
+			if (auto master = _info.startMaster.lock()) {
+				m_upRenderEndPoint->Start(_info);
+				m_bRenderLoop = true;
+				m_RenderThread = std::thread(&AudioSystem::RenderThread, this, _info.startMaster);
+			}
+			else { assert(false); }
 			return;
 		}
 	default:
@@ -172,7 +166,7 @@ std::shared_ptr<AS::MasterTrack> AS::AudioSystem::CreateMasterTrack() {
 	return MasterTrack::CreateInstance(format, devFrames.maxFrameSize);
 }
 
-std::shared_ptr<AS::SourceTrack> AS::AudioSystem::CreateSourceTrack(std::weak_ptr<MasterTrack> _connectMaster, const uint32_t _bufferTime) {
+std::shared_ptr<AS::SourceTrack> AS::AudioSystem::CreateSourceTrack(std::weak_ptr<MasterTrack> _connectMaster, const int32_t _bufferTime) {
 	std::shared_ptr<SourceTrack> source;
 	if (!m_upRenderEndPoint)return source;
 
@@ -183,7 +177,7 @@ std::shared_ptr<AS::SourceTrack> AS::AudioSystem::CreateSourceTrack(std::weak_pt
 	return source;
 }
 
-std::pair<std::shared_ptr<AS::SourceTrack>, std::shared_ptr<AS::EffectManager>> AS::AudioSystem::CreateSourceTrackWithEffect(std::weak_ptr<MasterTrack> _connectMaster, const uint32_t _bufferTime, const EEffectTiming _effectTiming) {
+std::pair<std::shared_ptr<AS::SourceTrack>, std::shared_ptr<AS::EffectManager>> AS::AudioSystem::CreateSourceTrackWithEffect(std::weak_ptr<MasterTrack> _connectMaster, const int32_t _bufferTime, const EEffectTiming _effectTiming) {
 	std::shared_ptr<SourceTrack> source;
 	std::shared_ptr<EffectManager> effect;
 	if (!m_upRenderEndPoint)return { source,effect };
@@ -196,7 +190,7 @@ std::pair<std::shared_ptr<AS::SourceTrack>, std::shared_ptr<AS::EffectManager>> 
 		FramesInfo devFrames;
 		m_upRenderEndPoint->GetFrames(devFrames);
 
-		uint32_t createFrames = 0;
+		int32_t createFrames = 0;
 		if (_bufferTime > 0)
 			createFrames = TimeToFrames(format, _bufferTime);
 		else
@@ -210,7 +204,7 @@ std::pair<std::shared_ptr<AS::SourceTrack>, std::shared_ptr<AS::EffectManager>> 
 	return { source,effect };
 }
 
-std::shared_ptr<AS::SourceTrack> AS::AudioSystem::CreateSourceTrackIndepend(const uint32_t _bufferTime) {
+std::shared_ptr<AS::SourceTrack> AS::AudioSystem::CreateSourceTrackIndepend(const int32_t _bufferTime) {
 	std::shared_ptr<SourceTrack> source;
 	if (!m_upRenderEndPoint)return source;
 
@@ -221,7 +215,7 @@ std::shared_ptr<AS::SourceTrack> AS::AudioSystem::CreateSourceTrackIndepend(cons
 	FramesInfo devFrames;
 	m_upRenderEndPoint->GetFrames(devFrames);
 
-	uint32_t createFrames = 0;
+	int32_t createFrames = 0;
 	if (_bufferTime > 0)
 		createFrames = FramesToTime(format, _bufferTime);
 	else
@@ -230,23 +224,4 @@ std::shared_ptr<AS::SourceTrack> AS::AudioSystem::CreateSourceTrackIndepend(cons
 	source = SourceTrack::CreateInstance(format, createFrames);
 
 	return source;
-}
-
-void AS::AudioSystem::SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info) {
-	m_CPUTimerLayer = _layers;
-	m_CPUTimerInfo = _info;
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime)) {
-		m_CPUTimer = CPUTimer(_info);
-	}
-}
-
-std::string AS::AudioSystem::OutputCPUMeasure() {
-	std::string dest;
-	if (static_cast<uint32_t>(m_CPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_SystemTime))
-		dest += m_CPUTimer.GetAverageStr("system");
-
-	if (auto master = m_wpRenderMaster.lock()) {
-		dest += master->OutputCPUMeasure();
-	}
-	return myLib::Log::Logging(dest, false);
 }

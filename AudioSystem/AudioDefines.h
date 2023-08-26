@@ -7,16 +7,15 @@
 #include "MStdPtrHelper.h"
 #include "MLog.h"
 #include "MOTFFT.h"
-#include "MCPUTimer.h"
 
 namespace AS {
 	using namespace myLib;
 	using byte = uint8_t;
-	const uint32_t BitsPerByte = 8;
+	const int32_t BitsPerByte = 8;
 	const int32_t NoPadding = -1;
 	const float Volume_Min = 0.0f;
 	const float Volume_Max = 2.0f;
-	const uint32_t LoopInfinity = std::numeric_limits<uint32_t>::max BOOST_PREVENT_MACRO_SUBSTITUTION();
+	const int32_t LoopInfinity = std::numeric_limits<int32_t>::max BOOST_PREVENT_MACRO_SUBSTITUTION();
 	const std::string DefaultDeviceStr = "(Default)";
 
 	enum class TimerLayers {
@@ -38,7 +37,7 @@ namespace AS {
 
 	struct AudioFormat {
 		AudioFormat() :samplingRate(0), bitDepth(0), channnels(0) {}
-		AudioFormat(uint32_t _sampRate, uint32_t _bitDepth, uint32_t _channels) :samplingRate(_sampRate), bitDepth(_bitDepth), channnels(_channels) {
+		AudioFormat(int32_t _sampRate, int32_t _bitDepth, int32_t _channels) :samplingRate(_sampRate), bitDepth(_bitDepth), channnels(_channels) {
 		}
 
 		bool operator ==(const AudioFormat _comp) {
@@ -47,18 +46,28 @@ namespace AS {
 			if (channnels != _comp.channnels)return false;
 			return true;
 		}
+
+		std::string GetFormatStr() {
+			std::stringstream strstr;
+			strstr << "\t" << "Channel\t\t:" << channnels << "\n";
+			strstr << "\t" << "SamplingRate\t:" << samplingRate << "\n";
+			strstr << "\t" << "BitDepth\t:" << bitDepth << std::endl;
+
+			return strstr.str();
+		}
+
 		//サンプリング周波数
-		uint32_t samplingRate;
+		int32_t samplingRate;
 		//量子化ビット数
-		uint32_t bitDepth;
+		int32_t bitDepth;
 		//チャンネル数
-		uint32_t channnels;
+		int32_t channnels;
 	};
 
 	class PCMNormalizer {
 	public:
-		static void PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const AudioFormat _format, const uint32_t _frames);
-		static void PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const AudioFormat _format, const uint32_t _frames);
+		static void PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const AudioFormat _format, const int32_t _frames);
+		static void PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const AudioFormat _format, const int32_t _frames);
 
 	private:
 		static void PCM_Normalize_8bit(byte* _pSrc, float* _pDest);
@@ -69,7 +78,7 @@ namespace AS {
 		static void PCM_Denormalize_32bit(float* _pSrc, byte* _pDest);
 	};
 
-	uint32_t TimeToFrames(const AudioFormat _format, const uint32_t _time);
-	uint32_t FramesToTime(const AudioFormat _format, const uint32_t _frames);
+	int32_t TimeToFrames(const AudioFormat _format, const int32_t _time);
+	int32_t FramesToTime(const AudioFormat _format, const int32_t _frames);
 }
 #endif

@@ -1,20 +1,23 @@
-﻿#include "MCPUTimer.h"
+﻿#include "MCPUPerfCounter.h"
 
-myLib::CPUTimerInfo myLib::CPUTimer::m_sTimerInfo{};
+myLib::CPUPerfCounterInfo myLib::CPUPerfCounter::m_sTimerInfo{ TimerViewDuration::ViewDuration_MilliSeconds,10 };
 
-myLib::CPUTimer::CPUTimer(myLib::CPUTimerInfo _info) {
-	m_sTimerInfo = _info;
+myLib::CPUPerfCounter::CPUPerfCounter(std::string _name) :m_TimerName(_name) {
 	if (!m_Timer.is_stopped())	m_Timer.stop();
 }
 
-myLib::CPUTimer::CPUTimer() {
-	if (!m_Timer.is_stopped())	m_Timer.stop();
+myLib::CPUPerfCounter::~CPUPerfCounter() {
 }
 
-myLib::CPUTimer::~CPUTimer() {
+void myLib::CPUPerfCounter::ViewAllAvarage() {
+	std::erase_if(m_sTimerList, [](auto child) {return child.expired(); });
+	for (auto& w_timer : m_sTimerList) {
+		if (auto timer = w_timer.lock()) {
+		}
+	}
 }
 
-void myLib::CPUTimer::StartTimer() {
+void myLib::CPUPerfCounter::StartTimer() {
 	if (!m_Timer.is_stopped())	m_Timer.stop();
 	if (m_sTimerInfo.avaragePrecision > 0) {
 		if (m_WallTimeRecorder.capacity() != m_sTimerInfo.avaragePrecision) {
@@ -27,7 +30,7 @@ void myLib::CPUTimer::StartTimer() {
 	}
 }
 
-void myLib::CPUTimer::StopTimer() {
+void myLib::CPUPerfCounter::StopTimer() {
 	if (!m_Timer.is_stopped()) {
 		m_Timer.stop();
 
@@ -40,7 +43,7 @@ void myLib::CPUTimer::StopTimer() {
 	}
 }
 
-myLib::CPUTime myLib::CPUTimer::GetAvarage() {
+myLib::CPUTime myLib::CPUPerfCounter::GetAvarage() {
 	if (m_WallTimeRecorder.size() > 0) {
 		//calc avarage
 		double wallAve = std::reduce(m_WallTimeRecorder.begin(), m_WallTimeRecorder.end(), 0.0) / m_WallTimeRecorder.size();
@@ -61,7 +64,7 @@ myLib::CPUTime myLib::CPUTimer::GetAvarage() {
 	}
 }
 
-std::string myLib::CPUTimer::GetAverageStr(std::string _name) {
+std::string myLib::CPUPerfCounter::GetAverageStr(std::string _name) {
 	CPUTime cputime = GetAvarage();
 	if (!cputime.hasValue())return std::string();
 	std::string unit;

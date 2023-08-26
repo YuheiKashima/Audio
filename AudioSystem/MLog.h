@@ -22,7 +22,7 @@ namespace  myLib {
 			ASLOG_ALL = 0x3F
 		};
 
-		static void Open(bool _viewLogging, uint32_t _destLevel);
+		static void Open(bool _viewLogging, int32_t _destLevel);
 		static void Open(bool _viewLogging);
 		static std::string Logging(std::string _log, bool _viewHeader = true);
 		static std::string Logging(Log::ELogLevel _level, std::string _log, bool _viewHeader = true);
@@ -32,7 +32,7 @@ namespace  myLib {
 		static bool is_Open() { return m_sLogStream.is_open(); }
 	private:
 		static std::ofstream m_sLogStream;
-		static uint32_t m_sLevel;
+		static int32_t m_sLevel;
 		static bool m_sViewLogging;
 		static std::function<void(std::string)> m_sLogOutputCallback;
 	};

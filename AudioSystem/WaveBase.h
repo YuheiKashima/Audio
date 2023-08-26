@@ -19,26 +19,19 @@ namespace AS {
 		WaveBase();
 		virtual ~WaveBase();
 
-		size_t GetBuffer(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd);
-		const uint32_t Seek(const ESeekPoint _point, const uint32_t _seek);
+		size_t GetBuffer(LineBuffer<float>& _dest, const int32_t _frames, const bool _loopFlg, bool& _isEnd);
+		const int32_t Seek(const ESeekPoint _point, const int32_t _seek);
 		const LineBuffer<float>& GetTrack() { return m_RealWave; }
 		const AudioFormat GetFormat() { return m_Format; }
-		const uint32_t Size() { return m_AllFrames; }
-		const uint32_t GetPlaingTime() {
-			auto ms = (m_Cursor / m_Format.samplingRate) * 1000.0;
-			return static_cast<uint32_t>(ms);
-		}
-		const uint32_t TotalTime() {
-			auto ms = (m_AllFrames / m_Format.samplingRate) * 1000.0;
-			return static_cast<uint32_t>(ms);
-		}
+		const int32_t Size() { return m_AllFrames; }
+		const int32_t GetFrameCount() { return m_Cursor; }
 	protected:
-		virtual size_t GetStream(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd) = 0;
-		virtual size_t GetMemory(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd);
+		virtual size_t GetStream(LineBuffer<float>& _dest, const int32_t _frames, const bool _loopFlg, bool& _isEnd) = 0;
+		virtual size_t GetMemory(LineBuffer<float>& _dest, const int32_t _frames, const bool _loopFlg, bool& _isEnd);
 
-		virtual void SeekStream(const uint32_t _seek) = 0;
+		virtual void SeekStream(const int32_t _seek) = 0;
 
-		void OutputLoadLog(std::string _fileType, std::string _directory, EBufferMode _bufMode, AudioFormat _format, const uint32_t _allFrames) {
+		void OutputLoadLog(std::string _fileType, std::string _directory, EBufferMode _bufMode, AudioFormat _format, const int32_t _allFrames) {
 			std::string mode;
 			switch (_bufMode) {
 			case AS::EBufferMode::WAVE_BUFFERMODE_LOADALL:
@@ -68,14 +61,14 @@ namespace AS {
 
 		AudioFormat m_Format{};
 		//１チャンネルあたりの最大フレーム数
-		uint32_t m_AllFrames;
+		int32_t m_AllFrames;
 		EBufferMode m_BufMode = EBufferMode::WAVE_BUFFERMODE_NONE;
 
 		LineBuffer<float> m_RealWave;
-		uint32_t m_Cursor = 0;
+		int32_t m_Cursor = 0;
 
 		std::fstream m_WaveStream;
-		uint32_t m_StreamBeginPoint = 0;
+		int32_t m_StreamBeginPoint = 0;
 
 		std::recursive_mutex m_WavMutex;
 

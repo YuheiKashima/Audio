@@ -35,11 +35,11 @@ namespace AS {
 
 	struct WasapiSetupInfo :public SetupInfo {
 		WasapiSetupInfo() {}
-		WasapiSetupInfo(uint32_t _periodTime, DWORD _streamFlag)
+		WasapiSetupInfo(int32_t _periodTime, DWORD _streamFlag)
 			:periodTime(_periodTime),
 			streamFlags(_streamFlag) {}
 		//Period time(ms)(0 = use device default period)
-		uint32_t periodTime = 0;
+		int32_t periodTime = 0;
 		//Stream flags(AUDCLNT_STREAMFLAGS_~)
 		DWORD streamFlags = 0;
 	};
@@ -61,7 +61,7 @@ namespace AS {
 		~Wasapi();
 
 		static std::string GetAPIName() { return m_APIName; }
-		uint32_t EnumrareDevices(const EEndPointMode _mode, DeviceList& _destList) override;
+		int32_t EnumrareDevices(const EEndPointMode _mode, DeviceList& _destList) override;
 		void LaunchDevice(LaunchInfo& _info) override;
 		void SetupDevice(SetupInfo& _info) override;
 		void Start(StartInfo& _info) override;
@@ -69,13 +69,13 @@ namespace AS {
 
 		bool WaitForProcess() override;
 		void GetFrames(FramesInfo& _destInfo) override;
-		uint32_t Process(LineBuffer<float>& _output, uint32_t& _frames) override;
+		int32_t Process(LineBuffer<float>& _output, int32_t& _frames) override;
 
 #ifndef _DEBUG
 	private:
 #endif
 
-		uint32_t CreateDeviceMap(const EEndPointMode _mode, std::map<std::string, IMMDevice*>& _destMap);
+		int32_t CreateDeviceMap(const EEndPointMode _mode, std::map<std::string, IMMDevice*>& _destMap);
 		DeviceInfo GetDeviceInfo(IMMDevice* _pDevice, EEndPointMode _mode);
 		IMMDevice* FindDeviceFromMap(const std::map<std::string, IMMDevice*>& _devMap, const std::string& _find);
 		HRESULT CheckFormat(ComPtr<IAudioClient> _pClient, const AudioFormat _checkFormat, const AUDCLNT_SHAREMODE _shareMode, AudioFormat& _destFormat);
@@ -83,8 +83,8 @@ namespace AS {
 		AudioFormat WFXToAudioFormat(const WAVEFORMATEXTENSIBLE _wfx);
 		HRESULT InitializeClient(ComPtr<IAudioClient> _pClient, const AUDCLNT_SHAREMODE _shareMode, const DWORD _streamFlags, const REFERENCE_TIME _initPeriod, const AudioFormat _initFormat, REFERENCE_TIME& _destFixPeriod);
 		void SetupHandle(ComPtr<IAudioClient> _pClient, const DWORD _streamFlag, HANDLE& _destHandle);
-		uint32_t RenderProcess(LineBuffer<float>& _output, uint32_t& _frames);
-		uint32_t CaptureProcess(LineBuffer<float>& _input, uint32_t& _frames);
+		int32_t RenderProcess(LineBuffer<float>& _output, int32_t& _frames);
+		int32_t CaptureProcess(LineBuffer<float>& _input, int32_t& _frames);
 	private:
 		static	CLSID	m_sCLSID_MMDeviceEnumerator;
 		static	IID		m_sIID_IMMDeviceEnumerator;

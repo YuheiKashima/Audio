@@ -5,7 +5,7 @@
 #include "CPUSupportChecker.h"
 
 namespace myLib {
-	//参考(というか写経)https://qiita.com/Gaccho/items/e936de237676120aa8a0
+	//Reference:https://qiita.com/Gaccho/items/e936de237676120aa8a0
 	template<typename T>
 	class LineBuffer_XY {
 	public:
@@ -90,6 +90,15 @@ namespace myLib {
 			std::memset(m_arr_real.get(), _value, sizeof(T) * capacity());
 		}
 
+		constexpr LineBuffer<T>(const LineBuffer<T>& _src) {
+			if (capacity() != _src.capacity()) {
+				Reset();
+				create(_src.sizeY(), _src.sizeX());
+				zeroclear();
+			}
+			memcpy_s(m_arr_real.get(), sizeof(T) * capacity(), _src.m_arr_real.get(), sizeof(T) * _src.capacity());
+		}
+
 		//x*yの1次元配列を生成するだけ
 		constexpr LineBuffer<T>(const size_t _y, const size_t _x) {
 			create(_y, _x);
@@ -103,13 +112,19 @@ namespace myLib {
 		}
 		constexpr const LineBuffer<T>& operator =(const LineBuffer<T>& _src) {
 			if (capacity() != _src.capacity()) {
-				m_arr_real.reset();
-				create(_src.m_Size_y, _src.m_Size_x);
+				Reset();
+				create(_src.sizeY(), _src.sizeX());
 				zeroclear();
 			}
-			memcpy_s(m_arr_real.get(), sizeof(T) * capacity(), _src.m_arr_real.get(), sizeof(T) * capacity());
+			memcpy_s(m_arr_real.get(), sizeof(T) * capacity(), _src.m_arr_real.get(), sizeof(T) * _src.capacity());
 			return *this;
 		}
+
+		void Reset() {
+			m_arr_real.reset();
+			m_Capacity_x = m_Size_x = m_Size_y = 0;
+		}
+
 		constexpr T* operator&() const {
 			return m_arr_real.get();
 		}
@@ -211,10 +226,10 @@ namespace myLib {
 			const size_t processFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(this->capacityX(), _add.capacityX());
 			const size_t avxForAdd = sizeof(__m256) / sizeof(float);
 
-			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
+			for (int32_t chan = 0; chan < sizeY(); ++chan) {
 				float* ptrThis = &at(chan).front();
 				float* ptrAdd = &_add.at(chan).front();
-				for (uint32_t fram = 0; fram < processFrames; fram += avxForAdd) {
+				for (int32_t fram = 0; fram < processFrames; fram += avxForAdd) {
 					__m256 avxThis = _mm256_load_ps(ptrThis);
 					__m256 avxAdd = _mm256_load_ps(ptrAdd);
 					_mm256_store_ps(ptrThis, _mm256_add_ps(avxThis, avxAdd));
@@ -227,10 +242,10 @@ namespace myLib {
 		void sequential_add(LineBuffer<float>& _add) {
 			const size_t processFrames = std::min BOOST_PREVENT_MACRO_SUBSTITUTION(this->sizeX(), _add.sizeX());
 
-			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
+			for (int32_t chan = 0; chan < sizeY(); ++chan) {
 				float* ptrThis = &at(chan).front();
 				float* ptrAdd = &_add.at(chan).front();
-				for (uint32_t fram = 0; fram < processFrames; ++fram) {
+				for (int32_t fram = 0; fram < processFrames; ++fram) {
 					*ptrThis += *ptrAdd;
 					ptrThis++;
 					ptrAdd++;
@@ -239,12 +254,12 @@ namespace myLib {
 		}
 
 		void avx_mul(float _mul) {
-			const uint32_t avxForAdd = sizeof(__m256) / sizeof(float);
+			const int32_t avxForAdd = sizeof(__m256) / sizeof(float);
 			const __m256 mul = _mm256_set_ps(_mul, _mul, _mul, _mul, _mul, _mul, _mul, _mul);
 
-			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
+			for (int32_t chan = 0; chan < sizeY(); ++chan) {
 				float* ptrThis = &at(chan).front();
-				for (uint32_t fram = 0; fram < capacityX(); fram += avxForAdd) {
+				for (int32_t fram = 0; fram < capacityX(); fram += avxForAdd) {
 					__m256 avxThis = _mm256_load_ps(ptrThis);
 					_mm256_store_ps(ptrThis, _mm256_mul_ps(avxThis, mul));
 					ptrThis += avxForAdd;
@@ -253,9 +268,9 @@ namespace myLib {
 		}
 
 		void sequential_mul(float _mul) {
-			for (uint32_t chan = 0; chan < sizeY(); ++chan) {
+			for (int32_t chan = 0; chan < sizeY(); ++chan) {
 				float* ptrThis = &at(chan).front();
-				for (uint32_t fram = 0; fram < sizeX(); ++fram) {
+				for (int32_t fram = 0; fram < sizeX(); ++fram) {
 					*ptrThis *= _mul;
 					ptrThis++;
 				}
@@ -264,7 +279,7 @@ namespace myLib {
 
 		void sequential_abs() {
 			float* ptrThis = get();
-			for (uint32_t i = 0; i < capacity(); ++i) {
+			for (int32_t i = 0; i < capacity(); ++i) {
 				*ptrThis = std::fabsf(*ptrThis++);
 			}
 		}

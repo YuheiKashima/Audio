@@ -1,6 +1,6 @@
 #include "MLog.h"
 std::ofstream myLib::Log::m_sLogStream;
-uint32_t myLib::Log::m_sLevel = ELogLevel::ASLOG_NONE;
+int32_t myLib::Log::m_sLevel = ELogLevel::ASLOG_NONE;
 bool myLib::Log::m_sViewLogging = true;
 std::function<void(std::string)> myLib::Log::m_sLogOutputCallback;
 
@@ -12,7 +12,7 @@ myLib::Log::~Log() {
 	m_sLevel = ELogLevel::ASLOG_NONE;
 }
 
-void myLib::Log::Open(bool _viewLogging, uint32_t _destlevel) {
+void myLib::Log::Open(bool _viewLogging, int32_t _destlevel) {
 	m_sLogStream.close();
 	m_sLevel = ELogLevel::ASLOG_NONE;
 

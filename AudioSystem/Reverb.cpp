@@ -12,7 +12,7 @@ void AS::Reverb::SetEffectParam(EffectParamBase& _param) {
 	std::lock_guard lock(m_ParamMutex);
 	m_Param = static_cast<ReverbParam&>(_param);
 
-	for (uint32_t i = 0; i < m_Comb->GetParallelSize(); ++i) {
+	for (int32_t i = 0; i < m_Comb->GetParallelSize(); ++i) {
 		auto comb = m_Comb->At(i).lock();
 		comb->SetEffectParam(m_Param.comb[i]);
 		comb->SetEnable(m_Param.combEnable[i]);
@@ -27,19 +27,15 @@ void AS::Reverb::SetEffectParam(EffectParamBase& _param) {
 	m_Param.dry = m_Param.dry > 0.0f ? m_Param.dry < 1.0f ? m_Param.dry : 1.0f : 0.0f;
 }
 
-void AS::Reverb::Process(LineBuffer<float>& _buffer, uint32_t _renderFrames) {
+void AS::Reverb::Process(LineBuffer<float>& _buffer, int32_t _renderFrames) {
 	std::lock_guard lock(m_ParamMutex);
-	if (m_DestTempBuf.empty()) {
-		m_DestTempBuf = _buffer;
-		m_DestTempBuf.zeroclear();
-	}
 
 	//並列コムフィルタ
 	m_DestTempBuf = _buffer;
 	m_Comb->Process(m_DestTempBuf, _renderFrames);
 
 	//直列オールパスフィルタ
-	for (uint32_t chan = 0; chan < m_Format.channnels; ++chan) {
+	for (int32_t chan = 0; chan < m_Format.channnels; ++chan) {
 		auto& biquad = m_IIRFilters.at(chan);
 		for (auto& filter : biquad) {
 			filter.Process(&m_DestTempBuf[chan].front(), _renderFrames);
@@ -58,4 +54,5 @@ void AS::Reverb::Flush() {
 	for (auto& biquad : m_IIRFilters)
 		for (auto& filter : biquad)
 			filter.Flush();
+	m_DestTempBuf.Reset();
 }

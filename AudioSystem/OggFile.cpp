@@ -25,8 +25,8 @@ bool AS::OggFile::Open(std::string _directory, EBufferMode _mode) {
 
 	vorbis_info* pOggInfo = ov_info(&m_OggFile, -1);
 	m_Format = AudioFormat(pOggInfo->rate, (pOggInfo->bitrate_nominal / pOggInfo->rate / pOggInfo->channels) * BitsPerByte, pOggInfo->channels);
-	m_AllFrames = static_cast<uint32_t>(ov_time_total(&m_OggFile, -1) * m_Format.samplingRate);
-	uint32_t pcmSize = m_AllFrames * m_Format.channnels * (m_Format.bitDepth / BitsPerByte);
+	m_AllFrames = static_cast<int32_t>(ov_time_total(&m_OggFile, -1) * m_Format.samplingRate);
+	int32_t pcmSize = m_AllFrames * m_Format.channnels * (m_Format.bitDepth / BitsPerByte);
 	m_BufMode = _mode;
 
 	switch (m_BufMode) {
@@ -60,10 +60,10 @@ bool AS::OggFile::Open(std::string _directory, EBufferMode _mode) {
 	return true;
 }
 
-size_t AS::OggFile::GetStream(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd) {
+size_t AS::OggFile::GetStream(LineBuffer<float>& _dest, const int32_t _frames, const bool _loopFlg, bool& _isEnd) {
 	if (!is_Open(m_OggFile))return 0;
 
-	const uint32_t orderSize = _frames * m_Format.channnels * (m_Format.bitDepth / BitsPerByte);
+	const int32_t orderSize = _frames * m_Format.channnels * (m_Format.bitDepth / BitsPerByte);
 	int32_t requestSize = 0;
 	int32_t bitStream = 0;
 	int32_t readDestSize = 0;
@@ -109,7 +109,7 @@ size_t AS::OggFile::GetStream(LineBuffer<float>& _dest, const uint32_t _frames, 
 	return readCompleteSize;
 }
 
-void AS::OggFile::SeekStream(const uint32_t _seek) {
+void AS::OggFile::SeekStream(const int32_t _seek) {
 	if (!is_Open(m_OggFile))return;
 	double seek = _seek * (m_Format.samplingRate / 1000.0);
 

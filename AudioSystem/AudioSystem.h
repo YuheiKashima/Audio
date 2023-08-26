@@ -17,7 +17,7 @@ namespace AS {
 		~AudioSystem();
 
 		template <class ENDPOINT>
-		uint32_t EnumerateDevices(const EEndPointMode _mode, DeviceList& _destList);
+		int32_t EnumerateDevices(const EEndPointMode _mode, DeviceList& _destList);
 		void LaunchDevice(LaunchInfo& _info);
 		void SetupDevice(const EEndPointMode _mode, SetupInfo& _info);
 		void Start(const EEndPointMode _mode, StartInfo& _info);
@@ -25,13 +25,10 @@ namespace AS {
 		void Close(const EEndPointMode _mode);
 
 		std::shared_ptr<MasterTrack> CreateMasterTrack();
-		std::shared_ptr<SourceTrack> CreateSourceTrack(std::weak_ptr<MasterTrack> _connectMaster, const uint32_t _bufferTime);
-		std::pair<std::shared_ptr<SourceTrack>, std::shared_ptr<EffectManager>> CreateSourceTrackWithEffect(std::weak_ptr<MasterTrack> _connectMaster, const uint32_t _bufferTime, const EEffectTiming _effectTiming);
-		std::shared_ptr<SourceTrack> CreateSourceTrackIndepend(const uint32_t _bufferTime);
+		std::shared_ptr<SourceTrack> CreateSourceTrack(std::weak_ptr<MasterTrack> _connectMaster, const int32_t _bufferTime);
+		std::pair<std::shared_ptr<SourceTrack>, std::shared_ptr<EffectManager>> CreateSourceTrackWithEffect(std::weak_ptr<MasterTrack> _connectMaster, const int32_t _bufferTime, const EEffectTiming _effectTiming);
+		std::shared_ptr<SourceTrack> CreateSourceTrackIndepend(const int32_t _bufferTime);
 		//std::shared_ptr<EffectManager> CreateEffectManager(std::weak_ptr<SourceTrack> _source);
-
-		void SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info);
-		std::string OutputCPUMeasure();
 	private:
 		void RenderThread(std::weak_ptr<MasterTrack> _master);
 		std::thread m_RenderThread;
@@ -43,23 +40,19 @@ namespace AS {
 		std::thread m_CaptureThread;
 		std::unique_ptr<EndPointBase> m_upCaptureEndPoint;
 		bool m_bCaptureLoop = false;
-
-		CPUTimer m_CPUTimer;
-		CPUTimerInfo m_CPUTimerInfo;
-		TimerLayers m_CPUTimerLayer = TimerLayers::Timerlayer_None;
 #if _DEBUGSINWAVE
 		static float m_stestSin_a;
 		static float m_stestSin_f0;
-		static uint32_t m_stestSinWave;
+		static int32_t m_stestSinWave;
 		void testSin(LineBuffer<float>& _buf, const AudioFormat _format);
 #endif
 	};
 
 	template<class ENDPOINT>
-	uint32_t AudioSystem::EnumerateDevices(const EEndPointMode _mode, DeviceList& _destList) {
+	int32_t AudioSystem::EnumerateDevices(const EEndPointMode _mode, DeviceList& _destList) {
 		static_assert(std::is_base_of<EndPointBase, ENDPOINT>::value, "The specified type is not a derived type of EndPointBase");
 		std::unique_ptr<EndPointBase> base(new ENDPOINT);
 		return base->EnumrareDevices(_mode, _destList);
 	}
-}
+	}
 #endif

@@ -63,6 +63,8 @@
       <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Libs\libvorbis\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\win32\VS2015\$(Platform)\$(Configuration);C:\boost\1_80_0\lib\$(PlatformShortName);..\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -73,6 +75,8 @@
       <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Libs\libvorbis\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\win32\VS2015\$(Platform)\$(Configuration);C:\boost\1_80_0\lib\$(PlatformShortName);..\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

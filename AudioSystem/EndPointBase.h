@@ -49,7 +49,7 @@ namespace AS {
 	};
 
 	struct FramesInfo {
-		uint32_t maxFrameSize = 0;
+		int32_t maxFrameSize = 0;
 		int32_t paddingFrameSize = 0;
 	};
 
@@ -58,7 +58,7 @@ namespace AS {
 		EndPointBase() {}
 		virtual ~EndPointBase() {}
 
-		virtual uint32_t EnumrareDevices(const EEndPointMode _mode, DeviceList& _destList) = 0;
+		virtual int32_t EnumrareDevices(const EEndPointMode _mode, DeviceList& _destList) = 0;
 		virtual void LaunchDevice(LaunchInfo& _info) = 0;
 		virtual void SetupDevice(SetupInfo& _info) = 0;
 		virtual void Start(StartInfo& _info) = 0;
@@ -66,7 +66,7 @@ namespace AS {
 
 		virtual bool WaitForProcess() = 0;
 		virtual void GetFrames(FramesInfo& _destInfo) = 0;
-		virtual uint32_t Process(LineBuffer<float>& _output, uint32_t& _frames) = 0;
+		virtual int32_t Process(LineBuffer<float>& _output, int32_t& _frames) = 0;
 		AudioFormat GetFormat() { return m_Format; }
 		EEndPointState GetState() { return m_EndpointState; }
 		DeviceInfo GetLaunchedDevicceInfo() { return m_DeviceInfo; }

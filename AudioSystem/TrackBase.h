@@ -29,23 +29,18 @@ namespace AS {
 		float Volume() { return m_Volume; }
 		AudioFormat GetFormat() { return m_Format; }
 		std::string GetTrackType() { return m_TrackType; }
-		uint32_t GetInstanceID() { return m_InstanceID; }
+		int32_t GetInstanceID() { return m_InstanceID; }
 
-		static void SetupCPUMeasure(TimerLayers _layers, CPUTimerInfo _info);
-
-		virtual size_t GetBuffer(LineBuffer<float>& _track, const uint32_t frames) = 0;
+		virtual size_t GetBuffer(LineBuffer<float>& _track, const int32_t frames) = 0;
 		virtual size_t ConnectTrack(const std::weak_ptr<TrackBase> _child) = 0;
 		virtual std::string OutputCPUMeasure();
 	protected:
-		const uint32_t GetInstancesSize() { return m_sTaskInstances; }
+		const int32_t GetInstancesSize() { return m_sTaskInstances; }
 		void RegisterTask(TrackRequest& _request);
 		virtual void TaskProcess(TrackRequest& _request);
 
-		static TimerLayers m_sCPUTimerLayer;
-		CPUTimer m_CPUTimer;
-
 		const AudioFormat m_Format;
-		const uint32_t m_InstanceID = 0;
+		const int32_t m_InstanceID = 0;
 		const std::string m_TrackType;
 
 		float m_Volume = 1.0f;
@@ -55,7 +50,7 @@ namespace AS {
 		static std::thread m_sTaskThread;
 		static std::queue<TrackRequest> m_sTaskQueue;
 		static std::condition_variable m_sTaskVariable;
-		static uint32_t m_sTaskInstances;
+		static int32_t m_sTaskInstances;
 	};
 };
 

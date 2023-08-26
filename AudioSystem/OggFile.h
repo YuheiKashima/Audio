@@ -20,8 +20,8 @@ namespace AS {
 		~OggFile();
 	private:
 		bool Open(std::string _directory, EBufferMode _mode);
-		size_t GetStream(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd)override;
-		void SeekStream(const uint32_t _seek)override;
+		size_t GetStream(LineBuffer<float>& _dest, const int32_t _frames, const bool _loopFlg, bool& _isEnd)override;
+		void SeekStream(const int32_t _seek)override;
 
 		inline bool is_Open(const OggVorbis_File& _check) {
 			return _check.datasource ? true : false;

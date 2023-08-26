@@ -1,6 +1,6 @@
 #include "MasterTrack.h"
 
-AS::MasterTrack::MasterTrack(AudioFormat _format, uint32_t _createFrames) :TrackBase(_format, "MasterTrack") {
+AS::MasterTrack::MasterTrack(AudioFormat _format, int32_t _createFrames) :TrackBase(_format, "MasterTrack") {
 	std::stringstream strstr;
 	strstr << "Track\t\t:" << m_InstanceID << std::endl;
 	strstr << "Type\t\t:" << m_TrackType << std::endl;
@@ -16,27 +16,11 @@ AS::MasterTrack::MasterTrack(AudioFormat _format, uint32_t _createFrames) :Track
 AS::MasterTrack::~MasterTrack() {
 }
 
-std::string AS::MasterTrack::OutputCPUMeasure() {
-	std::string dest;
-	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
-		dest += m_CPUTimer.GetAverageStr("Master");
-
-	for (auto& wpchild : m_Children) {
-		if (auto child = wpchild.lock()) {
-			dest += child->OutputCPUMeasure();
-		}
-	}
-	return dest;
-}
-
-size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
+size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, int32_t _frames) {
 	std::erase_if(m_Children, [](auto child) {return child.expired(); });
 
-	const uint32_t avxAdd = sizeof(__m256) / sizeof(float);
+	const int32_t avxAdd = sizeof(__m256) / sizeof(float);
 	LineBuffer<float> mixBuffer(m_Format.channnels, _frames);
-
-	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
-		m_CPUTimer.StartTimer();
 
 	for (auto& wpchild : m_Children) {
 		if (auto child = wpchild.lock()) {
@@ -48,9 +32,6 @@ size_t AS::MasterTrack::GetBuffer(LineBuffer<float>& _dest, uint32_t _frames) {
 			_dest.add(mixBuffer);
 		}
 	}
-
-	if (static_cast<uint32_t>(m_sCPUTimerLayer) & static_cast<uint32_t>(TimerLayers::Timerlayer_MasterTime))
-		m_CPUTimer.StopTimer();
 	return _frames;
 }
 

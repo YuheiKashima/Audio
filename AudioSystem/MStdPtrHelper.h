@@ -1,7 +1,7 @@
 #ifndef _MSTDPTRHELPER_
 #define _MSTDPTRHELPER_
 
-#include <functional>
+#include "Utilities.h"
 
 /*プライベートなコンストラクタ、デストラクタのクラスをshared_ptrへmake_sharedはできない
 (friendされたクラスからもfriendClass->shared_ptr->生成クラスの順でアクセスが発生するため不可)

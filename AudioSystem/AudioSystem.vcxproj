@@ -116,6 +116,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName)</AdditionalIncludeDirectories>
       <OpenMPSupport>false</OpenMPSupport>
+      <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,6 +165,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName)</AdditionalIncludeDirectories>
       <OpenMPSupport>false</OpenMPSupport>
+      <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -181,6 +183,8 @@
   <ItemGroup>
     <ClInclude Include="AudioDefines.h" />
     <ClInclude Include="AudioSystem.h" />
+    <ClInclude Include="FilterBase.h" />
+    <ClInclude Include="FilterEffect.h" />
     <ClInclude Include="IIRFilter.h" />
     <ClInclude Include="CombFilter.h" />
     <ClInclude Include="Compressor.h" />
@@ -188,7 +192,7 @@
     <ClInclude Include="EffectBase.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="FIRFilter.h" />
-    <ClInclude Include="MCPUTimer.h" />
+    <ClInclude Include="MCPUPerfCounter.h" />
     <ClInclude Include="ParallelEffector.h" />
     <ClInclude Include="EndPointBase.h" />
     <ClInclude Include="Equalizer.h" />
@@ -215,6 +219,7 @@
   <ItemGroup>
     <ClCompile Include="AudioDefines.cpp" />
     <ClCompile Include="AudioSystem.cpp" />
+    <ClCompile Include="FilterBase.cpp" />
     <ClCompile Include="IIRFilter.cpp" />
     <ClCompile Include="CombFilter.cpp" />
     <ClCompile Include="Compressor.cpp" />
@@ -224,7 +229,7 @@
     <ClCompile Include="FIRFilter.cpp" />
     <ClCompile Include="InstantInput.cpp" />
     <ClCompile Include="MasterTrack.cpp" />
-    <ClCompile Include="MCPUTimer.cpp" />
+    <ClCompile Include="MCPUPerfCounter.cpp" />
     <ClCompile Include="MLog.cpp" />
     <ClCompile Include="OggFile.cpp" />
     <ClCompile Include="MOTFFT.cpp" />

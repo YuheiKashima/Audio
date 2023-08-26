@@ -1,6 +1,6 @@
 #include "AudioDefines.h"
 
-void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const AudioFormat _format, const uint32_t _frames) {
+void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, const AudioFormat _format, const int32_t _frames) {
 	if (_frames > _dest.sizeX())return;
 
 	std::function<void(byte*, float*)> func;
@@ -28,7 +28,7 @@ void AS::PCMNormalizer::PCM_Normalize(byte* _pSrc, LineBuffer<float>& _dest, con
 	}
 }
 
-void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const AudioFormat _format, const uint32_t _frames) {
+void AS::PCMNormalizer::PCM_Denormalize(LineBuffer<float>& _src, byte* _pDest, const AudioFormat _format, const int32_t _frames) {
 	if (_frames > _src.sizeX())return;
 
 	std::function<void(float*, byte*)> func;
@@ -87,10 +87,10 @@ void AS::PCMNormalizer::PCM_Normalize_32bit(byte* pSrc, float* pDest) {
 void AS::PCMNormalizer::PCM_Denormalize_32bit(float* pSrc, byte* pDest) {
 }
 
-uint32_t AS::TimeToFrames(const AudioFormat _format, const uint32_t _time) {
-	return static_cast<uint32_t>(std::lroundf(_format.samplingRate * (_time / 1000.0f)));
+int32_t AS::TimeToFrames(const AudioFormat _format, const int32_t _time) {
+	return static_cast<int32_t>(std::lroundf(_format.samplingRate * (_time / 1000.0f)));
 }
 
-uint32_t AS::FramesToTime(const AudioFormat _format, const uint32_t _frames) {
-	return static_cast<uint32_t>(std::lroundf((_frames * 1000.0f) / _format.samplingRate));
+int32_t AS::FramesToTime(const AudioFormat _format, const int32_t _frames) {
+	return static_cast<int32_t>(std::lroundf((_frames * 1000.0f) / _format.samplingRate));
 }

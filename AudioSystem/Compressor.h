@@ -18,7 +18,7 @@ namespace AS {
 		~Compressor();
 
 		void SetEffectParam(EffectParamBase& _param)override;
-		void Process(LineBuffer<float>& _buffer, uint32_t _renderFrames)override;
+		void Process(LineBuffer<float>& _buffer, int32_t _renderFrames)override;
 		void Flush()override;
 
 	private:

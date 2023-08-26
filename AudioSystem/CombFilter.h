@@ -21,12 +21,12 @@ namespace AS {
 		~CombFilter();
 
 		void SetEffectParam(EffectParamBase& _param) override;
-		void Process(LineBuffer<float>& _buffer, uint32_t _renderFrames) override;
+		void Process(LineBuffer<float>& _buffer, int32_t _renderFrames) override;
 		void Flush()override;
 	private:
 
 		CombParam m_Param;
-		uint32_t m_DelayPoint = 0;
+		int32_t m_DelayPoint = 0;
 
 		std::vector<boost::circular_buffer<float>> m_CircularBuffers;
 	};

@@ -1,7 +1,7 @@
 #ifndef _MCPUTIMER_
 #define _MCPUTIMER_
 
-#include "Utilities.h"
+#include "MStdPtrHelper.h"
 
 namespace myLib {
 	struct CPUTime {
@@ -21,9 +21,9 @@ namespace myLib {
 		ViewDuration_Seconds
 	};
 
-	struct CPUTimerInfo {
-		CPUTimerInfo() {}
-		CPUTimerInfo(const  TimerViewDuration _duration, const size_t _presition) :viewDuration(_duration), avaragePrecision(_presition) {
+	struct CPUPerfCounterInfo {
+		CPUPerfCounterInfo() {}
+		CPUPerfCounterInfo(const  TimerViewDuration _duration, const size_t _presition) :viewDuration(_duration), avaragePrecision(_presition) {
 		}
 		//èoóÕå`éÆ
 		TimerViewDuration viewDuration = TimerViewDuration::ViewDuration_MilliSeconds;
@@ -31,22 +31,32 @@ namespace myLib {
 		size_t avaragePrecision = 0;
 	};
 
-	class CPUTimer {
+	class CPUPerfCounter {
+		template<typename T>
+		friend class StdPtrHelper;
 	public:
-		CPUTimer(CPUTimerInfo _info);
-		CPUTimer();
-		~CPUTimer();
+		static std::shared_ptr<CPUPerfCounter> CreateInstance(std::string _name) {
+			auto shaPtr = StdPtrHelper<CPUPerfCounter>::make_shared(_name);
+			m_sTimerList.push_back(shaPtr);
+			return shaPtr;
+		};
+		static void ChangeTimerSetting(CPUPerfCounterInfo& _info) { m_sTimerInfo = _info; }
+		static void ViewAllAvarage();
 
 		void StartTimer();
 		void StopTimer();
 		bool isTimerMeasuring() { return !m_Timer.is_stopped(); }
 		CPUTime GetAvarage();
-		CPUTimerInfo GetTimerInfo() { return  m_sTimerInfo; }
+		CPUPerfCounterInfo GetTimerInfo() { return  m_sTimerInfo; }
 		std::string GetAverageStr(std::string _name);
-
 	private:
-		static CPUTimerInfo m_sTimerInfo;
+		CPUPerfCounter(std::string _name);
+		~CPUPerfCounter();
 
+		static CPUPerfCounterInfo m_sTimerInfo;
+		static std::vector<std::weak_ptr<CPUPerfCounter>> m_sTimerList;
+
+		std::string m_TimerName;
 		boost::timer::cpu_timer m_Timer;
 		boost::circular_buffer<double> m_WallTimeRecorder;
 		boost::circular_buffer<double> m_UserTimeRecorder;

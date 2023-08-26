@@ -15,15 +15,15 @@ namespace AS {
 	public:
 		Resampler();
 		~Resampler();
-		static uint32_t CalcSamples(uint32_t _freqFrom, uint32_t _cntSammp, uint32_t _freqTo);
-		uint32_t Resampling(LineBuffer<float>& _src, uint32_t _freqFrom, uint32_t _freqTo, LineBuffer<float>& _dest);
-		uint32_t FixResamp441to480(LineBuffer<float>& _src, LineBuffer<float>& _dest);
-		uint32_t FixResamp480to441(LineBuffer<float>& _src, LineBuffer<float>& _dest);
+		static int32_t CalcSamples(int32_t _freqFrom, int32_t _cntSammp, int32_t _freqTo);
+		int32_t Resampling(LineBuffer<float>& _src, int32_t _freqFrom, int32_t _freqTo, LineBuffer<float>& _dest);
+		int32_t FixResamp441to480(LineBuffer<float>& _src, LineBuffer<float>& _dest);
+		int32_t FixResamp480to441(LineBuffer<float>& _src, LineBuffer<float>& _dest);
 	private:
 		FIRFilter m_lpf;
 
-		uint32_t Expansion(LineBuffer<float>& _src, double _resampRate, LineBuffer<float>& _dest);
-		uint32_t Decimation(LineBuffer<float>& _src, double _resampRate, LineBuffer<float>& _dest);
+		int32_t Expansion(LineBuffer<float>& _src, double _resampRate, LineBuffer<float>& _dest);
+		int32_t Decimation(LineBuffer<float>& _src, double _resampRate, LineBuffer<float>& _dest);
 	};
 }
 #endif

@@ -49,8 +49,8 @@ namespace AS {
 
 		void Create(std::string _fileName, AudioFormat _createFormat);
 		bool Open(std::string _directory, EBufferMode _mode);
-		size_t GetStream(LineBuffer<float>& _dest, const uint32_t _frames, const bool _loopFlg, bool& _isEnd)override;
-		void SeekStream(const uint32_t _seek) override;
+		size_t GetStream(LineBuffer<float>& _dest, const int32_t _frames, const bool _loopFlg, bool& _isEnd)override;
+		void SeekStream(const int32_t _seek) override;
 
 		RIFFChunk m_RIFF;
 		FMTChunk m_FMT;

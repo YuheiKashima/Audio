@@ -36,7 +36,7 @@ namespace myLib {
 
 		constexpr std::string GetFilePath() { return m_FileName; }
 		constexpr std::string GetFuntionName() { return m_FunctionName; }
-		constexpr uint32_t GetLineNumber() { return m_LineNumber; }
+		constexpr int32_t GetLineNumber() { return m_LineNumber; }
 		const ErrorInfo GetErrorInfo() { return m_ErrorInfo; }
 
 		virtual char const* what()const noexcept override {
@@ -49,7 +49,7 @@ namespace myLib {
 		std::string m_Message;
 		std::string m_FileName;
 		std::string m_FunctionName;
-		uint32_t m_LineNumber;
+		int32_t m_LineNumber;
 		ErrorInfo m_ErrorInfo;
 		bool m_IsErrorInfoExist;
 	};

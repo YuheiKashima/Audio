@@ -28,7 +28,6 @@ void ASQt::dropEvent(QDropEvent* _e) {
 
 void ASQt::timerEvent(QTimerEvent* _e) {
 	if (_e->timerId() == m_TimerID) {
-		m_AudioSystem.OutputCPUMeasure();
 	}
 }
 
@@ -37,8 +36,6 @@ void ASQt::ASLaunch() {
 	myLib::Log::SetLogOutputCallback([this](std::string _log) {
 		ui.m_LogView->append(QString::fromStdString(_log));
 		});
-
-	m_AudioSystem.SetupCPUMeasure(AS::TimerLayers::Timerlayer_RenderingTime, myLib::CPUTimerInfo(myLib::TimerViewDuration::ViewDuration_MilliSeconds, 500));
 
 	AS::DeviceInfo devInfo("", AS::Wasapi::GetAPIName(), AS::EEndPointMode::AS_ENDPOINTMODE_RENDER);
 	AS::AudioFormat audFormat(48000, 16, 2), altFormat;
