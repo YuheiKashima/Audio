@@ -66,7 +66,7 @@ void AS::IIRFilter::LowPass(int32_t _samplingFreq, double _cutoffFreq, double _q
 
 	const double cosOmega = cos(omega);
 
-	m_BiCoef = BiquadCoeficients(
+	m_BiCoef = BiquadCoefficient(
 		1.0f + alpha,
 		-2.0f * cosOmega,
 		1.0f - alpha,
@@ -81,7 +81,7 @@ void AS::IIRFilter::HighPass(int32_t _samplingFreq, double _cutoffFreq, double _
 
 	const double cosOmega = cos(omega);
 
-	m_BiCoef = BiquadCoeficients(
+	m_BiCoef = BiquadCoefficient(
 		1.0f + alpha,
 		-2.0f * cosOmega,
 		1.0f - alpha,
@@ -96,7 +96,7 @@ void AS::IIRFilter::BandPass(int32_t _samplingFreq, double _centerFreq, double _
 
 	const double cosOmega = cos(omega);
 
-	m_BiCoef = BiquadCoeficients(
+	m_BiCoef = BiquadCoefficient(
 		1.0f + alpha,
 		-2.0f * cosOmega,
 		1.0f - alpha,
@@ -111,7 +111,7 @@ void AS::IIRFilter::BandEliminate(int32_t _samplingFreq, double _centerFreq, dou
 
 	const double cosOmega = cos(omega);
 
-	m_BiCoef = BiquadCoeficients(
+	m_BiCoef = BiquadCoefficient(
 		1.0f + alpha,
 		-2.0f * cosOmega,
 		1.0f - alpha,
@@ -130,7 +130,7 @@ void AS::IIRFilter::LowShelf(int32_t _samplingFreq, double _cutoffFreq, double _
 	const double cosOmega = cos(omega);
 	const double sinOmega = sin(omega);
 
-	m_BiCoef = BiquadCoeficients(
+	m_BiCoef = BiquadCoefficient(
 		(ampli + 1.0f) + (ampli - 1.0f) * cosOmega + beta * sinOmega,
 		-2.0f * ((ampli - 1.0f) + (ampli + 1.0f) * cosOmega),
 		(ampli + 1.0f) + (ampli - 1.0f) * cosOmega - beta * sinOmega,
@@ -149,7 +149,7 @@ void AS::IIRFilter::HighShelf(int32_t _samplingFreq, double _cutoffFreq, double 
 	const double cosOmega = cos(omega);
 	const double sinOmega = sin(omega);
 
-	m_BiCoef = BiquadCoeficients(
+	m_BiCoef = BiquadCoefficient(
 		(ampli + 1.0f) - (ampli - 1.0f) * cosOmega + beta * sinOmega,
 		2.0f * ((ampli - 1.0f) - (ampli + 1.0f) * cosOmega),
 		(ampli + 1.0f) - (ampli - 1.0f) * cosOmega - beta * sinOmega,
@@ -167,7 +167,7 @@ void AS::IIRFilter::Peaking(int32_t _samplingFreq, double _centerFreq, double _b
 	const double cosOmega = cos(omega);
 	const double sinOmega = sin(omega);
 
-	m_BiCoef = BiquadCoeficients(
+	m_BiCoef = BiquadCoefficient(
 		1.0f + alpha / ampli,
 		-2.0f * cosOmega,
 		1.0f - alpha / ampli,
@@ -183,7 +183,7 @@ void AS::IIRFilter::AllPass(int32_t _samplingFreq, double _centerFreq, double _q
 	const double cosOmega = cos(omega);
 	const double sinOmega = sin(omega);
 
-	m_BiCoef = BiquadCoeficients(
+	m_BiCoef = BiquadCoefficient(
 		1.0f + alpha,
 		-2.0f * cosOmega,
 		1.0f - alpha,

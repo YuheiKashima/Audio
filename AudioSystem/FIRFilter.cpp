@@ -34,10 +34,14 @@ void AS::FIRFilter::Process(float* _src, int32_t _renderFrames) {
 	for (int32_t fram = 0; fram < _renderFrames; ++fram) {
 		auto dest = 0.0;
 		for (size_t cntCoef = 0; cntCoef <= m_CntCoefTaps; ++cntCoef) {
+			double coef = m_FIRCoefficients.at(cntCoef);//* m_WindowFuncCoefficients.at(cntCoef);
 			if (static_cast<int32_t>(m_FIRFeedbackBuffer.size() - cntCoef) > 0)
-				dest += (m_FIRCoefficients.at(cntCoef) * m_WindowFuncCoefficients.at(cntCoef)) * m_FIRFeedbackBuffer.at(cntCoef);
+				dest += m_FIRFeedbackBuffer.at(cntCoef) * coef;
 		}
 		m_FIRFeedbackBuffer.push_front(_src[fram]);
+		m_FIRLog[m_FIRLogCounter++] = dest;
+		if (m_FIRLogCounter % 1024 == 0)
+			m_FIRLogCounter = 0;
 		_src[fram] = static_cast<float>(dest);
 	}
 }
@@ -69,7 +73,7 @@ void AS::FIRFilter::LowPass(int32_t _samplingFreq, float _cutoffFreq, float _ban
 		m_FIRCoefficients.at(i) = 2.0 * ef * sinc(2.0 * std::numbers::pi * ef * m(i));
 	}
 
-	WindowFunc(m_WindowFuncCoefficients, m_WindowSelector);
+	CreateWindowFunction(m_WindowSelector, m_WindowFuncCoefficients);
 }
 
 void AS::FIRFilter::HighPass(int32_t _samplingFreq, float _cutoffFreq, float _bandwidth) {
@@ -92,7 +96,7 @@ void AS::FIRFilter::HighPass(int32_t _samplingFreq, float _cutoffFreq, float _ba
 		m_FIRCoefficients.at(i) = sinc(std::numbers::pi * m(i)) - 2 * ef * sinc(2.0 * std::numbers::pi * ef * m(i));
 	}
 
-	WindowFunc(m_WindowFuncCoefficients, m_WindowSelector);
+	CreateWindowFunction(m_WindowSelector, m_WindowFuncCoefficients);
 }
 
 void AS::FIRFilter::BandPass(int32_t _samplingFreq, float _cutoffFreq1, float _cutoffFreq2, float _bandwidth) {
@@ -117,7 +121,7 @@ void AS::FIRFilter::BandPass(int32_t _samplingFreq, float _cutoffFreq1, float _c
 			- 2.0 * ef1 * sinc(2.0 * std::numbers::pi * ef1 * m(i));
 	}
 
-	WindowFunc(m_WindowFuncCoefficients, m_WindowSelector);
+	CreateWindowFunction(m_WindowSelector, m_WindowFuncCoefficients);
 }
 
 void AS::FIRFilter::BandEliminate(int32_t _samplingFreq, float _cutoffFreq1, float _cutoffFreq2, float _bandwidth) {
@@ -143,7 +147,7 @@ void AS::FIRFilter::BandEliminate(int32_t _samplingFreq, float _cutoffFreq1, flo
 			+ 2.0 * ef1 * sinc(2.0 * std::numbers::pi * ef1 * m(i));
 	}
 
-	WindowFunc(m_WindowFuncCoefficients, m_WindowSelector);
+	CreateWindowFunction(m_WindowSelector, m_WindowFuncCoefficients);
 }
 
 double AS::FIRFilter::sinc(double _x) {
@@ -153,5 +157,5 @@ double AS::FIRFilter::sinc(double _x) {
 int32_t AS::FIRFilter::calctaps(double _delta) {
 	int32_t d = std::round(3.1 / _delta) - 1;
 	//d+1Ç™äÔêîÇ∆Ç»ÇÈÇÊÇ§í≤êÆ
-	return (d + 1) % 2 == 1 ? d++ : d;
+	return (d + 1) % 2 == 0 ? d + 1 : d;
 }

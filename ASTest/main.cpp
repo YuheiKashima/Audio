@@ -142,7 +142,7 @@ namespace Render {
 		auto comp = play.compressor.lock();
 		comp->SetEffectParam(compParam);
 
-		FIRParam firParam(FIRFilterType::AS_FIRTYPE_LPF, FIRLPFParam(play.source->GetFormat().samplingRate, 500.0f, 1000.0f), WindowFuncType::AS_WINDOWFUNC_HANNING);
+		FIRParam firParam(FIRFilterType::AS_FIRTYPE_LPF, FIRLPFParam(play.source->GetFormat().samplingRate, 500.0f, 1000.0f), WindowFuncType::AS_WINDOWFUNC_RECTANGULAR);
 		FilterParam filterParam(firParam);
 		auto filter = play.filter.lock();
 		filter->SetEffectParam(filterParam);

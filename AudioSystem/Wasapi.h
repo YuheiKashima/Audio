@@ -98,7 +98,7 @@ namespace AS {
 
 		std::map<std::string, IMMDevice*> m_DeviceMap;
 		ComPtr<IMMDevice> m_pDevice = nullptr;
-		ComPtr<IAudioClient> m_pClient;
+		ComPtr<IAudioClient2> m_pClient;
 		ComPtr<IAudioRenderClient> m_pRenderClient;
 		HANDLE m_EventHandle = nullptr;
 

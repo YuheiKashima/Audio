@@ -84,6 +84,8 @@ namespace AS {
 		std::vector<double> m_FIRCoefficients;
 
 		boost::circular_buffer<double> m_FIRFeedbackBuffer;
+		std::array<double, 1024> m_FIRLog;
+		int32_t m_FIRLogCounter = 0;
 	};
 }
 #endif

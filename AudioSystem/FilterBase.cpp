@@ -1,24 +1,32 @@
 #include "FilterBase.h"
 
-void AS::FilterBase::WindowFunc(std::vector<double>& _coefs, WindowFuncType _window) {
-	switch (_window) {
+void AS::FilterBase::CreateWindowFunction(WindowFuncType _type, std::vector<double>& _destWindowCoeff) {
+	switch (_type) {
 	case AS::WindowFuncType::AS_WINDOWFUNC_RECTANGULAR:
-		RecctangularWindow(_coefs);
+		RecctangularWindow(_destWindowCoeff);
 		break;
 	case AS::WindowFuncType::AS_WINDOWFUNC_SINGBELL:
-		SingbellWindow(_coefs);
+		SingbellWindow(_destWindowCoeff);
 		break;
 	case AS::WindowFuncType::AS_WINDOWFUNC_HANNING:
-		HanningWindow(_coefs);
+		HanningWindow(_destWindowCoeff);
 		break;
 	case AS::WindowFuncType::AS_WINDOWFUNC_HAMMING:
-		HammingWindow(_coefs);
+		HammingWindow(_destWindowCoeff);
 		break;
 	case AS::WindowFuncType::AS_WINDOWFUNC_BLACKMAN:
-		BlackmanWindow(_coefs);
+		BlackmanWindow(_destWindowCoeff);
 		break;
 	default:
 		break;
+	}
+}
+
+void AS::FilterBase::CreateWindowFuncMultiplyCoeffitient(std::vector<double>& _coef, WindowFuncType _type) {
+	std::vector<double> window(_coef.size());
+	CreateWindowFunction(_type, window);
+	for (int32_t i = 0; auto & win:window) {
+		_coef.at(i++) *= win;
 	}
 }
 

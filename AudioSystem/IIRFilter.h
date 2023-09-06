@@ -120,20 +120,20 @@ namespace AS {
 			std::array<double, cBuffers> out{ 0.0, 0.0 };
 			void Flush() { in = out = std::array<double, cBuffers>{0.0f, 0.0f}; }
 		};
-		struct BiquadCoeficients {
-			BiquadCoeficients() {}
-			BiquadCoeficients(double _alp0, double _alp1, double _alp2, double _bta0, double _bta1, double _bta2) {
+		struct BiquadCoefficient {
+			BiquadCoefficient() {}
+			BiquadCoefficient(double _alp0, double _alp1, double _alp2, double _bta0, double _bta1, double _bta2) {
 				alpha = std::array<double, cCoeficients>{_alp0, _alp1, _alp2};
 				beta = std::array<double, cCoeficients>{_bta0, _bta1, _bta2};
 			}
-			BiquadCoeficients(std::array<double, cCoeficients> _alpha, std::array<double, cCoeficients> _beta) :alpha(_alpha), beta(_beta) {
+			BiquadCoefficient(std::array<double, cCoeficients> _alpha, std::array<double, cCoeficients> _beta) :alpha(_alpha), beta(_beta) {
 			}
 			std::array<double, cCoeficients> alpha{ 0.0, 0.0, 0.0 };
 			std::array<double, cCoeficients> beta{ 0.0, 0.0, 0.0 };
 		};
 
 		IIRBuffer m_IIRBuff;
-		BiquadCoeficients m_BiCoef;
+		BiquadCoefficient m_BiCoef;
 	};
 }
 

@@ -38,11 +38,12 @@ std::string myLib::Log::Logging(std::string _log, bool _viewHeader) {
 	strstr << _log;
 
 	if (m_sViewLogging) {
-		std::cout << strstr.str();
+		std::cout << strstr.str() << std::endl;
 	}
 	if (m_sLogOutputCallback)
 		m_sLogOutputCallback(strstr.str());
 	m_sLogStream << strstr.str();
+	m_sLogStream << std::endl;
 	return strstr.str();
 }
 
