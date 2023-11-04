@@ -181,6 +181,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AllpassFilter.h" />
     <ClInclude Include="AudioDefines.h" />
     <ClInclude Include="AudioSystem.h" />
     <ClInclude Include="FilterBase.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="WavFile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AllpassFilter.cpp" />
     <ClCompile Include="AudioDefines.cpp" />
     <ClCompile Include="AudioSystem.cpp" />
     <ClCompile Include="FilterBase.cpp" />

@@ -83,7 +83,7 @@ std::string myLib::Log::Logging(Log::ELogLevel _level, std::string _comment, std
 	if (_viewHeader) {
 		auto fileDir = std::string(_location.file_name());
 		auto pos = fileDir.find_last_of("\\");
-		strstr << fileDir.substr(pos + 1) << "[" << _location.line() << "]" << std::endl;
+		strstr << fileDir.substr(pos + 1) << " [" << _location.line() << "] " << _location.function_name() << std::endl;
 	}
 	if (!_comment.empty())strstr << _comment << std::endl;
 	return myLib::Log::Logging(_level, strstr.str(), _viewHeader);

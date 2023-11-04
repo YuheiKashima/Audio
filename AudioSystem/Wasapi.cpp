@@ -253,7 +253,7 @@ HRESULT AS::Wasapi::InitializeClient(ComPtr<IAudioClient> _pClient, const AUDCLN
 		uint32_t deviceFrame = 0;
 		_pClient->GetBufferSize(&deviceFrame);
 		_destFixPeriod =
-			static_cast<REFERENCE_TIME>((10000.0 * 1000 / deviceFrame * _initFormat.samplingRate) + 0.5);
+			static_cast<REFERENCE_TIME>(std::round(10000.0 * 1000 / deviceFrame * _initFormat.samplingRate));
 		//(REFERENCE_TIME)((ms->ns * s->ms / (frames/sec) * frames) + 0.5)
 		//	* (frames/sec) / frames ‚É‚·‚é‚Æ(frames/sec)>frames‚ÌŠÛ‚ßˆ—‚ª“ü‚é‰Â”\«‚ª‚ ‚é
 	}
@@ -304,11 +304,11 @@ int32_t AS::Wasapi::CaptureProcess(LineBuffer<float>& _output, int32_t& _frames)
 	return 0;
 }
 
+//=========================================================================================================================================
+
 int32_t AS::Wasapi::EnumrareDevices(const EEndPointMode _mode, DeviceList& _destList) {
 	auto count = CreateDeviceMap(_mode, m_DeviceMap);
 	std::stringstream strstr;
-	strstr << m_APIName << "->" << std::source_location::current().function_name() << std::endl;
-
 	if (count != 0) {
 		auto count = _destList.size();
 		for (const auto& item : m_DeviceMap) {
@@ -332,7 +332,6 @@ void AS::Wasapi::LaunchDevice(LaunchInfo& _info) {
 
 	HRESULT res;
 	std::stringstream strstr;
-	strstr << m_APIName << "->" << std::source_location::current().function_name() << std::endl;
 	WasapiLaunchInfo& wa_info = static_cast<WasapiLaunchInfo&>(_info);
 	CreateDeviceMap(wa_info.LaunchDevice.endpointMode, m_DeviceMap);
 	m_pDevice = FindDeviceFromMap(m_DeviceMap, wa_info.LaunchDevice.deviceName);

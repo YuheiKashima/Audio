@@ -3,16 +3,17 @@
 #include "EffectBase.h"
 
 namespace AS {
+	enum class COMBFILTERTYPE {
+		COMBTYPE_FEEDBACK,
+		COMBTYPE_FEEDFORWARD
+	};
+
 	struct CombParam :public EffectParamBase {
 		CombParam() {}
-		CombParam(float _delayTime, float _decayLevel, float _feedBack)
-			:delayTime(_delayTime), decayLevel(_decayLevel), feedBack(_feedBack) {}
-		CombParam(float _delayTime, float _feedBackDecay)
-			:delayTime(_delayTime), decayLevel(_feedBackDecay), feedBack(_feedBackDecay) {}
-
+		CombParam(float _delayTime, float _decayLevel)
+			:delayTime(_delayTime), decayLevel(_decayLevel) {}
 		float delayTime = 1.0f;
 		float decayLevel = 1.0f;
-		float feedBack = 1.0f;
 	};
 
 	class CombFilter :public EffectBase {
@@ -26,9 +27,9 @@ namespace AS {
 	private:
 
 		CombParam m_Param;
-		int32_t m_DelayPoint = 0;
+		int32_t m_Delaylength = 0;
 
-		std::vector<boost::circular_buffer<float>> m_CircularBuffers;
+		std::vector<boost::circular_buffer<double>> m_DelayBuffer;
 	};
 };
 

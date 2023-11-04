@@ -14,6 +14,7 @@
 #include <endpointvolume.h>
 #include <functiondiscoverykeys_devpkey.h>
 #include <wrl.h>
+#include <winerror.h>
 
 #pragma comment(lib,"Avrt.lib")
 #pragma comment(lib,"winmm.lib")
@@ -85,6 +86,7 @@ namespace AS {
 		void SetupHandle(ComPtr<IAudioClient> _pClient, const DWORD _streamFlag, HANDLE& _destHandle);
 		int32_t RenderProcess(LineBuffer<float>& _output, int32_t& _frames);
 		int32_t CaptureProcess(LineBuffer<float>& _input, int32_t& _frames);
+
 	private:
 		static	CLSID	m_sCLSID_MMDeviceEnumerator;
 		static	IID		m_sIID_IMMDeviceEnumerator;
@@ -98,7 +100,7 @@ namespace AS {
 
 		std::map<std::string, IMMDevice*> m_DeviceMap;
 		ComPtr<IMMDevice> m_pDevice = nullptr;
-		ComPtr<IAudioClient2> m_pClient;
+		ComPtr<IAudioClient3> m_pClient;
 		ComPtr<IAudioRenderClient> m_pRenderClient;
 		HANDLE m_EventHandle = nullptr;
 

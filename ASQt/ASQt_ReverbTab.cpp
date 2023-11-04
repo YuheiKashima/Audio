@@ -74,10 +74,10 @@ ASQt_ReverbTab::ASQt_ReverbTab(std::weak_ptr<Ui::ASQt_SourceClass> _parent, std:
 			ui->m_DelayTime1->setValue(m_Param.comb[1].delayTime);
 			ui->m_DelayTime2->setValue(m_Param.comb[2].delayTime);
 			ui->m_DelayTime3->setValue(m_Param.comb[3].delayTime);
-			ui->m_Feedback0->setValue(m_Param.comb[0].feedBack);
-			ui->m_Feedback1->setValue(m_Param.comb[1].feedBack);
-			ui->m_Feedback2->setValue(m_Param.comb[2].feedBack);
-			ui->m_Feedback3->setValue(m_Param.comb[3].feedBack);
+			ui->m_Feedback0->setValue(m_Param.comb[0].feedbackDecay);
+			ui->m_Feedback1->setValue(m_Param.comb[1].feedbackDecay);
+			ui->m_Feedback2->setValue(m_Param.comb[2].feedbackDecay);
+			ui->m_Feedback3->setValue(m_Param.comb[3].feedbackDecay);
 			ui->m_EnableComb0->setCheckState(m_Param.combEnable[0] ? Qt::Checked : Qt::Unchecked);
 			ui->m_EnableComb1->setCheckState(m_Param.combEnable[1] ? Qt::Checked : Qt::Unchecked);
 			ui->m_EnableComb2->setCheckState(m_Param.combEnable[2] ? Qt::Checked : Qt::Unchecked);
