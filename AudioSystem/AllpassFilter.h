@@ -8,7 +8,6 @@ namespace AS {
 		AllpassParam(double _delayTime, double _decayLevel)
 			:delayTime(_delayTime), decayLevel(_decayLevel) {
 		}
-
 		double delayTime = 1.0;
 		double decayLevel = 1.0;
 	};

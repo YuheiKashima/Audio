@@ -1,8 +1,9 @@
 #include "Reverb.h"
 
-AS::Reverb::Reverb(AudioFormat _format) :EffectBase(_format) {
-	m_Comb = std::make_shared<TEMPLATE::ParallelEffector<CombFilter, 4>>(_format);
-	m_IIRFilters.resize(m_Format.channnels);
+AS::Reverb::Reverb(AudioFormat _format) :EffectBase(_format), m_Comb(_format) {
+	for (int32_t i = 0; i < m_Format.channnels; ++i) {
+		m_APFs.push_back({ std::make_shared<AllpassFilter>(m_Format), std::make_shared<AllpassFilter>(m_Format) });
+	}
 }
 
 AS::Reverb::~Reverb() {
@@ -12,14 +13,14 @@ void AS::Reverb::SetEffectParam(EffectParamBase& _param) {
 	std::lock_guard lock(m_ParamMutex);
 	m_Param = static_cast<ReverbParam&>(_param);
 
-	for (int32_t i = 0; i < m_Comb->GetParallelSize(); ++i) {
-		auto comb = m_Comb->At(i).lock();
-		comb->SetEffectParam(m_Param.comb[i]);
+	for (int32_t i = 0; i < m_Comb.GetParallelSize(); ++i) {
+		auto comb = m_Comb.At(i).lock();
+		comb->SetEffectParam(m_Param.combParams[i]);
 		comb->SetEnable(m_Param.combEnable[i]);
 	}
-	for (auto& biquad : m_IIRFilters) {
-		for (size_t i = 0; auto & filter : biquad) {
-			filter.AllPass(m_Format.samplingRate, m_Param.apfFreq[i], m_Param.apfQ[i]);
+	for (auto& apf : m_APFs) {
+		for (size_t i = 0; auto & filter : apf) {
+			filter->SetEffectParam(m_Param.apfParams[i]);
 			++i;
 		}
 	}
@@ -32,14 +33,14 @@ void AS::Reverb::Process(LineBuffer<float>& _buffer, int32_t _renderFrames) {
 
 	//並列コムフィルタ
 	m_DestTempBuf = _buffer;
-	m_Comb->Process(m_DestTempBuf, _renderFrames);
+	m_Comb.Process(m_DestTempBuf, _renderFrames);
 
 	//直列オールパスフィルタ
-	for (int32_t chan = 0; chan < m_Format.channnels; ++chan) {
-		auto& biquad = m_IIRFilters.at(chan);
-		for (auto& filter : biquad) {
-			filter.Process(&m_DestTempBuf[chan].front(), _renderFrames);
+	for (int32_t chan = 0; auto & apfs:m_APFs) {
+		for (auto& filter : apfs) {
+			filter->Process(m_DestTempBuf, _renderFrames);
 		}
+		++chan;
 	}
 
 	if (GetEnable()) {
@@ -50,9 +51,9 @@ void AS::Reverb::Process(LineBuffer<float>& _buffer, int32_t _renderFrames) {
 }
 
 void AS::Reverb::Flush() {
-	m_Comb->Flush();
-	for (auto& biquad : m_IIRFilters)
+	m_Comb.Flush();
+	for (auto& biquad : m_APFs)
 		for (auto& filter : biquad)
-			filter.Flush();
+			filter->Flush();
 	m_DestTempBuf.Reset();
 }

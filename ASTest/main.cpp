@@ -118,17 +118,20 @@ namespace Render {
 
 		//エフェクトパラメタ設定
 		std::array<CombParam, 4> combParam;
-		combParam[0] = CombParam(39.0f, 0.835603f);
-		combParam[1] = CombParam(36.7f, 0.844501f);
-		combParam[2] = CombParam(33.2f, 0.858223f);
-		combParam[3] = CombParam(29.9f, 0.832147f);
+		combParam[0] = CombParam(39.85f, 0.871402f);
+		combParam[1] = CombParam(36.1f, 0.882762f);
+		combParam[2] = CombParam(33.27f, 0.891443f);
+		combParam[3] = CombParam(30.15f, 0.901117f);
+		std::array<AllpassParam, 2> apfParam;
+		apfParam[0] = AllpassParam(5.0, 0.7);
+		apfParam[1] = AllpassParam(1.7, 0.7);
+
 		std::array<bool, 4> combEna{ true, true, true, true };
-		std::array<float, 2> apfQ{ 5.05f ,1.65f };
 		std::array<bool, 2> apfEna{ true, true };
 		ReverbParam revParam(
 			combParam,
+			apfParam,
 			combEna,
-			apfQ,
 			apfEna,
 			1.0f,
 			0.25f);

@@ -75,8 +75,12 @@ namespace AS {
 				}
 			}
 
+			std::weak_ptr<EFFECT> operator[](const size_t _i) { return m_ParallelEffects.at(_i); }
 			size_t GetParallelSize() { return m_ParallelEffects.size(); }
 			std::weak_ptr<EFFECT> At(size_t _i) { return m_ParallelEffects.at(_i); }
+
+		private:
+
 			std::array<std::shared_ptr<EFFECT>, SIZE> m_ParallelEffects;
 			LineBuffer<float> m_ProcessBuffer, m_DestTempBuffer;
 
