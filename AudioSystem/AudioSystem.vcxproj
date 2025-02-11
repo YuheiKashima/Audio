@@ -139,7 +139,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_85_0\include\$(PlatformShortName)</AdditionalIncludeDirectories>
       <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
@@ -163,7 +163,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_85_0\include\$(PlatformShortName)</AdditionalIncludeDirectories>
       <OpenMPSupport>false</OpenMPSupport>
       <Optimization>Full</Optimization>
     </ClCompile>

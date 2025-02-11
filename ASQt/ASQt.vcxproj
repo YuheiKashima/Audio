@@ -60,7 +60,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_85_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <WarningLevel>Level3</WarningLevel>
@@ -72,7 +72,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_80_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_85_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <WarningLevel>Level3</WarningLevel>
