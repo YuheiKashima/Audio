@@ -12,12 +12,12 @@ namespace myLib {
 		~InstantInput();
 		bool UpdateState();
 		void Ready();
-		bool GetPress(byte _key);
-		bool GetTrigger(byte _key);
-		bool GetRelease(byte _key);
+		bool GetPress(BYTE _key);
+		bool GetTrigger(BYTE _key);
+		bool GetRelease(BYTE _key);
 	private:
-		const byte m_Compare = 0x80;
-		std::array<byte, 256> m_Primary, m_Secondry;
+		const BYTE m_Compare = 0x80;
+		std::array<BYTE, 256> m_Primary, m_Secondry;
 	};
 }
 #endif

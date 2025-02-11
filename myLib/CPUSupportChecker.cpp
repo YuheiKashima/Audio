@@ -1,17 +1,20 @@
 #include "CPUSupportChecker.h"
 
+using namespace myLib;
+using namespace std;
+
 // Initialize static member data
-const myLib::CPUSupportChecker::CPUSupportChecker_Internal myLib::CPUSupportChecker::CPU_Rep;
+const CPUSupportChecker::CPUSupportChecker_Internal CPUSupportChecker::CPU_Rep;
 
-std::string myLib::CPUSupportChecker::OutputCPUSupports() {
-	std::stringstream outstream;
+string CPUSupportChecker::OutputCPUSupports() {
+	stringstream outstream;
 
-	auto support_message = [&outstream](std::string isa_feature, bool is_supported) {
-		outstream << isa_feature << (is_supported ? " supported" : " not supported") << std::endl;
-	};
+	auto support_message = [&outstream](string isa_feature, bool is_supported) {
+		outstream << isa_feature << (is_supported ? " supported" : " not supported") << endl;
+		};
 
-	outstream << CPUSupportChecker::Vendor() << std::endl;
-	outstream << CPUSupportChecker::Brand() << std::endl;
+	outstream << CPUSupportChecker::Vendor() << endl;
+	outstream << CPUSupportChecker::Brand() << endl;
 
 	support_message("3DNOW", CPUSupportChecker::_3DNOW());
 	support_message("3DNOWEXT", CPUSupportChecker::_3DNOWEXT());

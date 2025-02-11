@@ -2,11 +2,9 @@
 #define _AUDIODEFINES_
 
 #include "Utilities.h"
-#include "MLineBuffer.h"
-#include "MCircularBuffer.h"
-#include "MStdPtrHelper.h"
-#include "MLog.h"
-#include "MOTFFT.h"
+#include "LineBuffer.h"
+#include "StdPtrHelper.h"
+#include "Log.h"
 
 namespace AS {
 	using namespace myLib;

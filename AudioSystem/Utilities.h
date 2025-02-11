@@ -36,6 +36,7 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+
 //AVX
 #include <immintrin.h>
 #define AVX_ALIEN_RANGE 32

@@ -1,7 +1,17 @@
 #ifndef _MCPUTIMER_
 #define _MCPUTIMER_
 
-#include "MStdPtrHelper.h"
+#include "StdPtrHelper.h"
+
+#include <cmath>
+#include <numeric>
+#include <optional>
+#include <string>
+#include <sstream>
+#include <vector>
+
+#include <boost/circular_buffer.hpp>
+#include <boost/timer/timer.hpp>
 
 namespace myLib {
 	struct CPUTime {

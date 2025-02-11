@@ -1,7 +1,7 @@
 #ifndef _MCIRCULARBUFFER_
 #define _MCIRCULARBUFFER_
 
-#include "Utilities.h"
+#include <memory>
 
 //éQçl
 //http://precure-3dprinter.hatenablog.jp/entry/2018/02/12/%E4%BD%BF%E3%81%86%E3%81%AE%E3%81%8B%E5%88%86%E3%81%8B%E3%82%89%E3%81%AA%E3%81%84%E3%83%AA%E3%83%B3%E3%82%B0%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%81%AE%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9

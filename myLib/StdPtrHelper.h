@@ -1,7 +1,7 @@
 #ifndef _MSTDPTRHELPER_
 #define _MSTDPTRHELPER_
 
-#include "Utilities.h"
+#include <memory>
 
 /*プライベートなコンストラクタ、デストラクタのクラスをshared_ptrへmake_sharedはできない
 (friendされたクラスからもfriendClass->shared_ptr->生成クラスの順でアクセスが発生するため不可)
@@ -19,7 +19,7 @@ namespace myLib {
 
 		struct entity : public T {
 			template<typename... Args>
-			entity(Args&&... args) : T(std::forward<Args>(args)...) { }
+			entity(Args&&... args) : T(std::forward<Args>(args)...) {}
 		};
 
 		template<typename... Args>

@@ -1,8 +1,13 @@
-#ifndef _MLINEBUFFER_
-#define _MLINEBUFFER_
+#ifndef _LINEBUFFER_
+#define _LINEBUFFER_
 
-#include "Utilities.h"
+#include <algorithm>
+#include <memory>
 #include "CPUSupportChecker.h"
+
+//AVX
+#include <immintrin.h>
+#define AVX_ALIEN_RANGE 32
 
 namespace myLib {
 	//Reference:https://qiita.com/Gaccho/items/e936de237676120aa8a0
@@ -10,7 +15,8 @@ namespace myLib {
 	class LineBuffer_XY {
 	public:
 		constexpr LineBuffer_XY<T>(const size_t _id, const std::shared_ptr<T[]>& _arr)
-			: m_id_xy(_id), m_arr_ref(_arr) {}
+			: m_id_xy(_id), m_arr_ref(_arr) {
+		}
 		constexpr T operator+() const { return +m_arr_ref[m_id_xy]; }
 		constexpr T operator-() const { return -m_arr_ref[m_id_xy]; }
 		constexpr T operator+(const T& _a) const { return m_arr_ref[m_id_xy] + _a; }

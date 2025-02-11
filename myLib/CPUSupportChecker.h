@@ -1,7 +1,13 @@
 #ifndef _CPUSUPPORTCHECKER_
 #define _CPUSUPPORTCHECKER_
 
-#include "Utilities.h"
+#include <array>
+#include <bitset>
+#include <intrin.h>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
 
 namespace myLib {
 	class CPUSupportChecker

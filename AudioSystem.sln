@@ -4,16 +4,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.1.31903.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioSystem", "AudioSystem\AudioSystem.vcxproj", "{CE252292-83F2-4B2B-962C-CDADB56B20B5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD} = {426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASTest", "ASTest\ASTest.vcxproj", "{18EAC9E7-5842-4946-8262-C6F24C2CD921}"
 	ProjectSection(ProjectDependencies) = postProject
+		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD} = {426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}
 		{CE252292-83F2-4B2B-962C-CDADB56B20B5} = {CE252292-83F2-4B2B-962C-CDADB56B20B5}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASQt", "ASQt\ASQt.vcxproj", "{9EADC3A9-9FF3-4A2D-95B1-B7D2518774E1}"
 	ProjectSection(ProjectDependencies) = postProject
+		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD} = {426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}
 		{CE252292-83F2-4B2B-962C-CDADB56B20B5} = {CE252292-83F2-4B2B-962C-CDADB56B20B5}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "myLib", "myLib\myLib.vcxproj", "{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +40,10 @@ Global
 		{9EADC3A9-9FF3-4A2D-95B1-B7D2518774E1}.Debug|x64.Build.0 = Debug|x64
 		{9EADC3A9-9FF3-4A2D-95B1-B7D2518774E1}.Release|x64.ActiveCfg = Release|x64
 		{9EADC3A9-9FF3-4A2D-95B1-B7D2518774E1}.Release|x64.Build.0 = Release|x64
+		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}.Debug|x64.ActiveCfg = Debug|x64
+		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}.Debug|x64.Build.0 = Debug|x64
+		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}.Release|x64.ActiveCfg = Release|x64
+		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

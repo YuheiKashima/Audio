@@ -25,36 +25,6 @@
     <Filter Include="ソース ファイル\Utilities">
       <UniqueIdentifier>{0b31fd2c-41b3-4c0a-8058-e697b165d3ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\MyLibs">
-      <UniqueIdentifier>{ecd24395-ce95-4d78-81d1-9216c21e23e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MStdPtrHelper">
-      <UniqueIdentifier>{a192ae82-f9bb-4643-ab89-f999094d2770}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MLineBuffer">
-      <UniqueIdentifier>{10d5e99c-9858-413a-9e97-ddb17ee46c05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MException">
-      <UniqueIdentifier>{7030c78d-eb9d-4686-a234-67be93d5c51f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MCircularBuffer">
-      <UniqueIdentifier>{c9261d45-e492-4d26-9149-a8044e201005}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MChrono">
-      <UniqueIdentifier>{14056c34-20fe-4e4a-80cc-8afc69c4dadd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MLog">
-      <UniqueIdentifier>{a4419db4-7849-43d2-901a-d405e5ce19f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MSingleton">
-      <UniqueIdentifier>{ab618f1b-0475-4452-a7d0-589a62825c36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MOTFFT">
-      <UniqueIdentifier>{1bfcbe3b-6d3c-46bf-978d-55c86f60c7ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\InstantInput">
-      <UniqueIdentifier>{c75d9b30-3099-4149-8b09-152f4973bc9e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Tracks">
       <UniqueIdentifier>{f5c34d1d-4cc3-4f74-b0b1-eb3cec770671}</UniqueIdentifier>
     </Filter>
@@ -109,14 +79,8 @@
     <Filter Include="ソース ファイル\Effects\Compressor">
       <UniqueIdentifier>{113c7e7b-0ed1-4dce-9276-c246b08a89d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MCPUSupportChecker">
-      <UniqueIdentifier>{a62ac34b-336a-425f-ab75-8831671a075c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Resampler">
       <UniqueIdentifier>{fd1b05f2-5d14-4e22-8d6a-3df7f0941c5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\MyLibs\MCPUPerfCounter">
-      <UniqueIdentifier>{ee80f4d4-95a4-474e-8958-2f915ea17c32}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\Filter">
       <UniqueIdentifier>{eabd776a-1fa4-479a-9ed9-dbe15b3bd4e9}</UniqueIdentifier>
@@ -132,6 +96,9 @@
     </Filter>
     <Filter Include="ソース ファイル\Effects\FilterEffect">
       <UniqueIdentifier>{f18249a7-ea7a-4f0b-b9e9-295500189006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Filter\Allpass">
+      <UniqueIdentifier>{d08dd459-ac60-4430-a52e-cb704a19b093}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,17 +117,11 @@
     <ClInclude Include="EffectBase.h">
       <Filter>ソース ファイル\Effects\EffectBase</Filter>
     </ClInclude>
-    <ClInclude Include="InstantInput.h">
-      <Filter>ソース ファイル\MyLibs\InstantInput</Filter>
-    </ClInclude>
     <ClInclude Include="MasterTrack.h">
       <Filter>ソース ファイル\Tracks\MasterTrack</Filter>
     </ClInclude>
     <ClInclude Include="EndPointBase.h">
       <Filter>ソース ファイル\Endpoints\EndPointBase</Filter>
-    </ClInclude>
-    <ClInclude Include="MLog.h">
-      <Filter>ソース ファイル\MyLibs\MLog</Filter>
     </ClInclude>
     <ClInclude Include="OggFile.h">
       <Filter>ソース ファイル\Wave\OggFile</Filter>
@@ -168,17 +129,8 @@
     <ClInclude Include="SourceTrack.h">
       <Filter>ソース ファイル\Tracks\SourceTrack</Filter>
     </ClInclude>
-    <ClInclude Include="MChrono.h">
-      <Filter>ソース ファイル\MyLibs\MChrono</Filter>
-    </ClInclude>
     <ClInclude Include="TrackBase.h">
       <Filter>ソース ファイル\Tracks\TrackBase</Filter>
-    </ClInclude>
-    <ClInclude Include="MCircularBuffer.h">
-      <Filter>ソース ファイル\MyLibs\MCircularBuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="MException.h">
-      <Filter>ソース ファイル\MyLibs\MException</Filter>
     </ClInclude>
     <ClInclude Include="Utilities.h">
       <Filter>ソース ファイル\Utilities</Filter>
@@ -186,23 +138,11 @@
     <ClInclude Include="Wasapi.h">
       <Filter>ソース ファイル\Endpoints\Wasapi</Filter>
     </ClInclude>
-    <ClInclude Include="MLineBuffer.h">
-      <Filter>ソース ファイル\MyLibs\MLineBuffer</Filter>
-    </ClInclude>
     <ClInclude Include="WaveBase.h">
       <Filter>ソース ファイル\Wave\WaveBase</Filter>
     </ClInclude>
-    <ClInclude Include="MStdPtrHelper.h">
-      <Filter>ソース ファイル\MyLibs\MStdPtrHelper</Filter>
-    </ClInclude>
     <ClInclude Include="WavFile.h">
       <Filter>ソース ファイル\Wave\WavFile</Filter>
-    </ClInclude>
-    <ClInclude Include="MSingleton.h">
-      <Filter>ソース ファイル\MyLibs\MSingleton</Filter>
-    </ClInclude>
-    <ClInclude Include="MOTFFT.h">
-      <Filter>ソース ファイル\MyLibs\MOTFFT</Filter>
     </ClInclude>
     <ClInclude Include="CombFilter.h">
       <Filter>ソース ファイル\Effects\CombFilter</Filter>
@@ -219,9 +159,6 @@
     <ClInclude Include="Compressor.h">
       <Filter>ソース ファイル\Effects\Compressor</Filter>
     </ClInclude>
-    <ClInclude Include="CPUSupportChecker.h">
-      <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
-    </ClInclude>
     <ClInclude Include="Resampler.h">
       <Filter>ソース ファイル\Resampler</Filter>
     </ClInclude>
@@ -234,11 +171,8 @@
     <ClInclude Include="FilterEffect.h">
       <Filter>ソース ファイル\Effects\FilterEffect</Filter>
     </ClInclude>
-    <ClInclude Include="MCPUPerfCounter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="AllpassFilter.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ソース ファイル\Filter\Allpass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -253,12 +187,6 @@
     </ClCompile>
     <ClCompile Include="Equalizer.cpp">
       <Filter>ソース ファイル\Effects\Equalizer</Filter>
-    </ClCompile>
-    <ClCompile Include="InstantInput.cpp">
-      <Filter>ソース ファイル\MyLibs\InstantInput</Filter>
-    </ClCompile>
-    <ClCompile Include="MLog.cpp">
-      <Filter>ソース ファイル\MyLibs\MLog</Filter>
     </ClCompile>
     <ClCompile Include="OggFile.cpp">
       <Filter>ソース ファイル\Wave\OggFile</Filter>
@@ -281,9 +209,6 @@
     <ClCompile Include="WavFile.cpp">
       <Filter>ソース ファイル\Wave\WavFile</Filter>
     </ClCompile>
-    <ClCompile Include="MOTFFT.cpp">
-      <Filter>ソース ファイル\MyLibs\MOTFFT</Filter>
-    </ClCompile>
     <ClCompile Include="MasterTrack.cpp">
       <Filter>ソース ファイル\Tracks\MasterTrack</Filter>
     </ClCompile>
@@ -299,9 +224,6 @@
     <ClCompile Include="Compressor.cpp">
       <Filter>ソース ファイル\Effects\Compressor</Filter>
     </ClCompile>
-    <ClCompile Include="CPUSupportChecker.cpp">
-      <Filter>ソース ファイル\MyLibs\MCPUSupportChecker</Filter>
-    </ClCompile>
     <ClCompile Include="Resampler.cpp">
       <Filter>ソース ファイル\Resampler</Filter>
     </ClCompile>
@@ -311,11 +233,8 @@
     <ClCompile Include="FilterBase.cpp">
       <Filter>ソース ファイル\Filter\FilterBase</Filter>
     </ClCompile>
-    <ClCompile Include="MCPUPerfCounter.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="AllpassFilter.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Filter\Allpass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

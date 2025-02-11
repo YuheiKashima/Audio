@@ -1,23 +1,26 @@
-﻿#include "MCPUPerfCounter.h"
+﻿#include "CPUPerfCounter.h"
 
-myLib::CPUPerfCounterInfo myLib::CPUPerfCounter::m_sTimerInfo{ TimerViewDuration::ViewDuration_MilliSeconds,10 };
+using namespace myLib;
+using namespace std;
 
-myLib::CPUPerfCounter::CPUPerfCounter(std::string _name) :m_TimerName(_name) {
+CPUPerfCounterInfo CPUPerfCounter::m_sTimerInfo{ TimerViewDuration::ViewDuration_MilliSeconds,10 };
+
+CPUPerfCounter::CPUPerfCounter(string _name) :m_TimerName(_name) {
 	if (!m_Timer.is_stopped())	m_Timer.stop();
 }
 
-myLib::CPUPerfCounter::~CPUPerfCounter() {
+CPUPerfCounter::~CPUPerfCounter() {
 }
 
-void myLib::CPUPerfCounter::ViewAllAvarage() {
-	std::erase_if(m_sTimerList, [](auto child) {return child.expired(); });
+void CPUPerfCounter::ViewAllAvarage() {
+	erase_if(m_sTimerList, [](auto child) {return child.expired(); });
 	for (auto& w_timer : m_sTimerList) {
 		if (auto timer = w_timer.lock()) {
 		}
 	}
 }
 
-void myLib::CPUPerfCounter::StartTimer() {
+void CPUPerfCounter::StartTimer() {
 	if (!m_Timer.is_stopped())	m_Timer.stop();
 	if (m_sTimerInfo.avaragePrecision > 0) {
 		if (m_WallTimeRecorder.capacity() != m_sTimerInfo.avaragePrecision) {
@@ -30,7 +33,7 @@ void myLib::CPUPerfCounter::StartTimer() {
 	}
 }
 
-void myLib::CPUPerfCounter::StopTimer() {
+void CPUPerfCounter::StopTimer() {
 	if (!m_Timer.is_stopped()) {
 		m_Timer.stop();
 
@@ -43,16 +46,16 @@ void myLib::CPUPerfCounter::StopTimer() {
 	}
 }
 
-myLib::CPUTime myLib::CPUPerfCounter::GetAvarage() {
+CPUTime CPUPerfCounter::GetAvarage() {
 	if (m_WallTimeRecorder.size() > 0) {
 		//calc avarage
-		double wallAve = std::reduce(m_WallTimeRecorder.begin(), m_WallTimeRecorder.end(), 0.0) / m_WallTimeRecorder.size();
-		double userAve = std::reduce(m_UserTimeRecorder.begin(), m_UserTimeRecorder.end(), 0.0) / m_UserTimeRecorder.size();
-		double sysAve = std::reduce(m_SystemTimeRecorder.begin(), m_SystemTimeRecorder.end(), 0.0) / m_SystemTimeRecorder.size();
+		double wallAve = reduce(m_WallTimeRecorder.begin(), m_WallTimeRecorder.end(), 0.0) / m_WallTimeRecorder.size();
+		double userAve = reduce(m_UserTimeRecorder.begin(), m_UserTimeRecorder.end(), 0.0) / m_UserTimeRecorder.size();
+		double sysAve = reduce(m_SystemTimeRecorder.begin(), m_SystemTimeRecorder.end(), 0.0) / m_SystemTimeRecorder.size();
 
 		//change to viewduration
 		double dur = static_cast<double>(m_sTimerInfo.viewDuration);
-		double durpow = std::pow(1000.0, dur);
+		double durpow = pow(1000.0, dur);
 		wallAve /= durpow;
 		userAve /= durpow;
 		sysAve /= durpow;
@@ -64,10 +67,10 @@ myLib::CPUTime myLib::CPUPerfCounter::GetAvarage() {
 	}
 }
 
-std::string myLib::CPUPerfCounter::GetAverageStr(std::string _name) {
+string CPUPerfCounter::GetAverageStr(string _name) {
 	CPUTime cputime = GetAvarage();
-	if (!cputime.hasValue())return std::string();
-	std::string unit;
+	if (!cputime.hasValue())return string();
+	string unit;
 	switch (m_sTimerInfo.viewDuration) {
 	case TimerViewDuration::ViewDuration_NanoSeconds:
 		unit = "ns";
@@ -82,12 +85,12 @@ std::string myLib::CPUPerfCounter::GetAverageStr(std::string _name) {
 		unit = "s";
 		break;
 	}
-	std::stringstream strstr;
+	stringstream strstr;
 	strstr << "<" << _name << ">\t" <<
 		cputime.wall.value() << unit << " wall\t" <<
 		cputime.user.value() << unit << " user\t" <<
 		cputime.system.value() << unit << " system(" <<
-		cputime.cpuUsage.value() << "%)" << std::endl;
+		cputime.cpuUsage.value() << "%)" << endl;
 
 	return strstr.str();
 }

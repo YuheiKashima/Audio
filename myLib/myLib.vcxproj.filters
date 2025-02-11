@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\CPUSupportChecket">
+      <UniqueIdentifier>{70800a07-e804-4126-b006-46d5649b076b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\InstantInput">
+      <UniqueIdentifier>{e1731611-35f6-4bcf-861f-033f36aed807}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\TimeStamp">
+      <UniqueIdentifier>{1a8fceb8-4083-4090-8bb6-b562d8c5b582}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\CPUPerfCounter">
+      <UniqueIdentifier>{1b139c8e-af80-4203-b365-21c04ae2ff09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\MyLibException">
+      <UniqueIdentifier>{654e84ad-197c-4852-8888-2699af4ae1fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\LineBuffer">
+      <UniqueIdentifier>{143e65d4-18e3-475c-ae97-ac2346c0016c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Log">
+      <UniqueIdentifier>{294f600d-e9bb-4594-b3a4-75f6e55063a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\StdPtrhelper">
+      <UniqueIdentifier>{e72cf001-15ea-4d34-b42c-451040091495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\RingBuffer">
+      <UniqueIdentifier>{b5696de8-37f9-4269-b18a-591ed5805e4f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CPUSupportChecker.cpp">
+      <Filter>ソース ファイル\CPUSupportChecket</Filter>
+    </ClCompile>
+    <ClCompile Include="InstantInput.cpp">
+      <Filter>ソース ファイル\InstantInput</Filter>
+    </ClCompile>
+    <ClCompile Include="CPUPerfCounter.cpp">
+      <Filter>ソース ファイル\CPUPerfCounter</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>ソース ファイル\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeStamp.cpp">
+      <Filter>ソース ファイル\TimeStamp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CPUSupportChecker.h">
+      <Filter>ソース ファイル\CPUSupportChecket</Filter>
+    </ClInclude>
+    <ClInclude Include="InstantInput.h">
+      <Filter>ソース ファイル\InstantInput</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeStamp.h">
+      <Filter>ソース ファイル\TimeStamp</Filter>
+    </ClInclude>
+    <ClInclude Include="RingBuffer.h">
+      <Filter>ソース ファイル\RingBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="CPUPerfCounter.h">
+      <Filter>ソース ファイル\CPUPerfCounter</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibException.h">
+      <Filter>ソース ファイル\MyLibException</Filter>
+    </ClInclude>
+    <ClInclude Include="LineBuffer.h">
+      <Filter>ソース ファイル\LineBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>ソース ファイル\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="StdPtrHelper.h">
+      <Filter>ソース ファイル\StdPtrhelper</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
