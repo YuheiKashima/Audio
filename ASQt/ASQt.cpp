@@ -32,7 +32,7 @@ void ASQt::timerEvent(QTimerEvent* _e) {
 }
 
 void ASQt::ASLaunch() {
-	myLib::Log::Open(true, AS::Log::ASLOG_ALL);
+	myLib::Log::Open("");
 	myLib::Log::SetLogOutputCallback([this](std::string _log) {
 		ui.m_LogView->append(QString::fromStdString(_log));
 		});

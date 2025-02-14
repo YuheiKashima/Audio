@@ -25,7 +25,7 @@ AS::SourceTrack::SourceTrack(AudioFormat _format, int32_t _createFrames, EEffect
 		strstr << "Connect EffectManager" << std::endl;
 	}
 
-	Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current());
+	Log::Logging(Log::ELoggingLevel::LOGLV_INFO, std::source_location::current(), "{}", strstr.str());
 }
 
 AS::SourceTrack::~SourceTrack() {
@@ -78,7 +78,7 @@ void AS::SourceTrack::CreateBuffer(AudioFormat _format, int32_t _createFrames) {
 	strstr << "CreateFrameSize\t:" << _createFrames << "(" << FramesToTime(_format, _createFrames) << "ms)" << std::endl;
 
 	m_PlayState = EPlayState::AS_PLAYSTATE_UNBIND;
-	Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current());
+	Log::Logging(Log::ELoggingLevel::LOGLV_INFO, std::source_location::current(), "{}", strstr.str());
 }
 
 size_t AS::SourceTrack::GetBuffer(LineBuffer<float>& _dest, int32_t _frames) {

@@ -10,7 +10,7 @@ AS::MasterTrack::MasterTrack(AudioFormat _format, int32_t _createFrames) :TrackB
 	strstr << "\t" << "BitDepth\t:" << m_Format.bitDepth << std::endl;
 	strstr << ">" << std::endl;
 	strstr << "CreateFrameSize\t:" << _createFrames << std::endl;
-	Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current());
+	Log::Logging(Log::ELoggingLevel::LOGLV_INFO, std::source_location::current(), "{}", strstr.str());
 }
 
 AS::MasterTrack::~MasterTrack() {
@@ -47,7 +47,7 @@ size_t AS::MasterTrack::ConnectTrack(const std::weak_ptr<TrackBase> _child) {
 		std::stringstream strstr;
 		strstr << "Connect" << std::endl;
 		strstr << "\t" << this->m_TrackType << "(Track:" << m_InstanceID << ")" << "<===>" << child->GetTrackType() << "(Track:" << child->GetInstanceID() << ")" << std::endl;
-		Log::Logging(Log::ASLOG_INFO, strstr.str());
+		Log::Logging(Log::ELoggingLevel::LOGLV_INFO, "{}", strstr.str());
 	}
 
 	return m_Children.size();

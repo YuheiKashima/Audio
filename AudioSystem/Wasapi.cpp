@@ -216,7 +216,7 @@ HRESULT AS::Wasapi::CheckFormat(ComPtr<IAudioClient> _pClient, const AudioFormat
 		strstr << "\t\t" << "BitDepth\t:" << _destFormat.bitDepth << std::endl;
 	}
 
-	Log::Logging(myLib::Log::ASLOG_INFO, strstr.str(), false);
+	Log::Logging(myLib::Log::ELoggingLevel::LOGLV_INFO, "{}", strstr.str());
 
 	return res;
 }
@@ -321,7 +321,7 @@ int32_t AS::Wasapi::EnumrareDevices(const EEndPointMode _mode, DeviceList& _dest
 			++count;
 		}
 	}
-	Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current(), true);
+	Log::Logging(Log::ELoggingLevel::LOGLV_INFO, std::source_location::current(), "{}", strstr.str());
 
 	return count;
 }
@@ -345,7 +345,7 @@ void AS::Wasapi::LaunchDevice(LaunchInfo& _info) {
 		strstr << "\t\t" << "Channel\t:" << wa_info.LaunchFormat.channnels << std::endl;
 		strstr << "\t\t" << "SamplingRate\t:" << wa_info.LaunchFormat.samplingRate << std::endl;
 		strstr << "\t\t" << "BitDepth\t:" << wa_info.LaunchFormat.bitDepth << std::endl;
-		Log::Logging(Log::ASLOG_INFO, strstr.str(), std::source_location::current(), true);
+		Log::Logging(Log::ELoggingLevel::LOGLV_INFO, std::source_location::current(), "{}", strstr.str());
 	}
 
 	res = CheckFormat(m_pClient, wa_info.LaunchFormat, wa_info.shareMode, m_Format);

@@ -40,12 +40,13 @@ namespace myLib {
 
 		enum class ELoggingLevel {
 			LOGLV_NONE = 0x00,//使用しない
-			LOGLV_TRACE,
-			LOGLV_DEBUG,
-			LOGLV_INFO,
-			LOGLV_WARN,
-			LOGLV_ERROR,
-			LOGLV_FATAL,
+			LOGLV_TRACE = 0x01,
+			LOGLV_DEBUG = 0x02,
+			LOGLV_INFO = 0x04,
+			LOGLV_WARN = 0x08,
+			LOGLV_ERROR = 0x10,
+			LOGLV_FATAL = 0x20,
+			LOBLV_ALL = LOGLV_TRACE | LOGLV_DEBUG | LOGLV_INFO | LOGLV_WARN | LOGLV_ERROR | LOGLV_FATAL
 		};
 
 		/**

@@ -6,6 +6,8 @@
 #include "StdPtrHelper.h"
 #include "Log.h"
 
+#pragma comment(lib,"myLib.lib")
+
 namespace AS {
 	using namespace myLib;
 	using byte = uint8_t;

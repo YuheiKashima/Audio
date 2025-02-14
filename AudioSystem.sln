@@ -22,6 +22,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASQt", "ASQt\ASQt.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "myLib", "myLib\myLib.vcxproj", "{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASCore", "ASCore\ASCore.vcxproj", "{8C4435A9-D08F-441F-9D98-0D06FF3FA09E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD} = {426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASWasapi", "ASWasapi\ASWasapi.vcxproj", "{8C7F226C-0E9E-40BD-B9F6-8F01A00B41B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -44,6 +51,14 @@ Global
 		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}.Debug|x64.Build.0 = Debug|x64
 		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}.Release|x64.ActiveCfg = Release|x64
 		{426D60F2-B4B0-442D-B1C0-F75C7C23FBBD}.Release|x64.Build.0 = Release|x64
+		{8C4435A9-D08F-441F-9D98-0D06FF3FA09E}.Debug|x64.ActiveCfg = Debug|x64
+		{8C4435A9-D08F-441F-9D98-0D06FF3FA09E}.Debug|x64.Build.0 = Debug|x64
+		{8C4435A9-D08F-441F-9D98-0D06FF3FA09E}.Release|x64.ActiveCfg = Release|x64
+		{8C4435A9-D08F-441F-9D98-0D06FF3FA09E}.Release|x64.Build.0 = Release|x64
+		{8C7F226C-0E9E-40BD-B9F6-8F01A00B41B6}.Debug|x64.ActiveCfg = Debug|x64
+		{8C7F226C-0E9E-40BD-B9F6-8F01A00B41B6}.Debug|x64.Build.0 = Debug|x64
+		{8C7F226C-0E9E-40BD-B9F6-8F01A00B41B6}.Release|x64.ActiveCfg = Release|x64
+		{8C7F226C-0E9E-40BD-B9F6-8F01A00B41B6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

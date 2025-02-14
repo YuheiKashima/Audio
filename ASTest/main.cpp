@@ -368,7 +368,7 @@ namespace Capture {
 		DeviceList list;
 
 		void Init();
-		void Capturetest() {  }
+		void Capturetest() {}
 		void Exit() {}
 	};
 
@@ -386,7 +386,7 @@ void sourceLocationTest(std::source_location _loc = std::source_location::curren
 
 #define _RENDER_ true
 int main(int argc, char* argv[]) {
-	myLib::Log::Open(true, AS::Log::ASLOG_ALL);
+	myLib::Log::Open("");
 	std::shared_ptr<AudioSystem> system(std::make_shared<AudioSystem>());
 #if _RENDER_
 	Render::Test test(system);

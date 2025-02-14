@@ -33,7 +33,7 @@ void AS::WavFile::Create(std::string _fileName, AudioFormat _createFormat) {
 	std::filesystem::create_directory("../" + m_cOutputDirectory);
 	std::filesystem::create_directory("../" + m_cTempDirectory);
 	m_FileDirectory = "../" + m_cOutputDirectory + "/" + _fileName + ".wav";
-	m_TempDirectory = "../" + m_cTempDirectory + "/" + Chrono::GetTime_str() + ".tmp";
+	m_TempDirectory = "../" + m_cTempDirectory + "/" + TimeStamper::GetTime_str() + ".tmp";
 
 	FMTChunk fmt;
 	fmt.channels = _createFormat.channnels;
