@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\AudioDefines">
-      <UniqueIdentifier>{07027b29-7321-4a06-ac2a-a0d918876b53}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\AudioSystem">
       <UniqueIdentifier>{b27ea5e0-f366-4cb8-bb44-825523382604}</UniqueIdentifier>
     </Filter>
@@ -70,9 +67,6 @@
     <Filter Include="ソース ファイル\Endpoints\Wasapi">
       <UniqueIdentifier>{2fe13a20-0fbd-4c7b-a445-f66a94ae53cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Endpoints\EndPointBase">
-      <UniqueIdentifier>{71bb0134-5ec0-4acd-8162-e44d917d5700}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Effects\Reverb">
       <UniqueIdentifier>{fad550cf-bfbc-45fe-b9d0-23f3b8cea557}</UniqueIdentifier>
     </Filter>
@@ -102,9 +96,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioDefines.h">
-      <Filter>ソース ファイル\AudioDefines</Filter>
-    </ClInclude>
     <ClInclude Include="AudioSystem.h">
       <Filter>ソース ファイル\AudioSystem</Filter>
     </ClInclude>
@@ -119,9 +110,6 @@
     </ClInclude>
     <ClInclude Include="MasterTrack.h">
       <Filter>ソース ファイル\Tracks\MasterTrack</Filter>
-    </ClInclude>
-    <ClInclude Include="EndPointBase.h">
-      <Filter>ソース ファイル\Endpoints\EndPointBase</Filter>
     </ClInclude>
     <ClInclude Include="OggFile.h">
       <Filter>ソース ファイル\Wave\OggFile</Filter>
@@ -176,9 +164,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioDefines.cpp">
-      <Filter>ソース ファイル\AudioDefines</Filter>
-    </ClCompile>
     <ClCompile Include="AudioSystem.cpp">
       <Filter>ソース ファイル\AudioSystem</Filter>
     </ClCompile>

@@ -1,8 +1,16 @@
+/**
+
+	@file      EndpointBase.h
+	@brief
+	@details   ~
+	@author    Yuhei kashima
+	@date      23.02.2025
+
+**/
 #ifndef _ENDPOINTBASE_
 #define _ENDPOINTBASE_
 
-#include "AudioDefines.h"
-#include "MasterTrack.h"
+#include  "AudioDefine.h"
 
 namespace AS {
 	enum class EEndPointMode {
@@ -34,7 +42,8 @@ namespace AS {
 		LaunchInfo() {}
 		LaunchInfo(DeviceInfo& _device, AudioFormat& _format)
 			:LaunchDevice(_device),
-			LaunchFormat(_format) {}
+			LaunchFormat(_format) {
+		}
 		DeviceInfo LaunchDevice;
 		AudioFormat LaunchFormat;
 	};
@@ -44,8 +53,6 @@ namespace AS {
 
 	struct StartInfo {
 		StartInfo() {}
-		StartInfo(std::weak_ptr<MasterTrack> _master) :startMaster(_master) {}
-		std::weak_ptr<MasterTrack> startMaster;
 	};
 
 	struct FramesInfo {
@@ -53,12 +60,19 @@ namespace AS {
 		int32_t paddingFrameSize = 0;
 	};
 
-	class EndPointBase {
-	public:
-		EndPointBase() {}
-		virtual ~EndPointBase() {}
+	/**
 
-		virtual int32_t EnumrareDevices(const EEndPointMode _mode, DeviceList& _destList) = 0;
+		@class   EndpointBase
+		@brief
+		@details ~
+
+	**/
+	class EndpointBase {
+	public:
+		EndpointBase() {}
+		virtual ~EndpointBase() {}
+
+		virtual int32_t EnumerateDevices(const EEndPointMode _mode, DeviceList& _destList) = 0;
 		virtual void LaunchDevice(LaunchInfo& _info) = 0;
 		virtual void SetupDevice(SetupInfo& _info) = 0;
 		virtual void Start(StartInfo& _info) = 0;
@@ -66,10 +80,10 @@ namespace AS {
 
 		virtual bool WaitForProcess() = 0;
 		virtual void GetFrames(FramesInfo& _destInfo) = 0;
-		virtual int32_t Process(LineBuffer<float>& _output, int32_t& _frames) = 0;
+		virtual int32_t Process(myLib::LineBuffer<double>& _output, int32_t& _frames) = 0;
 		AudioFormat GetFormat() { return m_Format; }
 		EEndPointState GetState() { return m_EndpointState; }
-		DeviceInfo GetLaunchedDevicceInfo() { return m_DeviceInfo; }
+		DeviceInfo GetLaunchedDeviceInfo() { return m_DeviceInfo; }
 
 	protected:
 		EEndPointState m_EndpointState = EEndPointState::AS_ENDPOINTSTATE_NONE;
@@ -77,4 +91,4 @@ namespace AS {
 		DeviceInfo m_DeviceInfo;
 	};
 }
-#endif
+#endif // !_ENDPOINTBASE_
