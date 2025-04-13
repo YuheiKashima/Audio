@@ -1,7 +1,7 @@
 #ifndef _TRACKBASE_
 #define _TRACKBASE_
 
-#include "AudioDefines.h"
+#include "AudioDefine.h"
 
 namespace AS {
 	class TrackBase :public std::enable_shared_from_this<TrackBase> {

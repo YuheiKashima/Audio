@@ -1,6 +1,6 @@
 #ifndef _WAVEBASE_
 #define _WAVEBASE_
-#include "AudioDefines.h"
+#include "AudioDefine.h"
 
 namespace AS {
 	enum class EBufferMode {

@@ -1,7 +1,7 @@
 #ifndef _EFFECTMANAGER_
 #define _EFFECTMANAGER_
 
-#include "AudioDefines.h"
+#include "AudioDefine.h"
 #include "EffectBase.h"
 #include "ParallelEffector.h"
 

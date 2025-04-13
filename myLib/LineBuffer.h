@@ -6,7 +6,7 @@
 #include "CPUSupportChecker.h"
 
 //AVX
-#include <immintrin.h>
+# include <immintrin.h>
 #define AVX_ALIEN_RANGE 32
 
 namespace myLib {

@@ -1,7 +1,7 @@
 #ifndef _FILTERBASE_
 #define _FILTERBASE_
 
-#include "AudioDefines.h"
+#include "AudioDefine.h"
 
 namespace AS {
 	enum class WindowFuncType {

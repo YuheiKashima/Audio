@@ -1,7 +1,7 @@
 #ifndef _EFFECTBASE_
 #define _EFFECTBASE_
 
-#include "AudioDefines.h"
+#include "AudioDefine.h"
 
 namespace AS {
 	class EffectParamBase {};

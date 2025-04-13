@@ -11,11 +11,34 @@
 #ifndef _THREADPOOL_
 #define _THREADPOOL_
 
-#include "ThreadDefine.h"
-#include "ThreadTaskExclusive.h"
-#include "ThreadTask.h"
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <deque>
+#include <vector>
+#include <optional>
+#include <memory>
 
 namespace myLib {
+	/**
+
+		@class   ThreadTask
+		@brief
+		@details ~
+
+	**/
+	class ThreadTask {
+	public:
+		ThreadTask() {}
+		~ThreadTask() {}
+
+		virtual void Execute() = 0;
+
+	protected:
+
+	private:
+	};
+
 	/**
 
 		@class   ThreadPool
@@ -24,29 +47,22 @@ namespace myLib {
 		@tparam  CntThread -
 
 	**/
-	template<size_t CntThread>
 	class ThreadPool {
 	public:
 
 	private:
-		class WorkThread {
+		class inPoolThread {
 		public:
-			WorkThread() :m_Thread([this] {WorkThread(); }) {}
-			~WorkThread() {
-			}
+			inPoolThread();
+			~inPoolThread();
 
+			void Initialization(int32_t _index, ThreadPool* _pParent);
+			void WakeUp();
+			void WaitForIdle();
+			void Termination();
 		private:
-			void WaitForInitialize() {
-				std::unique_lock<std::mutex> lock(m_Mutex);
-				m_Condition.wait(lock, [this]() {return !m_pParent.has_value() :m_Index >= 0; })
-			}
-
-			void WorkThread() {
-				WaitForInitialize();
-
-				while (true) {
-				}
-			}
+			void WorkThreadFunc();
+			void WaitForInitialization();
 
 			bool m_isTermination = false;
 			int32_t m_Index = -1;
@@ -56,9 +72,8 @@ namespace myLib {
 			std::condition_variable m_Condition;
 			std::deque<std::weak_ptr<ThreadTask>> m_LocalTaskQueue;
 		};
-
-		std::array<WorkThread, CntThread> m_WorkThreads;
+		std::vector<inPoolThread> m_Threads;
 	};
 }
 
-#endif // !_THREADPOOL_
+#endif // !_THREADPOOL
