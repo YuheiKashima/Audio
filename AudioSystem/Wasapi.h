@@ -5,7 +5,7 @@
 
 #define USE_COINITIALIZEEX false
 
-#include "EndPointBase.h"
+#include <EndpointBase.h>
 #include <Windows.h>
 #include <mmsystem.h>
 #include <mmdeviceapi.h>
@@ -27,7 +27,8 @@ namespace AS {
 		WasapiLaunchInfo(DeviceInfo _device, AudioFormat _format, AUDCLNT_SHAREMODE _mode, AudioFormat* _paltFormat)
 			:LaunchInfo(_device, _format),
 			shareMode(_mode),
-			pAltFormat(_paltFormat) {}
+			pAltFormat(_paltFormat) {
+		}
 		//WasapiMode(共有モード:AUDCLNT_SHAREMODE_SHARED 排他モード:AUDCLNT_SHAREMODE_EXCLUSIVE)
 		AUDCLNT_SHAREMODE shareMode = AUDCLNT_SHAREMODE_SHARED;
 		//AltanateFormat(Output)
@@ -38,7 +39,8 @@ namespace AS {
 		WasapiSetupInfo() {}
 		WasapiSetupInfo(int32_t _periodTime, DWORD _streamFlag)
 			:periodTime(_periodTime),
-			streamFlags(_streamFlag) {}
+			streamFlags(_streamFlag) {
+		}
 		//Period time(ms)(0 = use device default period)
 		int32_t periodTime = 0;
 		//Stream flags(AUDCLNT_STREAMFLAGS_~)
@@ -50,7 +52,8 @@ namespace AS {
 		WasapiStartInfo(DWORD _timeOutTime) :timeoutTime(_timeOutTime) {}
 		WasapiStartInfo(std::weak_ptr<MasterTrack> _master, DWORD _timeOutTime)
 			:StartInfo(_master),
-			timeoutTime(_timeOutTime) {}
+			timeoutTime(_timeOutTime) {
+		}
 		//event timeout time(millisecond)(sharemode->exclusive&streamflags->AUDCLNT_STREAMFLAGS_EVENTCALLBACK)
 		DWORD timeoutTime = 0;
 	};

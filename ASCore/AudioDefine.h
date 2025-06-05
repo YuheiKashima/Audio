@@ -13,7 +13,7 @@
 
 #include <vector>
 #include <numeric>
-#include <boost/circular_buffer.hpp>
+#include <boost-1_88/boost/config/detail/suffix.hpp>
 #include "AudioInfo.h"
 #include "LineBuffer.h"
 

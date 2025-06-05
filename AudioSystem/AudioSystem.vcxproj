@@ -150,7 +150,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Libs\libvorbis\1.3.7\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\1.3.5\win32\VS2015\$(Platform)\$(Configuration);C:\boost\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libs\libvorbis\1.3.7\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\1.3.5\win32\VS2015\$(Platform)\$(Configuration);C:\boost\lib\$(PlatformShortName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -177,7 +177,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Libs\libvorbis\1.3.7\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\1.3.5\win32\VS2015\$(Platform)\$(Configuration);C:\boost\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libs\libvorbis\1.3.7\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\1.3.5\win32\VS2015\$(Platform)\$(Configuration);C:\boost\lib\$(PlatformShortName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

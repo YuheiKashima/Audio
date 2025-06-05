@@ -8,7 +8,7 @@ namespace AS {
 
 	class EffectBase {
 	public:
-		EffectBase(AudioFormat _format) :m_Format(_format) { }
+		EffectBase(AudioFormat _format) :m_Format(_format) {}
 		virtual ~EffectBase() {}
 
 		virtual void SetEffectParam(EffectParamBase& _param) = 0;

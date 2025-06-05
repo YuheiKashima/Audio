@@ -1,7 +1,13 @@
 #ifndef _AUDIOSYSTEM_
 #define _AUDIOSYSTEM_
 
-#include "EndPointBase.h"
+#include <thread>
+#include <memory>
+#include <mutex>
+
+#include <EndpointBase.h>
+#include "SourceTrack.h"
+#include "MasterTrack.h"
 
 #define _DEBUGSINWAVE false
 
@@ -32,13 +38,13 @@ namespace AS {
 	private:
 		void RenderThread(std::weak_ptr<MasterTrack> _master);
 		std::thread m_RenderThread;
-		std::unique_ptr<EndPointBase> m_upRenderEndPoint;
+		std::unique_ptr<EndpointBase> m_upRenderEndPoint;
 		bool m_bRenderLoop = false;
 		std::weak_ptr<MasterTrack> m_wpRenderMaster;
 
 		void CaptureThread(std::weak_ptr<SourceTrack> _record);
 		std::thread m_CaptureThread;
-		std::unique_ptr<EndPointBase> m_upCaptureEndPoint;
+		std::unique_ptr<EndpointBase> m_upCaptureEndPoint;
 		bool m_bCaptureLoop = false;
 #if _DEBUGSINWAVE
 		static float m_stestSin_a;
@@ -54,5 +60,5 @@ namespace AS {
 		std::unique_ptr<EndPointBase> base(new ENDPOINT);
 		return base->EnumrareDevices(_mode, _destList);
 	}
-	}
+}
 #endif

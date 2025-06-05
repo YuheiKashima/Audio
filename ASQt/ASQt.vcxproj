@@ -60,26 +60,26 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../myLib;C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_85_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../myLib;C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\include;../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Libs\libvorbis\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\win32\VS2015\$(Platform)\$(Configuration);C:\boost\lib\$(Platform);..\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libs\libvorbis\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\win32\VS2015\$(Platform)\$(Configuration);C:\boost\lib\$(PlatformShortName);..\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../myLib;C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\1_85_0\include\$(PlatformShortName);../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../myLib;C:\Libs\libvorbis\include;C:\Libs\libogg\include;C:\boost\include;../AudioSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4828</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Libs\libvorbis\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\win32\VS2015\$(Platform)\$(Configuration);C:\boost\lib\$(Platform);..\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Libs\libvorbis\win32\VS2010\$(Platform)\$(Configuration);C:\Libs\libogg\win32\VS2015\$(Platform)\$(Configuration);C:\boost\lib\$(PlatformShortName);..\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">

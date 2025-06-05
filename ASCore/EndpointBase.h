@@ -10,7 +10,7 @@
 #ifndef _ENDPOINTBASE_
 #define _ENDPOINTBASE_
 
-#include  "AudioDefine.h"
+#include "AudioDefine.h"
 
 namespace AS {
 	enum class EEndPointMode {
